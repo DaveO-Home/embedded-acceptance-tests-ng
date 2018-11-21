@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Acceptance Testing-Angular</title>
+    <link rel="icon" href="../images/favicon.ico">
+    <link href="../../dist_test/webpack/vendors~main.css" rel="stylesheet">
+    <link href="../../dist_test/webpack/main.css" rel="stylesheet">
+    <!--link href="../vendors~main.css" rel="stylesheet">
+    <link href="../main.css" rel="stylesheet"></head-->
+  </head>
+  <body>
+    <script type='text/javascript'>
+            window.testit = (typeof __karma__ !== 'undefined')
+            // true will generate a fatal error, only jasmine specs are run.
+            window.testOnly = false
+    </script>
+    <test-app>Loading...</test-app>
+        <script type="text/javascript" src="/base/dist_test/webpack/runtime.js"></script>
+        <script type="text/javascript" src="/base/dist_test/webpack/vendors~main~polyfill.js"></script>
+        <script type="text/javascript" src="/base/dist_test/webpack/polyfill.js"></script>
+        <script type="text/javascript" src="/base/dist_test/webpack/vendors~main.js"></script>
+        <script type="text/javascript" src="/base/dist_test/webpack/main.js"></script>
+  </body>
+</html>

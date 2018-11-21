@@ -1,0 +1,6 @@
+/build/
+webpack/config/
+/dist/
+/dist_test/
+webpack/test/unit/coverage/
+/*.ts

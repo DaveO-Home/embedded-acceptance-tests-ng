@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "baseUrl": "/appl",
+      "target": "ESNext",
+      "outDir": "/dist/out-tsc",
+      "moduleResolution": "node",
+      "removeComments": false,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "sourceMap": true,
+      "declaration": false,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "typeRoots": [
+        "node_modules/@types"
+      ],
+      "lib": [
+        "es2018",
+        "dom"
+      ]
+    },
+    "include": [
+      "appl/**/*.ts", "appl/index.js"
+    ]
+  }
