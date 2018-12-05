@@ -9,7 +9,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
     describe('Application Unit test suite - AppTest', () => {
         beforeAll(() => {
             // Add angular tag to karma page
-            $('body').append('<test-app>Loading</test-app>')
+            $('body').prepend('<test-app>Loading</test-app>')
             platformBrowserDynamic().bootstrapModule(AppModule)
                 .catch(err => console.error(err));
 
