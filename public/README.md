@@ -1,6 +1,6 @@
 # Embedded Angular Acceptance Testing with Karma and Jasmine
 
-This demo is comprised of four javascript bundlers each configured to run the tests.  The Bootstrap single page application retains functionality among the bundlers with only minor code change.  The javascript framework used is Angular7 and instrumentation is done with Gulp and Karma.  So you can pick your poison, Webpack, Browserify, Fusebox or Parcel. The demo was orginally developed using the Canjs framework which can be found at https://github.com/DaveO-Home/embedded-acceptance-tests, a React version can be found at https://github.com/DaveO-Home/embedded-acceptance-tests-react and a Vue version can be found at https://github.com/DaveO-Home/embedded-acceptance-tests-vue.
+This demo is comprised of five javascript bundlers each configured to run the tests.  The Bootstrap single page application retains functionality among the bundlers with only minor code change.  The javascript framework used is Angular7 and instrumentation is done with Gulp and Karma.  So you can pick your poison, Webpack, Browserify, Fusebox, StealJS or Parcel. The demo was orginally developed using the Canjs framework which can be found at https://github.com/DaveO-Home/embedded-acceptance-tests, a React version can be found at https://github.com/DaveO-Home/embedded-acceptance-tests-react and a Vue version can be found at https://github.com/DaveO-Home/embedded-acceptance-tests-vue.
 
 __Note__; the demo was not developed to compare software, rather simply to demonstrate how one might embed test code as part of the build process.  And the configuration also shows how to develop using hot module reload and test driven development.
 
@@ -229,7 +229,31 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 
   __Note;__ You should set `export NODE_ENV=production` before running the production task.
 
-### IV. **Webpack**
+### IV. **Stealjs**
+
+1\. ***Development Server Window*** -
+
+   * `gulp test`
+   * `gulp compile-only` - recompile typescript __Note__ Production build will remove all generated *.js files gernerated by typescript.
+   * `gulp prd` - build production without running tests
+
+2\. ***After a test run*** -
+
+   * `gulp e2e` - run application tests
+   * `gulp ngtest` - run angular unit tests
+
+   At this point you can start a browser and enter `localhost:3080/stealjs/appl/testapp_dev.html`(please note that dist_test is not in the URL).
+
+3\. ***Test Driven Development(tdd) Window*** -
+
+   * `cd public/steal/build`
+   * `gulp tdd`
+
+   Tests will rerun as source code(*.js) are changed. Note, tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.
+
+   __Note;__ After changing Angular code, i.e. *.ts files, execute `gulp compile-only` or `gulp test` to see changes.
+
+### V. **Webpack**
 
 1\. ***Development HMR Server Window*** -
 

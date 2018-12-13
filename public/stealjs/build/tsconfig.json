@@ -1,0 +1,40 @@
+{
+  "name": "daveo",
+  "compilerOptions": {
+    "outDir": "../appl",
+    "typeRoots": [
+      "../../node_modules/@types"
+    ],
+    "lib": [
+      "es2015",
+      "es6",
+      "dom"
+    ],
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noUnusedLocals": true,
+    "declaration": false,
+    "noImplicitAny": false,
+    "noImplicitUseStrict": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": false,
+    "allowUnreachableCode": true,
+    "allowJs": false,
+    "types": [
+      "jasmine",
+      "node"
+    ]
+  },
+  "include": ["../appl/entry.ts"],
+  "exclude": ["node_modules"],
+  "compileOnSave": true,
+  "buildOnSave": false,
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}

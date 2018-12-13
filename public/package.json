@@ -29,7 +29,7 @@
     "@angular/platform-browser": "^7.1.1",
     "@angular/platform-browser-dynamic": "^7.1.1",
     "@angular/router": "^7.1.1",
-    "@types/node": "^10.12.12",
+    "@types/node": "^10.12.14",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.1.3",
     "core-js": "^2.5.7",
@@ -38,8 +38,9 @@
     "helpers": "0.0.6",
     "jquery": "^3.3.1",
     "lodash": "^4.17.11",
+    "lodash-es": "^4.17.11",
     "marked": "^0.5.2",
-    "moment": "^2.22.1",
+    "moment": "^2.23.0",
     "pager": "^0.1.3",
     "parcel": "^1.10.3",
     "pdfjs-dist": "^2.0.489",
@@ -52,7 +53,7 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "^7.1.1",
-    "@ngtools/webpack": "^7.1.1",
+    "@ngtools/webpack": "^7.1.3",
     "@types/core-js": "^2.5.0",
     "@types/jasmine": "^3.3.1",
     "@types/lodash": "^4.14.119",
@@ -77,6 +78,7 @@
     "css-loader": "^1.0.1",
     "cssify": "^1.0.3",
     "csslint": "^1.0.5",
+    "de-indent": "^1.0.2",
     "del": "^3.0.0",
     "envify": "^4.1.0",
     "eslint-config-standard": "^11.0.0",
@@ -86,6 +88,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.1.0",
+    "events": "^1.1.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "fancy-log": "^1.3.3",
     "file-loader": "^2.0.0",
@@ -116,15 +119,15 @@
     "jasmine-jquery": "^2.1.1",
     "jasmine-promise-wrapper": "0.0.3",
     "karma": "^3.1.3",
-    "karma-browserify": "^5.3.0",
+    "karma-browserify": "^6.0.0",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-cli": "^1.0.1",
     "karma-commonjs": "^1.0.0",
     "karma-firefox-launcher": "^1.1.0",
     "karma-jasmine": "^2.0.1",
     "karma-jasmine-jquery": "^0.1.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-opera-launcher": "^1.0.0",
+    "karma-steal-npm": "^0.1.5",
     "karma-story-reporter": "^0.3.1",
     "karma-typescript": "^3.0.13",
     "karma-typescript-angular2-transform": "^1.0.2",
@@ -142,9 +145,12 @@
     "rollup-plugin-postcss": "^1.6.3",
     "rollup-plugin-replace": "^2.1.0",
     "sass-loader": "^7.1.0",
-    "ts-node": "^7.0.1",
+    "steal": "^2.1.11",
+    "steal-css": "^1.3.2",
+    "steal-tools": "^2.0.11",
+    "steal-typescript": "^0.5.0",
     "tsify": "^4.0.1",
-    "typescript": "^3.1.6",
+    "typescript": "3.1.6",
     "uglify-es": "^3.3.9",
     "uglify-js": "^3.4.9",
     "url-loader": "^1.1.2",
@@ -193,6 +199,84 @@
         "jquery:jQuery",
         "b/popper:Popper"
       ]
+    }
+  },
+  "steal": {
+    "npmAlgorithm": "flat",
+    "ext": {
+      "css": "steal-css",
+      "ts": "steal-typescript",
+      "js": "steal"
+    },
+    "cssOptions": {
+      "timeout": "15"
+    },
+    "plugins": [
+      "steal-css",
+      "steal-typescript"
+    ],
+    "meta": {
+      "typescript": {
+        "format": "global",
+        "exports": "ts"
+      },
+      "popper.js": {
+        "format": "global",
+        "exports": "Popper"
+      }
+    },
+    "paths": {
+      "app": "stealjs/appl/js/app.js",
+      "basecontrol": "stealjs/appl/js/utils/base.control.js",
+      "config": "stealjs/appl/js/config.js",
+      "cinput": "stealjs/appl/js/utils/CanvasInput.js",
+      "default": "stealjs/appl/js/utils/default.js",
+      "helpers": "stealjs/appl/js/utils/helpers.js",
+      "lodash": "node_modules/lodash/lodash.min.js",
+      "menu": "stealjs/appl/js/utils/menu.js",
+      "pdf": "stealjs/appl/js/controller/pdf.js",
+      "router": "stealjs/appl/js/router.js",
+      "setup": "stealjs/appl/js/utils/setup.js",
+      "start": "stealjs/appl/js/controller/start.js",
+      "table": "stealjs/appl/js/controller/table.js",
+      "tablepager": "node_modules/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js",
+      "tablesorter": "node_modules/tablesorter/dist/js/jquery.tablesorter.min.js",
+      "tablewidgets": "node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js",
+      "apptest": "stealjs/appl/jasmine/apptest.js",
+      "contacttest": "stealjs/appl/jasmine/contacttest.js",
+      "domtest": "stealjs/appl/jasmine/domtest.js",
+      "logintest": "stealjs/appl/jasmine/logintest.js",
+      "routertest": "stealjs/appl/jasmine/routertest.js",
+      "toolstest": "stealjs/appl/jasmine/toolstest.js",
+      "popper": "node_modules/popper.js/dist/umd/popper.min.js",
+      "marked": "node_modules/marked/lib/marked.js",
+      "css": "stealjs/appl/css/css.js",
+      "toolssm": "stealjs/appl/js/utils/tools.sm.js",
+      "rxjs/operators": "node_modules/rxjs/operators/index.js"
+    },
+    "map": {
+      "app/app": "app",
+      "basecontrol/basecontrol": "basecontrol",
+      "bootstrap/bootstrap": "bootstrap",
+      "config/config": "config",
+      "cinput/cinput": "cinput",
+      "default/default": "default",
+      "helpers/helpers": "helpers",
+      "jquery/jquery": "jquery",
+      "lodash/lodash": "lodash",
+      "menu/menu": "menu",
+      "pdf/pdf": "pdf",
+      "router/router": "router",
+      "setup/setup": "setup",
+      "start/start": "start",
+      "table/table": "table",
+      "tablepager/tablepager": "tablepager",
+      "tablesorter/tablesorter": "tablesorter",
+      "tablewidgets/tablewidgets": "tablewidgets",
+      "popper/popper": "popper",
+      "marked/marked": "marked",
+      "css/css": "css",
+      "toolssm/toolssm": "toolssm"
     }
   }
 }
