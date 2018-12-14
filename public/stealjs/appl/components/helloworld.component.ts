@@ -8,7 +8,7 @@ import Start from '../js/controller/start'
 })
 export class HelloWorldComponent {
   title = 'Acceptance Testing with Angular';
-  ngOnInit() {
+  ngOnInit() { // required if page is refreshed
     Setup.init()
     Start.initMenu()
     Start.index()

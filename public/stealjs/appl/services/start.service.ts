@@ -5,16 +5,16 @@ import Helpers from '../js/utils/helpers'
 declare var Promise: any;
 
 export class StartService {
-  getHtml(obj):Promise<{response, obj}> {
+  getHtml(obj: any):Promise<{response: string, obj: any}> {
     Setup.init()
     Start.initMenu()
     Start.index()
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve: any, reject: any) {
       let count = 0
       Helpers.isLoaded(resolve, reject, '', Start, count, 10)
     })
-      .catch(function (rejected) {
+      .catch(function (rejected: any) {
         console.warn('Failed', rejected)
       })
       .then(function (resolved: String) {

@@ -12,7 +12,7 @@ import Start from './js/controller/start'
 export class TestApp {
 	constructor() {
 	}
-	loginModal(event) {
+	loginModal(event: any) {
 		Start['div .login click']()
 	}
 }

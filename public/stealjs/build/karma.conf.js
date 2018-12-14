@@ -42,11 +42,9 @@ module.exports = function (config) {
             {pattern: 'node_modules/lodash-es/**/*js', watched: false, included: false},
             {pattern: 'node_modules/moment/**/*.js', watched: false, included: false},
             {pattern: 'node_modules/marked/**/*.js', watched: false, included: false},
-            // {pattern: 'node_modules/handlebars/dist/**/*.js', watched: false, included: false},
             {pattern: 'README.md', included: false},
             {pattern: 'index.js', included: false, served: false, watched: false},
             {pattern: bundler + '/appl/**/*.html', included: false},
-            {pattern: 'dev-bundle.js', watched: false, included: false},
             //Test suites
             {pattern: bundler + '/appl/jasmine/**/*test.js', included: false},
             //end Test suites

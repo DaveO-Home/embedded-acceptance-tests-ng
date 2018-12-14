@@ -19,7 +19,7 @@ export class ContactComponent {
         const failMsg = `Load problem with: '${controllerName}/${actionName}'.`
         $(document).ready(function () {
             const el = $($('[name=contact]')[0])
-            App.loadController(controllerName, {}, controller => {
+            App.loadController(controllerName, {}, (controller: any) => {
                 if (controller &&
                     controller[actionName]) {
                     controller.initMenu()
@@ -27,7 +27,7 @@ export class ContactComponent {
                 } else {
                     console.error(failMsg)
                 }
-            }, err => {
+            }, (err: any) => {
                 console.error(`${failMsg} - ${err}`)
             })
         })

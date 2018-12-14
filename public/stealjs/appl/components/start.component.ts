@@ -6,7 +6,7 @@ import { StartService } from '../services/start.service';
   template: '<span [innerHTML]="htmldata"></span>',
 })
 export class StartComponent {
-  public starts;
+  public starts: StartService;
   public htmldata: String = 'Loading Index Page...';
   
   constructor(starts: StartService) {

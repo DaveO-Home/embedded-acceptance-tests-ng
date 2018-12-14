@@ -1,5 +1,5 @@
 let startupHtml = "./appl/testapp_karma.html";
-let bundler = "parcel";
+let bundler = "stealjs";
 // Karma configuration - Unit testing angular components
 module.exports = function (config) {
 

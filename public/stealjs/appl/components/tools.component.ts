@@ -46,8 +46,8 @@ export class ToolsSelect {
 
     getMessage() {
         const items = ToolsSM.getStore().getState().tools.items
-        let index = -1
-        items.forEach((item, _index) => {
+        let index: number = -1
+        items.forEach((item: any, _index: number) => {
             if (item.displayed) {
                 index = _index
             }
@@ -61,7 +61,7 @@ export class ToolsSelect {
         return this.message;
     }
     
-    onCompletedClick(e) {
+    onCompletedClick(e: any) {
         let dropdownValue;
         e.preventDefault();
         const controller = App.controllers['Table']
@@ -88,7 +88,7 @@ export class ToolsSelect {
     styleUrls: ['css/table.css'],
 })
 export class ToolsComponent implements OnInit {
-    public tables;
+    public tables: TableService;
 
     @ViewChild(ToolsSelect) dropdown: ToolsSelect;
 

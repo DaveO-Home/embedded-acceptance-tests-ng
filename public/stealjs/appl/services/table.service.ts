@@ -5,29 +5,29 @@ import Table from '../js/controller/table'
 declare var Promise: any;
 
 export class TableService {
-  getHtml(obj): Promise<{ response, obj }> {
+  getHtml(obj: any): Promise<{ response: string, obj: any }> {
     const controllerName = 'Table'
     const actionName = 'tools'
     const failMsg = `Load problem with: '${controllerName}/${actionName}'.`
-    App.loadController(controllerName, Table, controller => {
+    App.loadController(controllerName, Table, (controller: object) => {
       if (controller &&
         controller[actionName]) {
         controller[actionName]({})
       } else {
         console.error(failMsg)
       }
-    }, err => {
+    }, (err: any) => {
       console.error(`${failMsg} - ${err}`)
     })
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve: any, reject: any) {
       let count = 0
       Helpers.isLoaded(resolve, reject, '', Table, count, 10)
     })
-      .catch(function (rejected) {
+      .catch(function (rejected: any) {
         console.warn('Failed', rejected)
       })
-      .then(function (resolved) {
+      .then(function (resolved: any) {
         return { "response": resolved, "obj": obj }
       })
   }
