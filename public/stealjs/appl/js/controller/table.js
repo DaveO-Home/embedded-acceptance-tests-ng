@@ -1,6 +1,6 @@
 
-import App from '../app'
-import Base from '../utils/base.control'
+import App from 'app'
+import Base from 'basecontrol'
 Base.init()
 export default App.controllers['Table'] || (App.controllers['Table'] = Object.assign({ // new (Base.extend({
     defaults: {

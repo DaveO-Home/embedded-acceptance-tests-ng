@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { RouterModule, Routes, Router } from '@angular/router';
 import 'rxjs/add/operator/map';
-import { StartComponent } from '../components/start.component';
-import { ContactComponent } from '../components/contact.component'
-import { PdfComponent } from '../components/pdf.component'
-import { ToolsComponent, ToolsSelect } from '../components/tools.component'
-import { HelloWorldComponent } from '../components/helloworld.component'
-import { StartService } from '../services/start.service';
-import { TableService } from '../services/table.service';
+import { StartComponent } from 'startc';
+import { ContactComponent } from 'contactc'
+import { PdfComponent } from 'pdfc'
+import { ToolsComponent, ToolsSelect } from 'toolsc'
+import { HelloWorldComponent } from 'helloc'
+import { StartService } from 'starts';
+import { TableService } from 'tables';
 
 const appRoutes: Routes = [
   { path: '', component: StartComponent },

@@ -10,21 +10,21 @@ var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var router_1 = require("@angular/router");
 require("rxjs/add/operator/map");
-var start_component_1 = require("../components/start.component");
-var contact_component_1 = require("../components/contact.component");
-var pdf_component_1 = require("../components/pdf.component");
-var tools_component_1 = require("../components/tools.component");
-var helloworld_component_1 = require("../components/helloworld.component");
-var start_service_1 = require("../services/start.service");
-var table_service_1 = require("../services/table.service");
+var startc_1 = require("startc");
+var contactc_1 = require("contactc");
+var pdfc_1 = require("pdfc");
+var toolsc_1 = require("toolsc");
+var helloc_1 = require("helloc");
+var starts_1 = require("starts");
+var tables_1 = require("tables");
 var appRoutes = [
-    { path: '', component: start_component_1.StartComponent },
-    { path: '#/', component: start_component_1.StartComponent },
-    { path: '#', component: start_component_1.StartComponent },
-    { path: 'contact', component: contact_component_1.ContactComponent },
-    { path: 'pdf/test', component: pdf_component_1.PdfComponent },
-    { path: 'table/tools', component: tools_component_1.ToolsComponent },
-    { path: 'welcome', component: helloworld_component_1.HelloWorldComponent }
+    { path: '', component: startc_1.StartComponent },
+    { path: '#/', component: startc_1.StartComponent },
+    { path: '#', component: startc_1.StartComponent },
+    { path: 'contact', component: contactc_1.ContactComponent },
+    { path: 'pdf/test', component: pdfc_1.PdfComponent },
+    { path: 'table/tools', component: toolsc_1.ToolsComponent },
+    { path: 'welcome', component: helloc_1.HelloWorldComponent }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -32,12 +32,12 @@ var AppRoutingModule = /** @class */ (function () {
     AppRoutingModule = __decorate([
         core_1.NgModule({
             declarations: [
-                start_component_1.StartComponent,
-                contact_component_1.ContactComponent,
-                pdf_component_1.PdfComponent,
-                tools_component_1.ToolsComponent,
-                tools_component_1.ToolsSelect,
-                helloworld_component_1.HelloWorldComponent,
+                startc_1.StartComponent,
+                contactc_1.ContactComponent,
+                pdfc_1.PdfComponent,
+                toolsc_1.ToolsComponent,
+                toolsc_1.ToolsSelect,
+                helloc_1.HelloWorldComponent,
             ],
             imports: [
                 router_1.RouterModule.forRoot(appRoutes, {
@@ -48,8 +48,8 @@ var AppRoutingModule = /** @class */ (function () {
                 router_1.RouterModule
             ],
             providers: [
-                start_service_1.StartService,
-                table_service_1.TableService,
+                starts_1.StartService,
+                tables_1.TableService,
                 { provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy },
             ],
         })

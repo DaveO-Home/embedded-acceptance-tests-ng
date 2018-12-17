@@ -1,9 +1,9 @@
-import domTest from './domtest'
-import toolsTest from './toolstest'
-import contactTest from './contacttest'
-import loginTest from './logintest'
-import Start from '../js/controller/start'
-import Helpers from '../js/utils/helpers'
+import domTest from 'domtest'
+import toolsTest from 'toolstest'
+import contactTest from 'contacttest'
+import loginTest from 'logintest'
+import Start from 'start'
+import Helpers from 'helpers'
 
 export default function (App, AppModule, platformBrowserDynamic) {
     describe('Application Unit test suite - AppTest', () => {

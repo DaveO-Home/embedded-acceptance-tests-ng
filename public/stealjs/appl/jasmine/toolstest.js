@@ -1,4 +1,4 @@
-import ToolsSM from "../js/utils/tools.sm"
+import ToolsSM from "toolssm"
 
 export default function (Helpers) {
     /*

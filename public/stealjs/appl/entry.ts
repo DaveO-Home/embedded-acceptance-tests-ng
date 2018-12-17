@@ -1,9 +1,9 @@
-import './js/utils/set.globals'
+import 'setglobals'
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import 'rxjs/add/operator/map';
-import { AppRoutingModule } from './router/index'
-import Start from './js/controller/start'
+import { AppRoutingModule } from 'router'
+import Start from 'start'
 
 @Component({
 	selector: 'test-app',

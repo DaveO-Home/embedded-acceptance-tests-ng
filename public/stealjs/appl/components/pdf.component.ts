@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import 'rxjs/add/operator/map';
-import App from '../js/app'
+import App from 'app'
 // Setting up for optional Karma/Jasmine
-import '../js/utils/set.globals'
+import 'setglobals'
 App.init()
 const url = 'views/prod/Test.pdf'
 declare var $: any;

@@ -1,17 +1,17 @@
 import 'zone.js/dist/zone'
 import {} from '@angular/compiler'
-import './js/utils/set.globals'
+import 'setglobals'
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './entry';
-import './js/config'
-import Default from './js/utils/default' 
-import Setup from './js/utils/setup'
+import { AppModule } from 'entry';
+import 'config'
+import Default from 'default' 
+import Setup from 'setup'
 import 'pager'
-import App from './js/app'
+import App from 'app'
 //!steal-remove-start
 import 'zone.js/dist/zone-error';
-import apptest from './jasmine/apptest'
+import apptest from 'apptest'
 //!steal-remove-end
 import './css/site.css'
 

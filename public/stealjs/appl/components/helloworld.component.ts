@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import Setup from '../js/utils/setup'
-import Start from '../js/controller/start'
+import Setup from 'setup'
+import Start from 'start'
 
 @Component({
   templateUrl: 'views/hello.world.html',

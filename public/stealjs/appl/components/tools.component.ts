@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation, ViewChild, OnInit } from '@angular/core';
 import 'rxjs/add/operator/map';
-import ToolsSM from '../js/utils/tools.sm'
-import { TableService } from '../services/table.service';
-import Table from '../js/controller/table'
-import Helpers from '../js/utils/helpers'
-import App from '../js/app'
+import ToolsSM from 'toolssm'
+import { TableService } from 'tables';
+import Table from 'table'
+import Helpers from 'helpers'
+import App from 'app'
 
 declare var $: any;
 

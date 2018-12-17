@@ -227,6 +227,7 @@
     },
     "paths": {
       "app": "stealjs/appl/js/app.js",
+      "setglobals": "stealjs/appl/js/utils/set.globals.js",
       "basecontrol": "stealjs/appl/js/utils/base.control.js",
       "config": "stealjs/appl/js/config.js",
       "cinput": "stealjs/appl/js/utils/CanvasInput.js",
@@ -235,7 +236,7 @@
       "lodash": "node_modules/lodash/lodash.min.js",
       "menu": "stealjs/appl/js/utils/menu.js",
       "pdf": "stealjs/appl/js/controller/pdf.js",
-      "router": "stealjs/appl/js/router.js",
+      "router": "stealjs/appl/router/index.js",
       "setup": "stealjs/appl/js/utils/setup.js",
       "start": "stealjs/appl/js/controller/start.js",
       "table": "stealjs/appl/js/controller/table.js",
@@ -252,10 +253,19 @@
       "marked": "node_modules/marked/lib/marked.js",
       "css": "stealjs/appl/css/css.js",
       "toolssm": "stealjs/appl/js/utils/tools.sm.js",
-      "rxjs/operators": "node_modules/rxjs/operators/index.js"
+      "rxjs/operators": "node_modules/rxjs/operators/index.js",
+      "entry": "stealjs/appl/entry.js",
+      "startc": "stealjs/appl/components/start.component.js",
+      "contactc": "stealjs/appl/components/contact.component.js",
+      "pdfc": "stealjs/appl/components/pdf.component.js",
+      "toolsc": "stealjs/appl/components/tools.component.js",
+      "helloc": "stealjs/appl/components/helloworld.component.js",
+      "starts": "stealjs/appl/services/start.service.js",
+      "tables": "stealjs/appl/services/table.service.js"
     },
     "map": {
       "app/app": "app",
+      "setglobals/setglobals": "setglobals",
       "basecontrol/basecontrol": "basecontrol",
       "bootstrap/bootstrap": "bootstrap",
       "config/config": "config",
@@ -276,7 +286,15 @@
       "popper/popper": "popper",
       "marked/marked": "marked",
       "css/css": "css",
-      "toolssm/toolssm": "toolssm"
+      "toolssm/toolssm": "toolssm",
+      "entry/entry": "entry",
+      "startc/startc": "startc",
+      "contactc/contactc": "contactc",
+      "pdfc/pdfc": "pdfc",
+      "toolsc/toolsc": "toolsc",
+      "helloc/helloc": "helloc",
+      "starts/starts": "starts",
+      "tables/tables": "tables"
     }
   }
 }
