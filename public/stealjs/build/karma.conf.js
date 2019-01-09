@@ -113,6 +113,7 @@ module.exports = function (config) {
         logLevel: config.LOG_WARN,
         autoWatch: true,
         singleRun: false,
+        browserDisconnectTimeout: 4000,
         loggers: [{
                 type: 'console'
             }

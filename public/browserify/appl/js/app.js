@@ -17,12 +17,6 @@ if (typeof testit !== 'undefined' && testit) {
 }
 /* develblock:end */
 
-const baseScriptsUrl = '~/'
-
-const pathName = window.location.pathname
-
-let baseUrl = `${pathName.substring(0, pathName.substring(1, pathName.length).lastIndexOf('/') + 1)}`
-
 export default {
     controllers: [],
     init (options) {
@@ -47,22 +41,13 @@ export default {
         })
     },
     toUrl (url) {
-        // Node Express exception
-        if (_.startsWith(baseUrl, '/appl/')) {
-            baseUrl = '/appl'
-        }
-
-        if (url && url.indexOf('~/') === 0) {
-            url = baseUrl + url.substring(2)
-        }
-
         return url
     },
     toScriptsUrl (url) {
-        return this.toUrl(`${baseScriptsUrl}/${url}`)
+        return url
     },
     toViewsUrl (url) {
-        return _.startsWith(url, 'views/') ? this.toScriptsUrl(url) : this.toUrl(url)
+        return url
     },
     loadController (controllerName, controller, fnLoad, fnError) {
         const me = this

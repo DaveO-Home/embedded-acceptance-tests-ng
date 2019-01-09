@@ -205,7 +205,7 @@ gulp.task('steal-tdd', function (done) {
 });
 
 /*
- * Startup live reload monitor. 
+ * Compile production angular typescript. 
  */
 gulp.task('compile', ["bootlint"], function (cb) {
     var osCommands = 'touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build';
@@ -220,7 +220,7 @@ gulp.task('compile', ["bootlint"], function (cb) {
     });
 });
 /*
- * Startup live reload monitor. 
+ * Compile angular typescript. 
  */
 gulp.task('compile-only', function (cb) {
     var osCommands = 'touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build';

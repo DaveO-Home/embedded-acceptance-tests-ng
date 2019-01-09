@@ -4,6 +4,8 @@ This demo is comprised of five javascript bundlers each configured to run the te
 
 __Note__; the demo was not developed to compare software, rather simply to demonstrate how one might embed test code as part of the build process.  And the configuration also shows how to develop using hot module reload and test driven development.
 
+**Warning**: If the application fails to install with your current node/npm versions, execute ```npm clean cache --force```, and use at least ```node``` version 8 and ```npm``` version 6 to install and build.
+
 ## Installation
 
 **Desktop:**

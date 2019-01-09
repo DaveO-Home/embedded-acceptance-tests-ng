@@ -73,10 +73,10 @@ module.exports = (argv) => {
                         MiniCssExtractPlugin.loader,
                         {
                             loader: 'css-loader',
-                            options: {
-                                minimize: false,
-                                importLoaders: 1
-                            }
+                            // options: {
+                            //     minimize: false,
+                            //     importLoaders: 1
+                            // }
                         },
                         // {
                         // 	loader: 'postcss-loader',
