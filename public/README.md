@@ -236,7 +236,7 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 1\. ***Development Server Window*** -
 
    * `gulp test`
-   * `gulp compile-only` - recompile typescript __Note__ Production build will remove all generated *.js files gernerated by typescript.
+   * `gulp compile-only` - recompile typescript __Note__ Production build will remove all generated *.js files gernerated by typescript. If you get **entry not found**, run this command.
    * `gulp prd` - build production without running tests
 
 2\. ***After a test run*** -
