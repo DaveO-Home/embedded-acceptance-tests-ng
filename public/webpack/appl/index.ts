@@ -52,7 +52,7 @@ if (!production) {
         if (typeof testit !== "undefined" && testit) {
             // Run acceptance tests. - To run only unit tests, comment the apptest call.
             apptest(App, AppModule, platformBrowserDynamic);
-            jasmine.DEFAULT_TIMEOUT_INTERVAL = 4000;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
             __karma__.start();
         }
     })

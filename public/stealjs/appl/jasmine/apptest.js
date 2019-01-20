@@ -122,7 +122,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
                 fail('Testing only, build will not proceed')
             })
         }
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 4000;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
         __karma__.start()
     })
 }
