@@ -4,6 +4,7 @@ import contactTest from 'contacttest'
 import loginTest from 'logintest'
 import Start from 'start'
 import Helpers from 'helpers'
+import { timer } from 'rxjs'
 
 export default function (App, AppModule, platformBrowserDynamic) {
     describe('Application Unit test suite - AppTest', () => {
@@ -111,11 +112,11 @@ export default function (App, AppModule, platformBrowserDynamic) {
         })
 
         // Spec to test if page data changes on select change event.
-        toolsTest(Helpers)
+        toolsTest(Helpers, timer)
         // Form Validation
         contactTest(Helpers)
         // Verify modal form
-        loginTest(Start)
+        loginTest(Start, timer)
 
         if (testOnly) {
             it('Testing only', () => {

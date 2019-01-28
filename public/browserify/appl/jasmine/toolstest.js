@@ -1,6 +1,6 @@
 import ToolsSM from "../js/utils/tools.sm"
 
-export default function (Helpers) {
+export default function (Helpers, timer) {
     /*
      * Test that new data are loaded when the select value changes.
      */
@@ -35,13 +35,17 @@ export default function (Helpers) {
                     spyToolsEvent = spyOnEvent(selectorItem, 'select')
                     selectorItem.click()
                     Helpers.fireEvent(selectorItem, 'select')
-                    // Note: if page does not refresh, increase the Timeout time.
-                    // Using setTimeout instead of Promise.
-                    setTimeout(function () {
+                    // Note: if page does not refresh, increase the timer time.
+                    // Using RxJs instead of Promise.
+                    const numbers = timer(50, 50);
+                    const observable = numbers.subscribe(timer => {
                         afterValue = tools.find('tbody').find('tr:nth-child(1)').find('td:nth-child(2)').text()
-                        newReduxValue = $('.tools-state').text().split(" ", 1)
-                        done()
-                    }, 100)
+                        if (afterValue !== beforeValue || timer === 25) {
+                            newReduxValue = $('.tools-state').text().split(" ", 1)
+                            observable.unsubscribe();
+                            done();
+                        }
+                    })
                 })
         })
 
