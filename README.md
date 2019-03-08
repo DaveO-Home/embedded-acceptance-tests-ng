@@ -18,7 +18,7 @@ __Note__; the demo was not developed to compare software, rather simply to demon
 
   1. OS Linux or Windows(Tested on Windows10)
   1. Node and npm
-  1. Gulp
+  1. Gulp4 is default - If your global Gulp is version 3, you can execute `npx gulp` from the build directories.
   1. Google Chrome
   1. Firefox
 
@@ -160,6 +160,8 @@ __Running Tests__-
   1. Run a full set of tests - `gulp test`, this will build the application and run all tests.
   1. Run e2e tests without build - `gulp e2e`.
   1. Run angular2 tests without build - `gulp ngtest`.
+
+  __Also Note__; All of the development tasks(`hmr, server, watch`) etc, can be run from one window using the `gulp development` task.
 
 ### I.  **Browserify**
 

@@ -12,10 +12,16 @@
 
     RUN dnf install -y nodejs xorg-x11-fonts-Type1 PackageKit-gtk3-module libcanberra-gtk3 bzip2
 
-    RUN npm install gulp@3.9.1 -g
-    RUN npm install brunch -g
+    RUN npm install gulp -g
     RUN npm install parcel -g
-    RUN npm install broccoli-cli -g
+
+    #Uncomment if you want to use the vs-code editor
+    #RUN echo $'[vscode] \n\
+#name=Visual Studio Code \n\
+#baseurl=https://packages.microsoft.com/yumrepos/vscode \n\
+#enabled=1 gpgcheck=1 \n\
+#gpgkey=https://packages.microsoft.com/keys/microsoft.asc' > /etc/yum.repos.d/vscode.repo
+    #RUN dnf install -y code
 
     USER tester
     EXPOSE 3080
@@ -33,4 +39,5 @@
 
     # Change to correspond with desired repo - defaults to angular
     RUN cd ~/embedded-acceptance-tests-ng; npm install 
-    RUN cd ~/embedded-acceptance-tests-ng/public; npm install 
+    RUN cd ~/embedded-acceptance-tests-ng/public; npm install
+    WORKDIR /home/tester/embedded-acceptance-tests-ng

@@ -19,7 +19,7 @@ let production = true;  // This will work if "parcel-plugin-strip" is linked in 
 production = false;
 /* develblock:end */
 
-if (typeof production === 'undefined' || production) {
+if (production) {
     enableProdMode();
 }
 if(typeof testit === "undefined" || !testit) {

@@ -1,14 +1,13 @@
-const { src } = require('gulp');
+const gulp = require('gulp');
 const bootlint = require('gulp-bootlint');
-const log = require("fancy-log")
 
-const bootLint = function () {
+gulp.task('bootlint', () => {
     var fileIssues = [],
             options = {
                 stoponerror: true,
                 stoponwarning: false,
                 loglevel: 'debug',
-                disabledIds: ['E001', 'W009', 'E007', 'W005'],
+                disabledIds: ['W009', 'E007', 'W005', 'E001'],
                 issues: fileIssues,
                 reportFn: function (file, lint, isError, isWarning, errorLocation) {
                     var message = (isError) ? "ERROR! - " : "WARN! - ";
@@ -17,18 +16,18 @@ const bootLint = function () {
                     } else {
                         message += file.path + ': ' + lint.id + ' ' + lint.message;
                     }
-                    log(message);
+                    console.log(message);
                 },
                 summaryReportFn: function (file, errorCount, warningCount) {
                     if (errorCount > 0 || warningCount > 0) {
-                        log("please fix the " + errorCount + " errors and " + warningCount + " warnings in " + file.path);
+                        console.log("please fix the " + errorCount + " errors and " + warningCount + " warnings in " + file.path);
                     } else {
-                        log("No problems found in " + file.path);
+                        console.log("No problems found in " + file.path);
                     }
                 }
             };
 
-    var stream = src(["../appl/app_bootstrap.html"])
+    var stream = gulp.src(["../appl/app_bootstrap.html"])
             .pipe(bootlint(options));
     
     stream.on('error', function() {
@@ -37,6 +36,6 @@ const bootLint = function () {
     
     return stream;
     
-};
+});
 
-exports.default = bootLint;
+gulp.task('default', ['bootlint']);
