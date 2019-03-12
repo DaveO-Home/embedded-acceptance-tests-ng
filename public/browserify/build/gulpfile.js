@@ -282,8 +282,11 @@ const copyProdRun = parallel(copyprod_fonts, copyprod_images, copyprod)
 const testRun = series(cleant, copyTestRun, parallel(build_dev_bundle, build_dev_vendor))
 const prodRun = series(clean, copyProdRun, parallel(build_prod_bundle, build_prod_vendor))
 const lintRun = parallel(esLint, cssLint, bootLint)
+prodRun.displayName = 'prd'
 
 exports.default = series(testRun, pate2e, pat, lintRun, prodRun)
+exports.prod = series(testRun, pate2e, pat, lintRun, prodRun)
+task(prodRun)
 exports.test = series(testRun, pate2e, pat)
 exports.tdd = series(testRun, b_watchify, tdd_browserify)
 exports.acceptance = e2e_test

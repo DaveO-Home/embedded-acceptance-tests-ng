@@ -399,6 +399,7 @@ prodRun.displayName = 'prod'
 
 task(prodRun)
 exports.default = prodRun
+exports.prd = build
 exports.test = series(testRun, pate2e, pat)
 exports.tdd = series(testRun, webpack_tdd)
 exports.rebuild = webpack_rebuild

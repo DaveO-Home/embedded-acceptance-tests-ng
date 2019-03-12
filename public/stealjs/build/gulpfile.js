@@ -184,7 +184,7 @@ const steal_tdd = function (done) {
  * Compile production angular typescript. 
  */
 const compile = function (cb) {
-    var osCommands = 'touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build';
+    var osCommands = 'touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build tsconfig_stealjs.json';
     if (isWindows) {
         osCommands = 'copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build'
     }
