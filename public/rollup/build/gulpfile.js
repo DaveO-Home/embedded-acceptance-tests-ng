@@ -9,7 +9,6 @@ const compilerPackage = require('google-closure-compiler');
 const closureCompiler = compilerPackage.gulp();
 const commonjs = require('rollup-plugin-commonjs');
 const copy = require("gulp-copy");
-const cssbundle = require('rollup-plugin-css-bundle');
 const csslint = require('gulp-csslint');
 const del = require('del')
 const eslint = require('gulp-eslint');
