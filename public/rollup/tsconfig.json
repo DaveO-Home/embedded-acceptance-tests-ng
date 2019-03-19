@@ -1,0 +1,43 @@
+{
+  "files": [
+    "./appl/main.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "../dist_test/rollup/appl",
+    "sourceMap": false,
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "target": "es5",
+    "module": "es6",
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noUnusedLocals": true,
+    "declaration": false,
+    "noImplicitAny": false,
+    "noImplicitUseStrict": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": false,
+    "allowJs": true,
+    "types": [
+      "jasmine",
+      "node"
+    ]
+  },
+  "exclude": [
+    "../node_modules"
+  ],
+  "include": [
+    "./appl/**/*.ts"
+  ],
+  "compileOnSave": true,
+  "buildOnSave": false
+}
