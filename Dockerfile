@@ -14,6 +14,7 @@
 
     RUN npm install gulp -g
     RUN npm install parcel -g
+    RUN npm install brunch -g
 
     #Uncomment if you want to use the vs-code editor
     #RUN echo $'[vscode] \n\
