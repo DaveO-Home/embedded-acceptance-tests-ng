@@ -7,7 +7,7 @@ import Start from 'start'
   styleUrls: ['css/hello.world.css']
 })
 export class HelloWorldComponent {
-  title = 'Acceptance Testing with Angular';
+  title = 'Acceptance Testing with Angular8';
   ngOnInit() { // required if page is refreshed
     Setup.init()
     Start.initMenu()

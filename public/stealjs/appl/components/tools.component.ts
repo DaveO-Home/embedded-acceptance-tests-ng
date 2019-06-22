@@ -90,7 +90,7 @@ export class ToolsSelect {
 export class ToolsComponent implements OnInit {
     public tables: TableService;
 
-    @ViewChild(ToolsSelect) dropdown: ToolsSelect;
+    @ViewChild(ToolsSelect, {static: false}) dropdown: ToolsSelect;
 
     constructor(tableservice: TableService) {
         ToolsSM.toolsStateManagement()
