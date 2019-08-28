@@ -1,4 +1,4 @@
-/* eslint "comma-style": [0, "last"] */
+/* eslint "comma-style": [0, "last"] quotes: 0 */
 import * as _ from 'lodash'
 import 'bootstrap'
 import 'tablesorter'
@@ -112,7 +112,7 @@ export default {
             }
         }
     },
-    renderTools (options, render) {
+    renderTools (options) {
         const currentController = this.controllers[_.capitalize(options.controller)]
         let template
         const jsonUrl = 'templates/tools_ful.json'

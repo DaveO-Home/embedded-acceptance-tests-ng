@@ -40,17 +40,17 @@ describe("Suite for Unit Tests", function () {
         }
     });
 
-    it("blockStrip to remove Canjs block of code", function () {
+    it("blockStrip to remove test block of code", function () {
         var contents = "var prodVar='saved'; \
             //!steal-remove-start \
             console.log('Logging String'); \
             //!steal-remove-end";
-        var startComment = 'steal-remove-start';
-        var endComment = 'steal-remove-end';
+        var startComment = "steal-remove-start";
+        var endComment = "steal-remove-end";
         var regexPattern = new RegExp("[\\t ]*(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
                 startComment + " ?[\\*\\/]?[\\s\\S]*?(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
                 endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
-        contents = contents.replace(regexPattern, '');
+        contents = contents.replace(regexPattern, "");
         expect(contents).toBe("var prodVar='saved';")
     });
 

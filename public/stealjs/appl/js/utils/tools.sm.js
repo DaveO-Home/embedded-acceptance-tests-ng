@@ -1,6 +1,6 @@
 // Per Tutorial: Let’s Build a Redux Powered React Application - Robin Orheden
 
-import { createStore } from 'redux'
+import { createStore } from "redux"
 
 let store = null
 
@@ -27,7 +27,7 @@ function findEntry (message, items) {
   }
  })
 
- return { 'idx': idx, 'current': current }
+ return { "idx": idx, "current": current }
 }
 
 function toolsApp (state, action) {
@@ -35,7 +35,7 @@ function toolsApp (state, action) {
  let found = -1
 
  switch (action.type) {
-  case 'ADD_TOOLS':
+  case "ADD_TOOLS":
    newState = Object.assign({}, state)
    found = findEntry(action.message, newState.tools.items)
    if (found.idx === -1) {
@@ -49,12 +49,12 @@ function toolsApp (state, action) {
 
    return newState
 
-  case 'REPLACE_TOOLS':
+  case "REPLACE_TOOLS":
    newState = Object.assign({}, state)
    found = findEntry(newState.tools.items[action.index].message, newState.tools.items)
    return newState
 
-  case 'DELETE_TOOLS':
+  case "DELETE_TOOLS":
    let items = [].concat(state.tools.items)
 
    items.splice(action.index, 1)
@@ -65,7 +65,7 @@ function toolsApp (state, action) {
     }
    })
 
-  case 'CLEAR_TOOLS':
+  case "CLEAR_TOOLS":
    return Object.assign({}, state, {
     tools: {
      items: []
@@ -79,7 +79,7 @@ function toolsApp (state, action) {
 
 function addTools (message) {
  return {
-  type: 'ADD_TOOLS',
+  type: "ADD_TOOLS",
   message: message,
   displayed: true
  }
@@ -87,7 +87,7 @@ function addTools (message) {
 
 function replaceTools (index) {
  return {
-  type: 'REPLACE_TOOLS',
+  type: "REPLACE_TOOLS",
   index: index,
   displayed: true
  }
@@ -123,7 +123,7 @@ export default {
  replaceCategory (index) {
   return store.dispatch(replaceTools(index))
  },
- findEntry (message, items) {
+ findEntry (message) {
   return findEntry(message, store.getState().tools.items)
  }
 }

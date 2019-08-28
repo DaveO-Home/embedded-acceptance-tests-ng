@@ -1,19 +1,19 @@
 /* eslint "comma-style": [0, "last"] */
-import capitalize from 'lodash-es/capitalize'
-import 'bootstrap'
-import 'tablesorter'
-import 'tablepager'
-import 'tablewidgets'
+import capitalize from "lodash-es/capitalize"
+import "bootstrap"
+import "tablesorter"
+import "tablepager"
+import "tablewidgets"
 //!steal-remove-start
 // Specs can be inserted at initialization(before karma is started).
-if (typeof testit !== 'undefined' && testit) {
-    describe('Popper Defined - required for Bootstrap', () => {
-        it('is JQuery defined', () => {
-            expect(typeof $ === 'function').toBe(true)
+if (typeof testit !== "undefined" && testit) {
+    describe("Popper Defined - required for Bootstrap", () => {
+        it("is JQuery defined", () => {
+            expect(typeof $ === "function").toBe(true)
         })
 
-        it('is Popper defined', () => {
-            expect(typeof Popper === 'function').toBe(true)
+        it("is Popper defined", () => {
+            expect(typeof Popper === "function").toBe(true)
         })
     })
 }
@@ -26,7 +26,7 @@ export default {
         this.initPage(options)
         $.fn.fa = function (options) {
             options = $.extend({
-                icon: 'check'
+                icon: "check"
             }, options)
             return this.each(function () {
                 const $element = $(this.target ? this.target : this)
@@ -36,10 +36,10 @@ export default {
         }
     },
     initPage () {
-        $('[data-toggle=collapse]').click(function (e) {
+        $("[data-toggle=collapse]").click(function (e) {
             // Don't change the hash
             e.preventDefault()
-            $(this).find('i').toggleClass('fa-chevron-right fa-chevron-down')
+            $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down")
         })
     },
     // toUrl (url) {
@@ -63,7 +63,7 @@ export default {
                 //!steal-remove-start
                 if (testit) {
                     expect(appController).not.toBe(null)
-                    expect(typeof fnLoad === 'function').toBe(true)
+                    expect(typeof fnLoad === "function").toBe(true)
                 }
                 //!steal-remove-end
                 me.controllers[capitalize(controllerName)] = appController
@@ -83,52 +83,52 @@ export default {
             if (options.url) {
                 $.get(resolvedUrl, fnLoad)
                     .done((data, err) => {
-                        if (typeof currentController !== 'undefined' && currentController.finish) {
+                        if (typeof currentController !== "undefined" && currentController.finish) {
                             currentController.finish(options)
                         }
-                        if (err !== 'success') {
+                        if (err !== "success") {
                             console.error(err)
                         }
                     })
             } else if (options.local_content) {
                 fnLoad(options.local_content)
-                if (typeof currentController !== 'undefined' && currentController.finish) {
+                if (typeof currentController !== "undefined" && currentController.finish) {
                     currentController.finish(options)
                 }
             }
         }
     },
-    renderTools (options, render) {
+    renderTools (options) {
         const currentController = this.controllers[capitalize(options.controller)]
         let template
-        const jsonUrl = 'templates/tools_ful.json'
+        const jsonUrl = "templates/tools_ful.json"
 
         $.get(options.templateUrl + options.template, source => {
             template = Stache.compile(source)
 
             $.get(jsonUrl, data => {
-                currentController.html = $('<div>').append(template(data)).attr('id', 'stuff').html()
-                $('#stuff').remove()
+                currentController.html = $("<div>").append(template(data)).attr("id", "stuff").html()
+                $("#stuff").remove()
 
                 const updateTable = sender => {
-                    const osKeys = ['Combined', 'Category1', 'Category2']
-                    const values = ['ful', 'cat1', 'cat2']
+                    const osKeys = ["Combined", "Category1", "Category2"]
+                    const values = ["ful", "cat1", "cat2"]
                     const tbodyTemplate = template
-                    const toolsUrl = 'templates/tools_'
+                    const toolsUrl = "templates/tools_"
 
                     let selectedJobType = getValue(sender.target.innerText, osKeys, values)
-                    if (typeof selectedJobType === 'undefined') {
+                    if (typeof selectedJobType === "undefined") {
                         return
                     }
                     $.get(`${toolsUrl + selectedJobType}.json`, data => {
-                        if (selectedJobType === 'ful') {
+                        if (selectedJobType === "ful") {
                             data.all = false
                         }
                         const tbody = tbodyTemplate(data)
-                        $('.tablesorter tbody').html(tbody).trigger('update')
-                        $('#dropdown1 a i').each(function () { this.remove() })
-                        $(sender).fa({ icon: 'check' })
-                    }, 'json').fail((data, err) => {
+                        $(".tablesorter tbody").html(tbody).trigger("update")
+                        $("#dropdown1 a i").each(function () { this.remove() })
+                        $(sender).fa({ icon: "check" })
+                    }, "json").fail((data, err) => {
                         console.error(`Error fetching fixture data: ${err}`)
                     })
                     function getValue (item, keys, values) {
@@ -138,10 +138,10 @@ export default {
                     }
                 }
                 currentController.dropdownEvent = updateTable
-            }, 'json').fail((data, err) => {
+            }, "json").fail((data, err) => {
                 console.error(`Error fetching json data: ${err}`)
             })
-        }, 'text')
+        }, "text")
             .fail((data, err) => {
                 console.error(`Error Loading Template: ${err}`)
                 console.warn(data)

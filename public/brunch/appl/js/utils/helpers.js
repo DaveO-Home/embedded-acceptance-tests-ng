@@ -1,26 +1,26 @@
 
-var moment = require('moment')
+var moment = require("moment")
 
 module.exports = {
     scrollTop () {
-        $('html, body').animate({
+        $("html, body").animate({
             scrollTop: 0
-        }, 'slow')
+        }, "slow")
     },
     convertToBoolean (value) {
         if (!this.isNullOrEmpty(value)) {
             return false
         }
 
-        if (typeof value === 'string') {
+        if (typeof value === "string") {
             switch (value.toLowerCase()) {
-                case 'true':
-                case 'yes':
-                case '1':
+                case "true":
+                case "yes":
+                case "1":
                     return true
-                case 'false':
-                case 'no':
-                case '0':
+                case "false":
+                case "no":
+                case "0":
                     return false
             }
         }
@@ -30,7 +30,7 @@ module.exports = {
         return (JSON && JSON.parse(json)) || $.parseJSON(json)
     },
     isNullOrEmpty (value) {
-        return typeof value === 'undefined' || value === null || value.length === 0
+        return typeof value === "undefined" || value === null || value.length === 0
     },
     getValueOrDefault (value, defaultValue) {
         return !this.isNullOrEmpty(value) ? value : defaultValue
@@ -39,8 +39,8 @@ module.exports = {
         return str.endsWith(endswith)
     },
     getWeekKeys () {
-        var nthWeek = moment().format('w')
-        var year = moment().format('TYYYY')
+        var nthWeek = moment().format("w")
+        var year = moment().format("TYYYY")
         var weekKeys = []
 
         for (var i = 1; i <= nthWeek; i++) {
@@ -54,7 +54,7 @@ module.exports = {
             values = keys
         }
 
-        var options = '<option value=""></option>'
+        var options = "<option value=\"\"></option>"
         for (var i = 0; i < keys.length; i++) {
             options = `${options}<option value='${values[i]}'>${keys[i]}</option>`
         }
@@ -69,7 +69,7 @@ module.exports = {
             if (options.ang) {
                 return frag
             }
-            var selector = typeof options.selector !== 'undefined' ? options.selector : '#main_container'
+            var selector = typeof options.selector !== "undefined" ? options.selector : "#main_container"
             var el = $(selector)
 
             el.empty()
@@ -91,8 +91,8 @@ module.exports = {
     },
     isLoaded: function isLoaded (resolve, reject, dataHtml, Controller, counter, length) {
         switch (Controller.name) {
-            case 'start':
-            case 'table':
+            case "start":
+            case "table":
                 dataHtml = Controller.getHtml()
                 break
             default:
@@ -103,7 +103,7 @@ module.exports = {
         } else {
             counter++
             if (counter > 10) {
-                reject('failed')
+                reject("failed")
             } else {
                 var time = Math.random() * 100 + 200
                 setTimeout(() => {
@@ -128,7 +128,7 @@ module.exports = {
         } else {
             counter++
             if (counter > 25) {
-                reject('failed')
+                reject("failed")
             } else {
                 const time = Math.random() * 100 + 1000
 
@@ -159,20 +159,20 @@ module.exports = {
         var event
 
         var einstellungen = {
-            'pointerX': 0,
-            'pointerY': 0,
-            'button': 0,
-            'ctrlKey': false,
-            'altKey': false,
-            'shiftKey': false,
-            'metaKey': false,
-            'bubbles': true,
-            'cancelable': true
+            "pointerX": 0,
+            "pointerY": 0,
+            "button": 0,
+            "ctrlKey": false,
+            "altKey": false,
+            "shiftKey": false,
+            "metaKey": false,
+            "bubbles": true,
+            "cancelable": true
         }
 
         var moeglicheEvents = [
-            ['HTMLEvents', ['load', 'unload', 'abort', 'error', 'select', 'change', 'submit', 'reset', 'focus', 'blur', 'resize', 'scroll']],
-            ['MouseEvents', ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mousemove', 'mouseout']]
+            ["HTMLEvents", ["load", "unload", "abort", "error", "select", "change", "submit", "reset", "focus", "blur", "resize", "scroll"]],
+            ["MouseEvents", ["click", "dblclick", "mousedown", "mouseup", "mouseover", "mousemove", "mouseout"]]
         ]
 
         for (i = 0, j = moeglicheEvents.length; i < j; ++i) {
@@ -186,7 +186,7 @@ module.exports = {
         }
 
         if (args.length > 2) {
-            if ((typeof args[2]) === 'object') {
+            if ((typeof args[2]) === "object") {
                 this.change(einstellungen, args[2])
             }
         }
@@ -197,7 +197,7 @@ module.exports = {
 
         if (document.createEvent) {
             event = document.createEvent(eventType)
-            if (eventType === 'HTMLEvents') {
+            if (eventType === "HTMLEvents") {
                 event.initEvent(args[1], einstellungen.bubbles, einstellungen.cancalable)
             } else {
                 event.initMouseEvent(args[1], einstellungen.bubbles, einstellungen.cancelable, document.defaultView,
@@ -217,8 +217,8 @@ module.exports = {
     change: function change () {
         var name
         for (name in arguments[1]) {
-            if ((typeof arguments[1][name]) === 'object') {
-                if ((typeof arguments[0][name]) === 'undefined') {
+            if ((typeof arguments[1][name]) === "object") {
+                if ((typeof arguments[0][name]) === "undefined") {
                     arguments[0][name] = {}
                 }
 

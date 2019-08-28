@@ -1,16 +1,16 @@
 /* Note; this is being handled in  the PdfC component */
-import App from 'b/app'
-import Base from 'b/basecontrol'
+import App from "b/app"
+import Base from "b/basecontrol"
 Base.init()
 export default App.controllers.Pdf || (App.controllers.Pdf = Object.assign({ // new (Base.extend({
-    name: 'pdf',
+    name: "pdf",
     finish (options) {
-        $('#pdfDO').attr('src', options.pdfUrl)
+        $("#pdfDO").attr("src", options.pdfUrl)
     },
     test (options) {
-        const pdfUrl = 'views/prod/Test.pdf'
+        const pdfUrl = "views/prod/Test.pdf"
         this.view({
-            local_content: '<iframe id="pdfDO" name="pdfDO" class="col-lg-12" style="height: 750px"></iframe>',
+            local_content: "<iframe id=\"pdfDO\" name=\"pdfDO\" class=\"col-lg-12\" style=\"height: 750px\"></iframe>",
             pdfUrl: pdfUrl,
             controller: options.controller
         })

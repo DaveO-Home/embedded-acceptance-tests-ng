@@ -1,5 +1,5 @@
-'use strict'
+"use strict"
 
 export default {
-  BROWSER_ENV: 'production'
+  BROWSER_ENV: "production"
 }

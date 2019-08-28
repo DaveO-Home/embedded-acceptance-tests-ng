@@ -8,10 +8,10 @@ module.exports = function (config) {
     }
 
     config.set({
-        basePath: '../',
-        frameworks: ['jasmine-jquery', 'jasmine', 'karma-typescript'],
+        basePath: "../",
+        frameworks: ["jasmine-jquery", "jasmine", "karma-typescript"],
         files: [
-            'tests/**/*.+(js|ts|html)'
+            "tests/**/*.+(js|ts|html)"
         ],
         bowerPackages: [
         ],preprocessors: {
@@ -36,14 +36,14 @@ module.exports = function (config) {
         browsers: global.whichBrowsers,
         customLaunchers: {
             FirefoxHeadless: {
-                base: 'Firefox',
-                flags: ['--headless', ' --safe-mode']
+                base: "Firefox",
+                flags: ["--headless", " --safe-mode"]
             }
         },
         browserNoActivityTimeout: 0,
         exclude: [
         ],
-        reporters: ['mocha'],
+        reporters: ["mocha"],
         port: 9876,
         colors: true,
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
@@ -51,7 +51,7 @@ module.exports = function (config) {
         autoWatch: true,
         singleRun: false,
         loggers: [{
-            type: 'console'
+            type: "console"
         }
         ],
         client: {

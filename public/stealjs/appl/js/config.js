@@ -1,7 +1,7 @@
-import 'css'
+import "css"
 //!steal-remove-start
 import steal from "@steal"
-import App from 'app'
+import App from "app"
 //!steal-remove-end
 /*
  * Startup live-reload in another window first - gulp hmr

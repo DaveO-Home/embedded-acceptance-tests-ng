@@ -2,44 +2,44 @@ export default function (Helpers) {
     /*
      * Test Form validation and submission.
      */
-    describe('Contact Form Validation', () => {
+    describe("Contact Form Validation", () => {
         let contact
         let submitObject
         let nameObject
         let emailObject
         let commentObject
-        const mainContainer = 'ng-component'
+        const mainContainer = "ng-component"
 
         beforeAll(done => {
-            location.hash = '/contact'
+            location.hash = "/contact"
             done()
         })
 
-        it('Contact form - verify required fields', done => {
+        it("Contact form - verify required fields", done => {
             Helpers.getResource(mainContainer, 0, 0)
                 .catch(rejected => {
                     fail(`Contact Page did not load within limited time: ${rejected}`)
                 }).then(resolved => {
                     contact = $(`${mainContainer} form`)
-                    nameObject = $('#inputName')
-                    emailObject = $('#inputEmail')
-                    commentObject = $('#inputComment')
+                    nameObject = $("#inputName")
+                    emailObject = $("#inputEmail")
+                    commentObject = $("#inputComment")
 
                     expect(nameObject[0].validity.valueMissing).toBe(true)
                     expect(emailObject[0].validity.valueMissing).toBe(true)
                     expect(commentObject[0].validity.valueMissing).toBe(true)
-                    expect(contact.find('input[type=checkbox]')[0].validity.valueMissing).toBe(false) // Not required
+                    expect(contact.find("input[type=checkbox]")[0].validity.valueMissing).toBe(false) // Not required
 
                     done()
                 })
         })
 
-        it('Contact form - validate populated fields, email mismatch.', done => {
-            submitObject = contact.find('input[type=submit]')
+        it("Contact form - validate populated fields, email mismatch.", done => {
+            submitObject = contact.find("input[type=submit]")
 
-            nameObject.val('me')
-            emailObject.val('notanemailaddress')
-            commentObject.val('Stuff')
+            nameObject.val("me")
+            emailObject.val("notanemailaddress")
+            commentObject.val("Stuff")
 
             submitObject.click()
 
@@ -57,8 +57,8 @@ export default function (Helpers) {
             done()
         })
 
-        it('Contact form - validate email with valid email address.', done => {
-            emailObject.val('ace@ventura.com')
+        it("Contact form - validate email with valid email address.", done => {
+            emailObject.val("ace@ventura.com")
 
             expect(emailObject[0].validity.typeMismatch).toBe(false)
             expect(emailObject[0].checkValidity()).toBe(true)
@@ -66,7 +66,7 @@ export default function (Helpers) {
             done()
         })
 
-        it('Contact form - validate form submission.', done => {
+        it("Contact form - validate form submission.", done => {
             submitObject.click()
 
             setTimeout(() => {

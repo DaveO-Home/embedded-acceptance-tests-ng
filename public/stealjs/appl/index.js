@@ -1,26 +1,26 @@
-import 'zone.js/dist/zone'
-import {} from '@angular/compiler'
-import 'setglobals'
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from 'entry';
-import 'config'
-import Default from 'default' 
-import Setup from 'setup'
-import 'pager'
-import App from 'app'
+import "zone.js/dist/zone"
+import {} from "@angular/compiler"
+import "setglobals"
+import { enableProdMode } from "@angular/core";
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from "entry";
+import "config"
+import Default from "default" 
+import Setup from "setup"
+import "pager"
+import App from "app"
 //!steal-remove-start
-import 'zone.js/dist/zone-error';
-import apptest from 'apptest'
+import "zone.js/dist/zone-error";
+import apptest from "apptest"
 //!steal-remove-end
-import './css/site.css'
+import "./css/site.css"
 
 let production = true; 
 //!steal-remove-start
 production = false;
 //!steal-remove-end
 
-if (typeof production === 'undefined' || production) {
+if (typeof production === "undefined" || production) {
     enableProdMode();
 }
 if (typeof testit === "undefined" || !testit) {

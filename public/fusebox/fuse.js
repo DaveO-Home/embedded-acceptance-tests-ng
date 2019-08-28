@@ -1,19 +1,21 @@
-const exec = require('child_process').exec;
-const fs = require('fs');
+/* eslint quotes: ["error", "double"] semi: ["error"] */
+/* eslint-env es6 */
+const exec = require("child_process").exec;
+const fs = require("fs");
 const {
     FuseBox,
     QuantumPlugin,
     WebIndexPlugin,
     HTMLPlugin,
     CSSPlugin,
-    CSSResourcePlugin, 
-    UglifyJSPlugin,
-    HMRPlugin,
-    EnvPlugin,
+    CSSResourcePlugin
+    // UglifyJSPlugin,
+    // HMRPlugin,
+    // EnvPlugin,
     // BabelPlugin
-    } = require("fuse-box");
-const  BlockStripPlugin = require("./appl/js/plugin/BlockStrip").BlockStrip;
-const  CopyFsPlugin = require("./appl/js/plugin/CopyFs").CopyFs;
+} = require("fuse-box");
+const BlockStripPlugin = require("./appl/js/plugin/BlockStrip").BlockStrip;
+const CopyFsPlugin = require("./appl/js/plugin/CopyFs").CopyFs;
 const aliases = {
     "apptest": "../jasmine/apptest.js",
     "contacttest": "./contacttest.js",
@@ -37,19 +39,19 @@ const aliases = {
     "handlebars": "handlebars/dist/handlebars.min.js"
 };
 let isKarma = process.env.USE_KARMA === "true";
-let isProduction = process.env.NODE_ENV === 'production';
+let isProduction = process.env.NODE_ENV === "production";
 let distDir = isProduction ? "../dist/fusebox" : "../dist_test/fusebox";
 let useQuantum = true;
-let useHMR = process.env.USE_HMR === 'true';
+let useHMR = process.env.USE_HMR === "true";
 let resources = (f) => (!isProduction && isKarma ? `/base/dist_test/fusebox/resources/${f}` : isProduction ? `../resources/${f}` : `/dist_test/fusebox/resources/${f}`);
-let src = 'appl';
+let src = "appl";
 
-if (!isProduction && fs.existsSync('../.fusebox')) {
-    exec('rm -r ../.fusebox');
+if (!isProduction && fs.existsSync("../.fusebox")) {
+    exec("rm -r ../.fusebox");
 }
 
 const fuse = FuseBox.init({
-//    experimentalFeatures: false,
+    //    experimentalFeatures: false,
     homeDir: src,
     output: `${distDir}/$name-$hash.js`,
     target: "browser@es5",
@@ -64,7 +66,7 @@ const fuse = FuseBox.init({
     shim: {
         jquery: {
             source: "../node_modules/jquery/dist/jquery.js",
-            exports: "$",
+            exports: "$"
         }
     },
     useTypescriptCompiler: true,
@@ -72,16 +74,17 @@ const fuse = FuseBox.init({
     plugins: [
         isProduction && BlockStripPlugin({
             options: {
-                start: 'develblock:start',
-                end: 'develblock:end'
-        }}),
+                start: "develblock:start",
+                end: "develblock:end"
+            }
+        }),
         WebIndexPlugin({
-            template: isProduction? "./appl/testapp.html": "./appl/testapp_dev.html",
-            target: isProduction? "appl/testapp.html": "appl/testapp_dev.html",
+            template: isProduction ? "./appl/testapp.html" : "./appl/testapp_dev.html",
+            target: isProduction ? "appl/testapp.html" : "appl/testapp_dev.html",
             path: "../"
         }),
         HTMLPlugin({
-            useDefault: false,
+            useDefault: false
         }),
         isProduction && useQuantum && QuantumPlugin({
             target: "browser",
@@ -104,54 +107,53 @@ const fuse = FuseBox.init({
         ],
         CSSPlugin(),
         CopyFsPlugin({
-            copy: [{from: "appl/views/**/*", to: distDir + "/appl/views"},
-                {from: "appl/templates/**/*", to: distDir + "/appl/templates"},
-                {from: "appl/index.html", to: distDir + "/"},
-                {from: "index.html", to: distDir + "/"},
-                {from: "images/*", to: distDir + "/images"},
-                {from: "appl/assets/*", to: distDir + "/appl/assets"},
-                {from: "../README.md", to: distDir},
-                {from: "appl/css/table.css", to: distDir + "/"},
-                {from: "appl/css/hello.world.css", to: distDir + "/"},
-                {from: "appl/app_bootstrap.html", to: distDir + "/"}
+            copy: [{ from: "appl/views/**/*", to: distDir + "/appl/views" },
+            { from: "appl/templates/**/*", to: distDir + "/appl/templates" },
+            { from: "appl/index.html", to: distDir + "/" },
+            { from: "index.html", to: distDir + "/" },
+            { from: "images/*", to: distDir + "/images" },
+            { from: "appl/assets/*", to: distDir + "/appl/assets" },
+            { from: "../README.md", to: distDir },
+            { from: "appl/css/table.css", to: distDir + "/" },
+            { from: "appl/css/hello.world.css", to: distDir + "/" },
+            { from: "appl/app_bootstrap.html", to: distDir + "/" }
             ]
         })
-    ],
-    
+    ]
+
 });
 
 if (!isProduction) {
     if (useHMR === true) {
         fuse.dev({
-            root: '../',
+            root: "../",
             port: 3080,
             open: false
         });
     }
-    var vendor = fuse.bundle("vendor")
-            .target("browser")
-            .instructions(`~ main.ts`);
 
-    var acceptance = fuse.bundle("index") 
-            .target("browser")
-            .instructions(`> [main.ts]`);
+    fuse.bundle("vendor")
+        .target("browser")
+        .instructions("~ main.ts");
+
+    var acceptance = fuse.bundle("index")
+        .target("browser")
+        .instructions("> [main.ts]");
 
     if (useHMR === true) {
-        acceptance.hmr({reload: true})
-                .watch();
+        acceptance.hmr({ reload: true })
+            .watch();
     }
 } else {
-    fuse.bundle('vendor')
-            .target('browser@es5')
-            .sourceMaps(true)
-            .instructions(`~ main.ts`);
+    fuse.bundle("vendor")
+        .target("browser@es5")
+        .sourceMaps(true)
+        .instructions("~ main.ts");
 
-    fuse.bundle('index') 
-            .target('browser@es5')
-            .sourceMaps(false)
-            .instructions(`!> [main.ts]`);
+    fuse.bundle("index")
+        .target("browser@es5")
+        .sourceMaps(false)
+        .instructions("!> [main.ts]");
 }
 
 fuse.run();
-
-

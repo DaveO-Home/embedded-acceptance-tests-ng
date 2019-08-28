@@ -1,6 +1,6 @@
 
 export default {
-    template: 'stache',
+    template: "stache",
     errorNotify: false,
     errorLog: false,
     bundler: window._bundler

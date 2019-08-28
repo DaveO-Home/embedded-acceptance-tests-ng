@@ -1,5 +1,5 @@
 const AngularCompilerPlugin = require("@ngtools/webpack").AngularCompilerPlugin;
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require("copy-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const webpack = require("webpack");
@@ -17,7 +17,7 @@ module.exports = (argv) => {
         resolve: {
             extensions: [".ts", ".js", ".json"],
             alias: {
-                '@': resolve('appl'),
+                "@": resolve("appl"),
                 app: resolve("appl/js/app.js"),
                 basecontrol: resolve("appl/js/utils/base.control"),
                 config: resolve("appl/js/config"),
@@ -38,7 +38,7 @@ module.exports = (argv) => {
                 logintests: resolve("tests/logintest"),
                 routertests: resolve("tests/routertest"),
                 toolstests: resolve("tests/toolstest"),
-                handlebars: 'handlebars/dist/handlebars.js'
+                handlebars: "handlebars/dist/handlebars.js"
             }
         },
         module: {
@@ -60,8 +60,8 @@ module.exports = (argv) => {
                 },
                 {
                     test: /\.js$/,
-                    loader: 'babel-loader',
-                    include: [resolve('appl'), resolve('tests'), resolve('node_modules/webpack-dev-server/client')]
+                    loader: "babel-loader",
+                    include: [resolve("appl"), resolve("tests"), resolve("node_modules/webpack-dev-server/client")]
                 },
                 {
                     include: [/node_modules/, /appl\/css/],
@@ -72,11 +72,11 @@ module.exports = (argv) => {
                     use: [
                         MiniCssExtractPlugin.loader,
                         {
-                            loader: 'css-loader',
-                            // options: {
+                            loader: "css-loader",
+                            options: {
                             //     minimize: false,
-                            //     importLoaders: 1
-                            // }
+                                importLoaders: 1
+                            }
                         },
                         // {
                         // 	loader: 'postcss-loader',
@@ -85,25 +85,25 @@ module.exports = (argv) => {
                         // 	}
                         // },
                         {
-                            loader: 'resolve-url-loader'
+                            loader: "resolve-url-loader"
                         },
                         {
-                            loader: 'sass-loader'
+                            loader: "sass-loader"
                         }
                     ]
                 },
                 {
                     test: /\.(png|jpg|gif|svg)$/,
-                    loader: 'file-loader',
+                    loader: "file-loader",
                     options: {
-                        name: 'images/[name].[ext]'
+                        name: "images/[name].[ext]"
                     }
                 },
                 {
                     test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                     use: [
                         {
-                          loader: 'url-loader',
+                          loader: "url-loader",
                           options: {
                             limit: 10000,
                           },
@@ -112,7 +112,7 @@ module.exports = (argv) => {
                 },
                 {
                     test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
-                    use: 'file-loader'
+                    use: "file-loader"
                 },
             ]
         },
@@ -120,7 +120,7 @@ module.exports = (argv) => {
             new webpack.ProvidePlugin({
                 $: "jquery",
                 jQuery: "jquery",
-                Popper: ['popper.js', 'default']
+                Popper: ["popper.js", "default"]
             }),
             new AngularCompilerPlugin({
                 tsConfigPath: path.join(__dirname, "../tsconfig.json"),
@@ -128,37 +128,37 @@ module.exports = (argv) => {
                 entryModule: path.join(__dirname, "../appl/entry#AppModule"),
                 sourceMap: true
             }),
-            argv.dist === 'development' ? new webpack.NamedModulesPlugin()
+            argv.dist === "development" ? new webpack.NamedModulesPlugin()
                 : new webpack.HashedModuleIdsPlugin(),
             new MiniCssExtractPlugin({
-                filename: argv.mode === 'development'? "[name].css": "[name].[contenthash].css",
-                chunkFilename: argv.mode === 'development'? "[name].[id].css": "[name].[id].[contenthash].css"
+                filename: argv.mode === "development"? "[name].css": "[name].[contenthash].css",
+                chunkFilename: argv.mode === "development"? "[name].[id].css": "[name].[id].[contenthash].css"
             }),
             new CopyWebpackPlugin([
                 {
-                    from: path.resolve(__dirname, '../static'),
+                    from: path.resolve(__dirname, "../static"),
                     to: argv.dist,
-                    ignore: ['.*']
+                    ignore: [".*"]
                 },
-                { from: '../images/favicon.ico', to: argv.dist + "/images" },
-                { from: resolve('/appl/index.html'), to: argv.dist },
-                { from: '../../README.md', to: '../' },
-                { from: resolve('/appl/css/hello.world.css'), to: argv.dist + '/appl/css' },
-                { from: resolve('/appl/css/table.css'), to: argv.dist + '/appl/css' },
-                { from: resolve('/appl/app_bootstrap.html'), to: argv.dist + '/appl' },
+                { from: "../images/favicon.ico", to: argv.dist + "/images" },
+                { from: resolve("/appl/index.html"), to: argv.dist },
+                { from: "../../README.md", to: "../" },
+                { from: resolve("/appl/css/hello.world.css"), to: argv.dist + "/appl/css" },
+                { from: resolve("/appl/css/table.css"), to: argv.dist + "/appl/css" },
+                { from: resolve("/appl/app_bootstrap.html"), to: argv.dist + "/appl" },
                 {
                     from: {
-                        glob: resolve('/appl/views/**/*'),
+                        glob: resolve("/appl/views/**/*"),
                         dot: false
                     },
-                    to: argv.dist + '/appl'
+                    to: argv.dist + "/appl"
                 },
                 {
                     from: {
-                        glob: '../appl/templates/**/*',
+                        glob: "../appl/templates/**/*",
                         dot: false
                     },
-                    to: argv.dist + '/appl'
+                    to: argv.dist + "/appl"
                 },
             ], { debug: "error" })
         ],
@@ -191,5 +191,5 @@ module.exports = (argv) => {
 }
 
 function resolve(dir) {
-    return path.join(__dirname, '..', dir)
+    return path.join(__dirname, "..", dir)
 }

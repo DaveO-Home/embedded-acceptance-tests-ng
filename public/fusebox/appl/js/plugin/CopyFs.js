@@ -17,7 +17,7 @@ var CopyFsClass = /** @class */ (function () {
             });
         });
     }
-    ;
+    
     return CopyFsClass;
 }());
 exports.CopyFsClass = CopyFsClass;

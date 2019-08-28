@@ -2,23 +2,23 @@
  * Successful acceptance tests & lints start the production build.
  * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint', 'bootlint') -> 'build'
  */
-const { src, dest, series, parallel, task } = require('gulp');
-const eslint = require('gulp-eslint');
-const csslint = require('gulp-csslint');
-const exec = require('child_process').exec;
+const { src, dest, series, parallel, task } = require("gulp");
+const eslint = require("gulp-eslint");
+const csslint = require("gulp-csslint");
+const exec = require("child_process").exec;
 const env = require("gulp-env")
 const copy = require("gulp-copy");
 const stripCode = require("gulp-strip-code");
-const del = require('del');
-const noop = require('gulp-noop');
-const log = require('fancy-log');
-const Bundler = require('parcel-bundler')
-const flatten = require('gulp-flatten')
-const chalk = require('chalk');
-const browserSync = require('browser-sync');
-const uglify = require('gulp-uglify-es').default;
-const Server = require('karma').Server;
-const parcel = require('gulp-parcel')
+const del = require("del");
+const noop = require("gulp-noop");
+const log = require("fancy-log");
+const Bundler = require("parcel-bundler")
+const flatten = require("gulp-flatten")
+const chalk = require("chalk");
+const browserSync = require("browser-sync");
+const uglify = require("gulp-uglify-es").default;
+const Server = require("karma").Server;
+const parcel = require("gulp-parcel")
 
 const startComment = "develblock:start",
     endComment = "develblock:end",
@@ -27,13 +27,13 @@ const startComment = "develblock:start",
         endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
 
 let lintCount = 0
-let isProduction = process.env.NODE_ENV == 'production'
+let isProduction = process.env.NODE_ENV == "production"
 let browsers = process.env.USE_BROWSERS
 let bundleTest = process.env.USE_BUNDLER
 let testDist = "dist_test/parcel"
 let prodDist = "dist/parcel"
 let dist = isProduction ? prodDist : testDist
-let useNg = '';
+let useNg = "";
 let runSingle = true;
 
 if (browsers) {
@@ -56,12 +56,12 @@ const parcel_prod = function (cb) {
     var envs = env.set({
         NODE_ENV: "production",
     });
-    return src('../../' + dist + '/appl/main.*.js')
+    return src("../../" + dist + "/appl/main.*.js")
         .pipe(envs)
         .pipe(isProduction ? stripCode({ pattern: regexPattern }) : noop())
         .pipe(isProduction ? uglify() : noop())
-        .pipe(dest('../../' + dist + '/appl'))
-        .on('end', () => {
+        .pipe(dest("../../" + dist + "/appl"))
+        .on("end", () => {
             log(chalk.cyan("***** Finished Build *****"));
             cb()
         });
@@ -70,7 +70,7 @@ const parcel_prod = function (cb) {
  * Production Parcel 
  */
 const build = function (cb) {
-    process.env.NODE_ENV = 'production'
+    process.env.NODE_ENV = "production"
     isProduction = true;
     dist = prodDist;
     parcelBuild(false, cb)
@@ -82,7 +82,7 @@ const pate2e = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ''
+    useNg = ""
     runSingle = true
     runKarma(done);
 };
@@ -93,7 +93,7 @@ const pat = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = '.ng'
+    useNg = ".ng"
     runSingle = true
     runKarma(done);
 };
@@ -104,21 +104,21 @@ const esLint = function (cb) {
     dist = prodDist;
     var stream = src(["../appl/js/**/*.js"])
         .pipe(eslint({
-            configFile: 'eslintConf.json',
+            configFile: "../../.eslintrc.js", // 'eslintConf.json',
             quiet: 0
         }))
         .pipe(eslint.format())
-        .pipe(eslint.result(result => {
+        .pipe(eslint.result(() => {
             //Keeping track of # of javascript files linted.
             lintCount++;
         }))
         .pipe(eslint.failAfterError());
 
-    stream.on('error', () => {
+    stream.on("error", () => {
         process.exit(1);
     });
 
-    return stream.on('end', () => {
+    return stream.on("end", () => {
         log(chalk.cyan("# javascript files linted: " + lintCount));
         cb()
     });
@@ -127,13 +127,13 @@ const esLint = function (cb) {
  * css linter
  */
 const cssLint = function (cb) {
-    var stream = src(['../appl/css/site.css', '../appl/css/table.css'])
+    var stream = src(["../appl/css/site.css", "../appl/css/table.css"])
         .pipe(csslint())
         .pipe(csslint.formatter());
 
-    stream.on('error', () => {
+    stream.on("error", () => {
         process.exit(1);
-    }).on('end', () => {
+    }).on("end", () => {
         cb();
     });
 };
@@ -141,7 +141,7 @@ const cssLint = function (cb) {
  * Bootstrap html linter 
  */
 const bootLint = function (cb) {
-    exec('npx gulp --gulpfile Gulpboot.js', function (err, stdout, stderr) {
+    exec("npx gulp --gulpfile Gulpboot.js", function (err, stdout, stderr) {
         log(stdout);
         log(stderr);
         cb(err);
@@ -154,7 +154,7 @@ const clean = function (done) {
     isProduction = true;
     dist = prodDist;
     return del([
-        '../../' + prodDist + '/**/*'
+        "../../" + prodDist + "/**/*"
     ], { dryRun: false, force: true }, done);
 };
 
@@ -166,7 +166,7 @@ const cleant = function (done) {
     isProduction = false;
     dist = testDist;
     return del([
-        '../../' + testDist + '/**/*'
+        "../../" + testDist + "/**/*"
     ], { dryRun: dryRun, force: true }, done);
 };
 /**
@@ -222,7 +222,7 @@ const tdd_parcel = function (done) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
     new Server({
-        configFile: __dirname + '/karma.conf.js',
+        configFile: __dirname + "/karma.conf.js",
     }, done).start();
 };
 /**
@@ -233,17 +233,17 @@ const tddo = function (done) {
         global.whichBrowsers = ["Opera"];
     }
     new Server({
-        configFile: __dirname + '/karma.conf.js',
+        configFile: __dirname + "/karma.conf.js",
     }, done).start();
 };
 /**
  * Using BrowserSync Middleware for HMR  
  */
 const sync = function () {
-    const server = browserSync.create('devl');
+    const server = browserSync.create("devl");
     dist = testDist;
-    server.init({ server: '../../', index: 'index_p.html', port: 3080/*, browser: ['google-chrome']*/ });
-    server.watch('../../' + dist + '/appl/main.*.js').on('change', server.reload);  //change any file in appl/ to reload app - triggered on watchify results
+    server.init({ server: "../../", index: "index_p.html", port: 3080/*, browser: ['google-chrome']*/ });
+    server.watch("../../" + dist + "/appl/main.*.js").on("change", server.reload);  //change any file in appl/ to reload app - triggered on watchify results
     return server;
 };
 
@@ -259,7 +259,7 @@ const watch_parcel = function (cb) {
 const testRun = series(cleant, copy_images, copy_test, build_development)
 const lintRun = parallel(esLint, cssLint, bootLint)
 const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build, parcel_prod)
-prodRun.displayName = 'prod'
+prodRun.displayName = "prod"
 
 task(prodRun)
 exports.default = prodRun
@@ -272,24 +272,25 @@ exports.rebuild = testRun
 exports.ngtest = ng_test
 exports.e2e = e2e_test
 exports.development = parallel(series(watch_parcel, sync, watcher), tdd_parcel)
+exports.lint = lintRun
 
 function parcelBuild(watch, cb) {
     if (bundleTest && bundleTest === "false") {
         return cb()
     }
     
-    const file = isProduction ? '../appl/testapp.html' : '../appl/testapp_dev.html'
+    const file = isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html"
     // Bundler options
     const options = {
         production: isProduction,
-        outDir: '../../' + dist + '/appl',
-        outFile: isProduction ? 'testapp.html' : 'testapp_dev.html',
-        publicUrl: './',
+        outDir: "../../" + dist + "/appl",
+        outFile: isProduction ? "testapp.html" : "testapp_dev.html",
+        publicUrl: "./",
         watch: watch,
         cache: !isProduction,
-        cacheDir: '.cache',
+        cacheDir: ".cache",
         minify: false,
-        target: 'browser',
+        target: "browser",
         https: false,
         logLevel: 3, // 3 = log everything, 2 = log warnings & errors, 1 = log errors
         // hmrPort: 3080,
@@ -302,7 +303,7 @@ function parcelBuild(watch, cb) {
     const bundler = new Bundler(file, options);
     let isBundled = false
 
-    bundler.on('bundled', (bundle) => {
+    bundler.on("bundled", (bundle) => {
         isBundled = true
     })
     bundler.on("buildEnd", () => {
@@ -321,19 +322,19 @@ function parcelBuild(watch, cb) {
 }
 
 function copySrc() {
-    return src(['../appl/view*/**/*', '../appl/temp*/**/*' /*, isProduction ? '../appl/testapp.html' : '../appl/testapp_dev.html'*/])
+    return src(["../appl/view*/**/*", "../appl/temp*/**/*" /*, isProduction ? '../appl/testapp.html' : '../appl/testapp_dev.html'*/])
         .pipe(flatten({ includeParents: -2 })
-            .pipe(dest('../../' + dist + '/appl')))
+            .pipe(dest("../../" + dist + "/appl")))
 }
 
 function copyImages() {
-    return src(['../images/*', '../../README.m*', '../appl/css/table.css', '../appl/app_bootstrap.html', '../appl/css/hello.world.css'])
-        .pipe(copy('../../' + dist + '/appl'));
+    return src(["../images/*", "../../README.m*", "../appl/css/table.css", "../appl/app_bootstrap.html", "../appl/css/hello.world.css"])
+        .pipe(copy("../../" + dist + "/appl"));
 }
 
 function runKarma(done) {
     new Server({
-        configFile: __dirname + '/karma' + useNg + '.conf.js',
+        configFile: __dirname + "/karma" + useNg + ".conf.js",
         singleRun: true
     }, result => {
         var exitCode = !result ? 0 : result;
@@ -349,12 +350,12 @@ function runKarma(done) {
  * From Stack Overflow - Node (Gulp) process.stdout.write to file
  * @type type
  */
-if (process.env.USE_LOGFILE == 'true') {
-    var fs = require('fs');
+if (process.env.USE_LOGFILE == "true") {
+    var fs = require("fs");
     var origstdout = process.stdout.write,
         origstderr = process.stderr.write,
-        outfile = 'node_output.log',
-        errfile = 'node_error.log';
+        outfile = "node_output.log",
+        errfile = "node_error.log";
 
     if (fs.exists(outfile)) {
         fs.unlink(outfile);
@@ -364,12 +365,12 @@ if (process.env.USE_LOGFILE == 'true') {
     }
 
     process.stdout.write = function (chunk) {
-        fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ''));
+        fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstdout.apply(this, arguments);
     };
 
     process.stderr.write = function (chunk) {
-        fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ''));
+        fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstderr.apply(this, arguments);
     };
 }

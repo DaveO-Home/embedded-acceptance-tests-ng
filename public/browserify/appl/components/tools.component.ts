@@ -67,8 +67,8 @@ export class ToolsSelect {
         const controller = App.controllers['Table']
 
         dropdownValue = e.target.text.trim();
-        let store = ToolsSM.getStore()
-        const found = ToolsSM.findEntry(dropdownValue, store.getState().tools.items)
+        // let store = ToolsSM.getStore()
+        const found = ToolsSM.findEntry(dropdownValue /*, store.getState().tools.items*/)
         
         controller.dropdownEvent(e) // Load table with selected data
         if (found.idx === -1) {
