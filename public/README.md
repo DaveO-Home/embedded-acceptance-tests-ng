@@ -204,7 +204,7 @@ __Running Tests__-
 
   **Both Chrome and Firefox are the default browsers.**  
 
-### I.  **Browserify**
+### I. **Browserify**
 
 [Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
@@ -227,7 +227,7 @@ __Running Tests__-
 * `cd public/browserify/build`
 * `gulp tdd`
 
-### II.  **Brunch**
+### II. **Brunch**
 
 [Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
@@ -256,7 +256,7 @@ __Note__; The test url is `localhost:3080` since Brunch by default uses 'config.
 * `npm install eslint@latest`
 * `cd <install>/public` and edit the `brunch-config.js` file and uncomment the eslint section.
 
-### III.  **Fusebox**
+### III. **Fusebox**
 
 [Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
@@ -276,7 +276,7 @@ __Node:__ Fusebox has been upgraed to version 4.
 
    The HMR Server must be running if you want tests to rerun as source code(*.js) is changed.
 
-### IV.  **Parcel**
+### IV. **Parcel**
 
 [Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
@@ -296,7 +296,7 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
   
   * Using `export USE_BUNDLER=false` - When using `gulp watch & gulp tdd` together, you can set USE_BUNDLER to false to startup TDD without building first, `gulp watch` does the test build.  Also, by settting `USE_BUNDLER=false` before `gulp`(production build), only testing and linting will execute.
 
-### V.  **Rollup**
+### V. **Rollup**
 
 [Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
