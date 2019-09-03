@@ -6,7 +6,9 @@ The basic idea is to build a production application after ensuring code complian
 
 [Test Build](#test-build)
 
-[Bundlers](#bundlers)
+[Development Overview](#development)
+
+## Bundlers
 
 1. [Browserify](#i-browserify)
 1. [Brunch](#ii-brunch)
@@ -17,8 +19,6 @@ The basic idea is to build a production application after ensuring code complian
 1. [Webpack](#vii-webpack)
 
 [Installation](#installation)
-
-[Development](#development)
 
 [Docker](#VIII-Dockerfile)
 
@@ -86,6 +86,8 @@ To generate a build "cd to `public/<bundler>/build` and type `gulp`, e.g.
   gulp
 ```
 
+or `gulp prod`
+
 If the tests succeed then the build should complete.
 
 To run the production application:
@@ -96,7 +98,7 @@ To run the production application:
 
 You can repeat the procedure with "webpack", "browserify", or "parcel". Output from the build can be logged by setting the environment variable `USE_LOGFILE=true`.
 
-You can run `gulp rebuild` from the `<bundler>/build` directory as a stand-alone build.
+You can run `gulp prd` from the `<bundler>/build` directory as a stand-alone build.
 
 ## Test Build
 
