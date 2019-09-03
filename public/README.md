@@ -1,14 +1,45 @@
-# Embedded Angular Acceptance Testing with Karma and Jasmine
+# Embedded Angular2 Acceptance Testing with Karma and Jasmine
 
-This demo is comprised of seven javascript bundlers each configured to run the tests.  The Bootstrap single page application retains functionality among the bundlers with only minor code change.  The javascript framework used is Angular7 and instrumentation is done with Gulp and Karma.  So you can pick your poison, Webpack, Browserify, Fusebox, StealJS, Parcel, Rollup or Brunch. The demo was orginally developed using the Canjs framework which can be found at https://github.com/DaveO-Home/embedded-acceptance-tests, a React version can be found at https://github.com/DaveO-Home/embedded-acceptance-tests-react and a Vue version can be found at https://github.com/DaveO-Home/embedded-acceptance-tests-vue.
+The basic idea is to build a production application after ensuring code compliance via javascript, css and bootstrap linting and automated unit and e2e testing.
 
-__Note__; the demo was not developed to compare software, rather simply to demonstrate how one might embed test code as part of the build process.  And the configuration also shows how to develop using hot module reload and test driven development.
+[Production Build](#production-build)
 
-**Warning**: If the application fails to install with your current node/npm versions, execute ```npm clean cache --force```, and use at least ```node``` version 8 and ```npm``` version 6 to install and build.
+[Test Build](#test-build)
 
-**Dockerfile**: See instructions at bottom of README.
+[Bundlers](#bundlers)
+
+1. [Browserify](#i-browserify)
+1. [Brunch](#ii-brunch)
+1. [Fusebox](#iii-fusebox)
+1. [Parcel](#iv-parcel)
+1. [Rollup](#v-rollup)
+1. [Steal](#vi-stealjs)
+1. [Webpack](#vii-webpack)
+
+[Installation](#installation)
+
+[Development](#development)
+
+[Docker](#VIII-Dockerfile)
+
+## Other Framworks
+
+  1. **Canjs** - <https://github.com/DaveO-Home/embedded-acceptance-tests>
+  1. **Vue** - <https://github.com/DaveO-Home/embedded-acceptance-tests-vue>
+  1. **React** - <https://github.com/DaveO-Home/embedded-acceptance-tests-react>
+
+## Main Tools
+
+  1. Gulp
+  1. Karma
+  1. Jasmine
+  1. Any Browser with a karma launcher
+  1. See `public/package.json` for details
+  1. Node, npm - node v8 or greater works best
 
 ## Installation
+
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
 **Desktop:**
 
@@ -32,6 +63,8 @@ __Note__; the demo was not developed to compare software, rather simply to demon
 
   This will install a small Node/Express setup to view the results of a production build.
 
+  To install the demo
+
   `cd <install>/embedded-acceptance-tests/public`
 
 ```bash
@@ -43,6 +76,8 @@ __Note__; the demo was not developed to compare software, rather simply to demon
 Test builds will generate bundles in 'dist_test' and production in the 'dist' directory at the root level, 'public'.
 
 ## Production Build
+
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
 To generate a build "cd to `public/<bundler>/build` and type `gulp`, e.g.
 
@@ -64,6 +99,8 @@ You can repeat the procedure with "webpack", "browserify", or "parcel". Output f
 You can run `gulp rebuild` from the `<bundler>/build` directory as a stand-alone build.
 
 ## Test Build
+
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
 The test build simply runs the tests in headless mode. The default browsers are ChromeHeadless and FirefoxHeadless.  To change the default you can set an environment variable; e.g.
 
@@ -146,14 +183,16 @@ SUMMARY:
 
 ## Development
 
-__Note__; When modifying project assets(.handlebars, .html, etc.) you can execute `gulp copy` from the `public/<bundler>/build` directory to preview changes.
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
+
+__Note__; When modifying project assets(.handlebars, .html, etc.) you can execute `gulp copy` from the `public/<bundler>/build` directory to preview changes. Some of the bundlers may not have this implemented.
 
 __A word on developing tests__; You can write and execute tests quicker by using the rebuild process of a given bundler and running the `acceptance` gulp task after the auto-rebuild, e.g. with __Fusebox__ you can;
 
-  * `cd public/fusebox/build`
-  * `gulp hmr`
-  * Develop or modify a test.
-  * In another window execute `gulp acceptance` from the `build` directory to view the modified or new test results.
+* `cd public/fusebox/build`
+* `gulp hmr`
+* Develop or modify a test.
+* In another window execute `gulp acceptance` from the `build` directory to view the modified or new test results.
 
 __Running Tests__-
 
@@ -161,46 +200,50 @@ __Running Tests__-
   1. Run e2e tests without build - `gulp e2e`.
   1. Run angular2 tests without build - `gulp ngtest`.
 
-  __Also Note__; All of the development tasks(`hmr, server, watch`) etc, can be run from one window using the `gulp development` task.
+  __Also Note(Experimental)__; All of the development tasks(`hmr, server, watch`) etc, can be run from one window using the `gulp development` task.
+
+  **Both Chrome and Firefox are the default browsers.**  
 
 ### I.  **Browserify**
 
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
+
 1\. ***Development Server Window*** -
 
-   * `cd public/browserify/build`
-   * `gulp server`
+* `cd public/browserify/build`
+* `gulp server`
 
    Browsersync will start a browser tab(default Chrome) with `localhost:3080/dist_test/browserify/appl/testapp_dev.html`.  Any changes to the source code(*.js files) should be reflected in the browser auto reload.
 
 2\. ***Hot Module Reload(HMR) Window*** -
 
-   * `cd public/browserify/build`
-   * `gulp hmr`
+* `cd public/browserify/build`
+* `gulp hmr`
 
    The `watchify` plugin will remain active to rebuild the bundle on code change.
 
 3\. ***Test Driven Development(tdd) Window*** -
 
-   * `cd public/browserify/build`
-   * `gulp tdd`
-
-   Tests will rerun as source code(*.js) is changed. Note, tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.  Note, you do not need `hmr` active for `tdd`. Also, `tdd` can be run with a headless browser.
+* `cd public/browserify/build`
+* `gulp tdd`
 
 ### II.  **Brunch**
 
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
+
 1\. ***Watch, Recompile and Reload Window*** -
 
-  * `cd public/brunch/build`
-  * `gulp watch` or `./cook watch` (output formatted better)
+* `cd public/brunch/build`
+* `gulp watch` or `./cook watch` (output formatted better)
 
 At this point you can start a browser and enter `localhost:3080/testapp_dev.html`. Any changes to the source code(*.js files and other assets such as *.html) should be reflected in the browser auto reload.
 
-__Note__; The test url is `localhost:3080` since Brunch by default uses 'config.paths.public' as the server context. Also, the reload may fail at times, I've noticed that making a second code mod re-rights the ship.
+__Note__; The test url is `localhost:3080` since Brunch by default uses 'config.paths.public' as the server context. Also, the reload may fail at times, I've noticed that making a second code modification may work.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
-  * `cd public/brunch/build`
-  * `gulp tdd` or `./cook tdd`
+* `cd public/brunch/build`
+* `gulp tdd` or `./cook tdd`
 
   While the Brunch watcher is running, tests are re-run when code are changed. 
   
@@ -208,111 +251,117 @@ __Note__; The test url is `localhost:3080` since Brunch by default uses 'config.
 
 3\. ***Special Considerations***
   
-  * Brunch plugin eslint-brunch uses eslint 3. The demo/react uses version 4.  The `gulp`(production build) command uses a gulp linter, so javascript linting is executed. However, if you wish to use the Brunch eslint-brunch plugin, do the following;
-    * `cd <install>/public/node_modules/eslint-brunch`
-    * `npm install eslint@latest`
-    * `cd <install>/public` and edit the `brunch-config.js` file and uncomment the eslint section.
+* Brunch plugin eslint-brunch uses eslint 3. The demo/react uses version 4.  The `gulp`(production build) command uses a gulp linter, so javascript linting is executed. However, if you wish to use the Brunch eslint-brunch plugin, do the following;
+* `cd <install>/public/node_modules/eslint-brunch`
+* `npm install eslint@latest`
+* `cd <install>/public` and edit the `brunch-config.js` file and uncomment the eslint section.
 
 ### III.  **Fusebox**
 
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
+
+__Node:__ Fusebox has been upgraed to version 4.
+
 1\. ***Hot Module Reload(HMR) Server Window*** -
 
-   * `cd public/fusebox/build`
-   * `gulp hmr` or `fuse hmr`
+* `cd public/fusebox/build`
+* `gulp hmr`
 
    At this point you can start a browser and enter `localhost:3080/dist_test/fusebox/appl/testapp_dev.html`.  Any changes to the source code(*.js files) should be reflected in the browser auto reload.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
-   * `cd public/fusebox/build`
-   * `gulp tdd`
+* `cd public/fusebox/build`
+* `gulp tdd`
 
-   The HMR Server must be running if you want tests to rerun as source code(*.js) is changed. Note, tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.
+   The HMR Server must be running if you want tests to rerun as source code(*.js) is changed.
 
 ### IV.  **Parcel**
 
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
+
 1\. ***Watch, Recompile and Reload Window*** -
 
-  * `cd public/parcel/build`
-  * `gulp watch`
+* `cd public/parcel/build`
+* `gulp watch`
 
 At this point you can start a browser and enter `localhost:3080/dist_test/parcel/appl/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(*.js and *.css files) should be reflected in the browser auto reload.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
-  * `cd public/parcel/build`
-  * `gulp tdd`
+* `cd public/parcel/build`
+* `gulp tdd`
 
   While the Parcel watcher is running, tests are re-run when code are changed.
   
   * Using `export USE_BUNDLER=false` - When using `gulp watch & gulp tdd` together, you can set USE_BUNDLER to false to startup TDD without building first, `gulp watch` does the test build.  Also, by settting `USE_BUNDLER=false` before `gulp`(production build), only testing and linting will execute.
 
-  __Note__; tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.
-
 ### V.  **Rollup**
+
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Development Server Window*** -
 
-   * `cd public/rollup/build`
-   * `gulp watch`
-   * After a code change in a typescript source file, run `npx tsc` to generate the new javascript files.
+* `cd public/rollup/build`
+* `gulp watch`
+* After a code change in a typescript source file, run `npx tsc` to generate the new javascript files.
 
    The Rollup Development Server, Watch(auto-rebuild) and Page Reload functions are started together.  Simply use one of the following URLs in any browser; `localhost:3080/rollup/appl/testapp_dev.html` or `localhost:3080/dist_test/rollup/appl/testapp_dev.html`.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
-   * `cd public/rollup/build`
-   * `gulp tdd`
-
-   Tests will rerun as source code(*.js) is changed. Note, tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.
+* `cd public/rollup/build`
+* `gulp tdd`
 
 ### VI. **Stealjs**
 
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
+
 1\. ***Development Server Window*** -
 
-   * `gulp test`
-   * `gulp compile-only` - recompile typescript __Note__ Production build will remove all generated *.js files gernerated by typescript. If you get **entry not found**, run this command.
-   * `gulp prd` - build production without running tests
+* `gulp test`
+* `gulp compile-only` - recompile typescript __Note__ Production build will remove all generated *.js files gernerated by typescript. If you get **entry not found**, run this command.
+* `gulp prd` - build production without running tests
 
 2\. ***After a test run*** -
 
-   * `gulp e2e` - run application tests
-   * `gulp ngtest` - run angular unit tests
+* `gulp e2e` - run application tests
+* `gulp ngtest` - run angular unit tests
 
    At this point you can start a browser and enter `localhost:3080/stealjs/appl/testapp_dev.html`(please note that dist_test is not in the URL).
 
 3\. ***Test Driven Development(tdd) Window*** -
 
-   * `cd public/steal/build`
-   * `gulp tdd`
-
-   Tests will rerun as source code(*.js) are changed. Note, tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.
+* `cd public/steal/build`
+* `gulp tdd`
 
    __Note;__ After changing Angular code, i.e. *.ts files, execute `gulp compile-only` or `gulp test` to see changes.
 
 ### VII. **Webpack**
 
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
+
 1\. ***Development HMR Server Window*** -
 
-   * `cd public/webpack/build`
-   * `gulp hmr`
+* `cd public/webpack/build`
+* `gulp hmr`
 
 
 2\. ***Hot Module Reload(Watch) Window*** -
 
-   * `cd public/webpack/build`
-   * `gulp watch`
+* `cd public/webpack/build`
+* `gulp watch`
 
    At this point you can start a browser and enter `localhost:3080/dist_test/webpack/appl/testapp_dev.html`.  Any changes to the source code(*.js files) should be reflected in the browser auto reload. Running the application from the source directory should also work, e.g., `localhost:3080/webpack/appl/testapp_dev.html`.
 
 3\. ***Test Driven Development(tdd) Window*** -
 
-   * `cd public/webpack/build`
-   * `gulp tdd`
+* `cd public/webpack/build`
+* `gulp tdd`
 
-   Tests will rerun as source code(*.js) is changed. Note, tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.
+### VIII. **Dockerfile**
 
-### VIII.  **Dockerfile**
+[Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
 You can build a complete test/develpment environment on a Docker vm with the supplied Dockerfile.
 
@@ -340,4 +389,4 @@ For Pro and Enterpise OS's, follow the Docker instructions on installation.  For
 
 The web port 3080 is exposed to the parent host, so once an application is sucessfully bundled and the node server(```npm start``` in directory embedded-acceptance-tests) is started, a host browser can view the application using say ```localhost:3080/dist/fusebox/appl/testapp.html```.
 
-__Note__; Without a complete Pro/Enterprise docker installation, the ```test_env``` container can only run with Headless browsers. Therfore you should execute ```export USE_BROWSERS=ChromeHeadless,FirefoxHeadless``` before testing, development and building.
+__Note__; Without a complete Pro/Enterprise docker installation, the `test_env` container can only run with Headless browsers. Therfore you should execute `export USE_BROWSERS=ChromeHeadless,FirefoxHeadless` before testing, development and building.
