@@ -1,6 +1,6 @@
-import Helpers from '../js/utils/helpers'
-import App from '../js/app'
-import Table from '../js/controller/table'
+import Helpers from 'js/helpers'
+import App from 'js/app'
+import Table from 'js/table'
 
 declare var Promise: any;
 

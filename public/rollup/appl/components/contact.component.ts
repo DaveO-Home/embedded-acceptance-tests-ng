@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import 'rxjs/add/operator/map';
-import App from '../js/app'
-import Setup from '../js/utils/setup'
+import App from '../js/app.js'
+import Setup from '../js/utils/setup.js'
 
 declare var $: any;
 

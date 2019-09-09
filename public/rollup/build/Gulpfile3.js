@@ -26,11 +26,11 @@ const serve = require("rollup-plugin-serve");
 const sourcemaps = require("gulp-sourcemaps");
 const stripCode = require("gulp-strip-code");
 const uglify = require("gulp-uglify");
-const typescript = require("typescript")
+// const typescript = require("typescript")
 const tsPlugin = require("rollup-plugin-typescript2");
 const angular = require("rollup-plugin-angular");
-const babel = require("rollup-plugin-babel");
-const babelGulp = require("gulp-babel");
+// const babel = require("rollup-plugin-babel");
+// const babelGulp = require("gulp-babel");
 const ts = require("gulp-typescript");
 
 // const Server = require('karma').Server;

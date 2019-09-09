@@ -14,8 +14,8 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        "strict": 0,
-        "semi": 0,
+        "strict": 1,
+        "semi": 1,
         "quotes": 2,
         "no-console": 1,
         "no-case-declarations": 1
@@ -29,6 +29,6 @@ module.exports = {
         "rmain_container": true,
         "FuseBox": true,
         "__karma__": true,
-        "spyOnEvent": true
+        "spyOnEvent": true,
     }
 };

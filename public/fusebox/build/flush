@@ -1,3 +1,4 @@
 #!/usr/bin/bash
 
-../rf
+rm -rf .cache
+#source ../rf

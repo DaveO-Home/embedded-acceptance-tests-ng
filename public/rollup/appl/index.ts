@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import './polyfills'
-import 'setglobals'
+import './js/utils/set.globals'
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './entry';
@@ -11,11 +11,11 @@ import App from './js/app'
 import Default from './js/utils/default'
 import Setup from './js/utils/setup'
 import 'tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js'
+
 /* develblock:start */
 import 'zone.js/dist/zone-error';
 import apptest from './jasmine/apptest'
 
-declare var fail: any;
 declare var testit: any;
 declare var Promise: any;
 /* develblock:end */
@@ -42,12 +42,12 @@ new Promise((resolve, reject) => {
     setTimeout(function () {
         resolve(0)
     },  500);
-}).catch(rejected => {
-    fail(`Error ${rejected}`)
 }).then(resolved => {
     if (typeof testit !== "undefined" && testit) {
         //Run acceptance tests. - To run only unit tests, comment the apptest call.
         apptest(App, AppModule, platformBrowserDynamic);
     }
+}).catch(rejected => {
+    throw `Error ${rejected}`;
 })
 /* develblock:end */

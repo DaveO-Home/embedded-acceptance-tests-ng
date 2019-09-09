@@ -1,6 +1,6 @@
-import Start from '../js/controller/start'
-import Setup from '../js/utils/setup'
-import Helpers from '../js/utils/helpers'
+import Start from 'js/start'
+import Setup from 'js/setup'
+import Helpers from 'js/helpers'
 
 declare var Promise: any;
 

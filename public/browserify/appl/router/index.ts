@@ -17,7 +17,29 @@ const appRoutes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'pdf/test', component: PdfComponent },
   { path: 'table/tools', component: ToolsComponent },
-  { path: 'welcome', component: HelloWorldComponent }
+  { path: 'welcome', component: HelloWorldComponent },
+  { path: 'close', redirectTo: "#close" },
+  { path: 'dodexInput', redirectTo: "#dodexInput" },
+  { path: 'commHandle', redirectTo: "#commHandle" },
+  { path: 'closeHandle', redirectTo: "#closeHandle" },
+  { path: 'dodexComm', redirectTo: "#dodexComm" },
+  /*
+    These are included to avoid errors from angular. See README.md source.
+    Haven't figured out how to scroll to anchors in "markdown". Works in vs-code preview and github.
+  */
+  { path: 'embedded-angular2-acceptance-testing-with-karma-and-jasmine', redirectTo: "#top" },
+  { path: 'production-build', redirectTo: "#production-build" },
+  { path: 'test-build', redirectTo: "#test-build" },
+  { path: 'development', redirectTo: "#development" },
+  { path: 'i-browserify', redirectTo: "#browserify" },
+  { path: 'ii-brunch', redirectTo: "#brunch" },
+  { path: 'iii-fusebox', redirectTo: "#fusebox" },
+  { path: 'iv-parcel', redirectTo: "#parcel" },
+  { path: 'v-rollup', redirectTo: "#rollup" },
+  { path: 'vi-stealjs', redirectTo: "#steal" },
+  { path: 'vii-webpack', redirectTo: "#webpack" },
+  { path: 'viii-dockerfile', redirectTo: "#docker" },
+  { path: 'installation', redirectTo: "#installation" }
 ];
 
 @NgModule({

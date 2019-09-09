@@ -1,4 +1,4 @@
-"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
 /*eslint no-extra-semi: "warn"*/
 /*global exports:true*/

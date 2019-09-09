@@ -19,7 +19,10 @@ module.exports = function (config) {
             "/README.md": "/base/README.md",
             "brunch/appl/": "/base/" + bundler + "/appl/",
             "/css/": "/base/" + bundler + "/appl/css/",
-            "/fonts/": "/base/node_modules/font-awesome/fonts/"
+            "/fonts/": "/base/node_modules/font-awesome/fonts/",
+            "../../../dodex/": "/base/dodex/",
+            "/dodex/": "/base/" + bundler + "/appl/dodex/",
+            "/images/": "/base/" + bundler + "/images/"
         },
         // list of files / patterns to load in the browser
         files: [
@@ -35,13 +38,12 @@ module.exports = function (config) {
             {pattern: "node_modules/popper.js/dist/umd/*", watched: false, included: false},
             {pattern: "node_modules/handlebars/dist/handlebars.min.js", watched: false, included: true, served: true},
             {pattern: bundler + "/appl/**/*.*", included: false, watched: false},
-            {pattern: "node_modules/**/package.json", watched: false, included: false},
             {pattern: "node_modules/tablesorter/**/*.js", watched: false, served: true, included: false},
             {pattern: "README.md", included: false},
             //Looking for changes via HMR - tdd should run with Rollup Hot Moudule Reload.
             //Looking for changes to the client bundle
             {pattern: "dist_test/" + bundler + "/bundle.js", included: false, watched: true, served: true},
-            {pattern: bundler + "/images/favicon.ico", included: false, watched: false},
+            {pattern: bundler + "/images/*", included: false, watched: false},
             {pattern: "node_modules/font-awesome/**/*", watched: false, included: false},
             //Jasmine/Loader tests and starts Karma
             bundler + "/build/karma.bootstrap.js"

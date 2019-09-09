@@ -353,11 +353,11 @@ function getNPMPackageIds () {
 
 function applicationBuild (cb) {
     browserifyInited = browserify({
-        entries: ["../appl/main.js"],
+        entries: ["../appl/main.ts"],
         transform: ["browserify-css"],
         debug: !isProduction,
         insertGlobals: true,
-        noParse: ["jquery"],
+        noParse: ["jquery", "dodex"],
         cache: {},
         packageCache: {}
     })
@@ -420,7 +420,8 @@ function enableWatchify () {
 }
 
 function copySrc () {
-    return src(["../appl/views/**/*", "../appl/templates/**/*", "../appl/index.html", isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html"])
+    return src(["../appl/views/**/*", "../appl/templates/**/*", "../appl/index.html", "../appl/dodex/**/*",
+            isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html"])
         .pipe(copy("../../" + dist + "/appl"))
 }
 

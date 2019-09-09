@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation, ViewChild, OnInit } from '@angular/core';
-import 'rxjs/add/operator/map';
-import ToolsSM from '../js/utils/tools.sm'
-import { TableService } from '../services/table.service';
-import Table from '../js/controller/table'
-import Helpers from '../js/utils/helpers'
-import App from '../js/app'
+import 'rxjs/operator/map';
+import ToolsSM from 'js/tools.sm'
+import { TableService } from 'ts/table.service';
+import Table from 'js/table'
+import Helpers from 'js/helpers'
+import App from 'js/app'
 
 declare var $: any;
 
@@ -13,7 +13,7 @@ const dropdown =
 Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
 </h4>
 <section>
-<div id="dropdown1" class="dropdown">
+<div id="dropdown1" class="dropdown pull-left">
 			<button class="dropdown-toggle smallerfont" 
 			type="button"
 			id="dropdown0"

@@ -3,7 +3,6 @@
     "./appl/main.ts"
   ],
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "../dist_test/rollup/appl",
     "sourceMap": false,
     "typeRoots": [
@@ -27,10 +26,14 @@
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": false,
     "allowJs": true,
+    "maxNodeModuleJsDepth": 5,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": false,
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "showConfig": true
   },
   "exclude": [
     "../node_modules"

@@ -3,15 +3,15 @@ export default function (Start, timer) {
      * Test Form validation and submission.
      */
     describe("Popup Login Form", () => {
-        let modal
-        let closeButton
-        let nameObject
+        let modal;
+        let closeButton;
+        let nameObject;
 
         beforeAll(done => {
-            Start.initMenu()
-            Start["div .login click"]()
-            const loginObject = $("div .login")
-            loginObject.click()
+            Start.initMenu();
+            Start["div .login click"]();
+            const loginObject = $("div .login");
+            loginObject.click();
 
             // Note: if page does not refresh, increase the timer time.
             // Using RxJs instead of Promise.
@@ -26,20 +26,20 @@ export default function (Start, timer) {
                     observable.unsubscribe();
                     done();
                 }
-            })
-        })
+            });
+        });
 
         it("Login form - verify modal with login loaded", function (done) {
-            expect(modal[0]).toBeInDOM()
-            expect(nameObject[0]).toExist()
+            expect(modal[0]).toBeInDOM();
+            expect(nameObject[0]).toExist();
 
-            closeButton = $(".close-modal")
-            done()
-        })
+            closeButton = $(".close-modal");
+            done();
+        });
 
         it("Login form - verify cancel and removed from DOM", function (done) {
-            expect(modal[0]).toExist()
-            closeButton.click()
+            expect(modal[0]).toExist();
+            closeButton.click();
 
             const numbers = timer(50, 50);
             const observable = numbers.subscribe(timer => {
@@ -50,7 +50,7 @@ export default function (Start, timer) {
                     observable.unsubscribe();
                     done();
                 }
-            })
-        })
-    })
+            });
+        });
+    });
 }

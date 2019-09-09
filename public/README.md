@@ -1,6 +1,6 @@
 # Embedded Angular2 Acceptance Testing with Karma and Jasmine
 
-The basic idea is to build a production application after ensuring code compliance via javascript, css and bootstrap linting and automated unit and e2e testing.
+The basic idea is to build a production application ensuring consistent and stable code using JavaScript, CSS and bootstrap linting and automated unit and e2e testing. This will be in part, assisted by the development tools, detailed in the [Development Overview](#development) and bundle sections.
 
 [Production Build](#production-build)
 
@@ -8,19 +8,19 @@ The basic idea is to build a production application after ensuring code complian
 
 [Development Overview](#development)
 
-## Bundlers
+## Bundle Tools
 
-1. [Browserify](#i-browserify)
-1. [Brunch](#ii-brunch)
-1. [Fusebox](#iii-fusebox)
-1. [Parcel](#iv-parcel)
-1. [Rollup](#v-rollup)
-1. [Steal](#vi-stealjs)
-1. [Webpack](#vii-webpack)
+> 1. [Browserify](#i-browserify)
+> 1. [Brunch](#ii-brunch)
+> 1. [Fusebox](#iii-fusebox)
+> 1. [Parcel](#iv-parcel)
+> 1. [Rollup](#v-rollup)
+> 1. [Steal](#vi-stealjs)
+> 1. [Webpack](#vii-webpack)
 
 [Installation](#installation)
 
-[Docker](#VIII-Dockerfile)
+[Docker](#viii-dockerfile)
 
 ## Other Framworks
 
@@ -34,8 +34,9 @@ The basic idea is to build a production application after ensuring code complian
   1. Karma
   1. Jasmine
   1. Any Browser with a karma launcher
+  1. Code bundling tools
   1. See `public/package.json` for details
-  1. Node, npm - node v8 or greater works best
+  1. Node, npm - node v10 or greater works best
 
 ## Installation
 
@@ -96,7 +97,7 @@ To run the production application:
   1. `npm start`  -  This should start a Node Server with port 3080.
   1. Start a browser and enter `localhost:3080/dist/<bundler>/appl/testapp.html`
 
-You can repeat the procedure with "webpack", "browserify", or "parcel". Output from the build can be logged by setting the environment variable `USE_LOGFILE=true`.
+You can repeat the procedure with any of the supported bundlers. Output from the build can be logged by setting the environment variable `USE_LOGFILE=true`.
 
 You can run `gulp prd` from the `<bundler>/build` directory as a stand-alone build.
 
@@ -116,15 +117,16 @@ To run the tests "cd to `public/<bundler>/build` and type `gulp test`, e.g.
 
 ```bash
   cd public/webpack/build
+  export USE_BROWSERS=FirefoxHeadless,ChromeHeadless,Opera
   gulp test
 ```
 
 A test result might look like;
 
 ```text
-[2018-11-09T08:17:31.753] [INFO] launcher - Starting browser ChromeHeadless
-[2018-11-09T08:17:31.811] [INFO] launcher - Starting browser Firefox
-[2018-11-09T08:17:31.874] [INFO] launcher - Starting browser Opera
+[2019-09-05T14:21:30.265] [INFO] launcher - Starting browser Firefox
+[2019-09-05T14:21:30.310] [INFO] launcher - Starting browser ChromeHeadless
+[2019-09-05T14:21:30.352] [INFO] launcher - Starting browser Opera
   Unit Tests - Suite 1
     ✔ Verify that browser supports Promises
     ✔ ES6 Support
@@ -154,33 +156,50 @@ A test result might look like;
     Popup Login Form
       ✔ Login form - verify modal with login loaded
       ✔ Login form - verify cancel and removed from DOM
+    Dodex Operation Validation
+      ✔ Dodex - loaded and toggle on icon mousedown
+      ✔ Dodex - Check that card A is current and flipped on mousedown
+      ✔ Dodex - Check that card B is current and flipped on mousedown
+      ✔ Dodex - Flip cards A & B back to original positions
+      ✔ Dodex - Flip multiple cards on tab mousedown
+      ✔ Dodex - Add additional app/personal cards
+      ✔ Dodex - Load Login Popup from card1(A)
+    Dodex Input Operation Validation
+      ✔ Dodex Input - popup on mouse double click
+      ✔ Dodex Input - Verify that form elements exist
+      ✔ Dodex Input - verify that uploaded file is processed
+      ✔ Dodex Input - close popup on button click
 
-Finished in 30.545 secs / 23.874 secs @ 14:03:22 GMT-0700 (PDT)
+Finished in 32.012 secs / 26.381 secs @ 14:21:51 GMT-0700 (Pacific Daylight Time)
 
 SUMMARY:
-✔ 66 tests completed
+✔ 105 tests completed
 ...
 
-[2018-11-09T08:18:05.847] [INFO] launcher - Starting browser ChromeHeadless
-[2018-11-09T08:18:05.910] [INFO] launcher - Starting browser Firefox
-[2018-11-09T08:18:05.985] [INFO] launcher - Starting browser Opera
+[2019-09-05T14:22:05.965] [INFO] launcher - Starting browser Firefox
+[2019-09-05T14:22:06.027] [INFO] launcher - Starting browser ChromeHeadless
+[2019-09-05T14:22:06.094] [INFO] launcher - Starting browser Opera
 
-  Unit Tests - Suite 1
-    ✔ ES6 Support
-    ✔ Verify that browser supports Promises
   Unit Tests - Suite 2
     ✔ Verify NaN
     ✔ Is Karma active
-  Test Welcome Router
-    ✔ should navigate
+  Unit Tests - Suite 1
+    ✔ Verify that browser supports Promises
+    ✔ ES6 Support
   Example HelloComponent
     ✔ should display a different test title
     ✔ should display original title
+  Unit Tests - Suite 3
+    ✔ Strip Webpack Block Code
+    ✔ Strip Canjs Warning Code
+  Test Welcome Router
+    ✔ should navigate
 
-Finished in 2.877 secs / 2.009 secs @ 08:18:16 GMT-0800 (PST)
+
+Finished in 2.138 secs / 1.642 secs @ 14:22:14 GMT-0700 (Pacific Daylight Time)
 
 SUMMARY:
-✔ 21 tests completed
+✔ 27 tests completed
 ```
 
 ## Development
@@ -202,9 +221,7 @@ __Running Tests__-
   1. Run e2e tests without build - `gulp e2e`.
   1. Run angular2 tests without build - `gulp ngtest`.
 
-  __Also Note(Experimental)__; All of the development tasks(`hmr, server, watch`) etc, can be run from one window using the `gulp development` task.
-
-  **Both Chrome and Firefox are the default browsers.**  
+   **Both Chrome and Firefox are the default browsers.**  
 
 ### I. **Browserify**
 
@@ -215,7 +232,7 @@ __Running Tests__-
 * `cd public/browserify/build`
 * `gulp server`
 
-   Browsersync will start a browser tab(default Chrome) with `localhost:3080/dist_test/browserify/appl/testapp_dev.html`.  Any changes to the source code(*.js files) should be reflected in the browser auto reload.
+   Browsersync will start a browser tab(default Chrome) with `localhost:3080/dist_test/browserify/appl/testapp_dev.html`.  Any changes to the source code(\*.js|*.ts) files should be reflected in the browser auto reload.
 
 2\. ***Hot Module Reload(HMR) Window*** -
 
@@ -238,7 +255,7 @@ __Running Tests__-
 * `cd public/brunch/build`
 * `gulp watch` or `./cook watch` (output formatted better)
 
-At this point you can start a browser and enter `localhost:3080/testapp_dev.html`. Any changes to the source code(*.js files and other assets such as *.html) should be reflected in the browser auto reload.
+At this point you can start a browser and enter `localhost:3080/testapp_dev.html`. Any changes to the source code(\*.js|*.ts) files and other assets such as *.html) should be reflected in the browser auto reload.
 
 __Note__; The test url is `localhost:3080` since Brunch by default uses 'config.paths.public' as the server context. Also, the reload may fail at times, I've noticed that making a second code modification may work.
 
@@ -247,13 +264,11 @@ __Note__; The test url is `localhost:3080` since Brunch by default uses 'config.
 * `cd public/brunch/build`
 * `gulp tdd` or `./cook tdd`
 
-  While the Brunch watcher is running, tests are re-run when code are changed. 
-  
-  __Note__; tests can be added or removed as code is developed. Both Chrome and Firefox are the default browsers. This can be overridden with an environment variable, `export USE_BROWSERS=Opera`.
+  While the Brunch watcher is running, tests are re-run when code sources are changed.
 
 3\. ***Special Considerations***
   
-* Brunch plugin eslint-brunch uses eslint 3. The demo/react uses version 4.  The `gulp`(production build) command uses a gulp linter, so javascript linting is executed. However, if you wish to use the Brunch eslint-brunch plugin, do the following;
+* Brunch plugin eslint-brunch uses eslint 3. The demo uses version 4.  The `gulp`(production build) command uses a gulp linter, so javascript linting is executed. However, if you wish to use the Brunch eslint-brunch plugin, do the following;
 * `cd <install>/public/node_modules/eslint-brunch`
 * `npm install eslint@latest`
 * `cd <install>/public` and edit the `brunch-config.js` file and uncomment the eslint section.
@@ -262,21 +277,28 @@ __Note__; The test url is `localhost:3080` since Brunch by default uses 'config.
 
 [Top](#embedded-angular2-acceptance-testing-with-karma-and-jasmine)
 
-__Node:__ Fusebox has been upgraed to version 4.
+__Note:__ Fusebox has been upgraed to version 4.
 
 1\. ***Hot Module Reload(HMR) Server Window*** -
 
 * `cd public/fusebox/build`
 * `gulp hmr`
 
-   At this point you can start a browser and enter `localhost:3080/dist_test/fusebox/appl/testapp_dev.html`.  Any changes to the source code(*.js files) should be reflected in the browser auto reload.
+   At this point you can start a browser and enter `localhost:3080/dist_test/fusebox/appl/testapp_dev.html`.  Any changes to the source code(\*.js|*.ts) files should be reflected in the browser auto reload.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
 * `cd public/fusebox/build`
 * `gulp tdd`
 
-   The HMR Server must be running if you want tests to rerun as source code(*.js) is changed.
+   The HMR Server must be running if you want tests to rerun as sources(\*.js|*.ts) are changed.
+
+3\. ***Production Preview*** -
+
+* `cd public/fusebox/build`
+* `gulp preview`
+
+   Builds production without minimization and starts development server. View application in a browser with `localhost:3080/dist/fusebox/appl/testapp.html`.
 
 ### IV. **Parcel**
 
@@ -287,14 +309,14 @@ __Node:__ Fusebox has been upgraed to version 4.
 * `cd public/parcel/build`
 * `gulp watch`
 
-At this point you can start a browser and enter `localhost:3080/dist_test/parcel/appl/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(*.js and *.css files) should be reflected in the browser auto reload.
+At this point you can start a browser and enter `localhost:3080/dist_test/parcel/appl/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(\*.js|*.ts and *.css files) should be reflected in the browser auto reload.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
 * `cd public/parcel/build`
 * `gulp tdd`
 
-  While the Parcel watcher is running, tests are re-run when code are changed.
+  While the Parcel watcher is running, tests are re-run when code sources are changed.
   
   * Using `export USE_BUNDLER=false` - When using `gulp watch & gulp tdd` together, you can set USE_BUNDLER to false to startup TDD without building first, `gulp watch` does the test build.  Also, by settting `USE_BUNDLER=false` before `gulp`(production build), only testing and linting will execute.
 
@@ -354,7 +376,7 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 * `cd public/webpack/build`
 * `gulp watch`
 
-   At this point you can start a browser and enter `localhost:3080/dist_test/webpack/appl/testapp_dev.html`.  Any changes to the source code(*.js files) should be reflected in the browser auto reload. Running the application from the source directory should also work, e.g., `localhost:3080/webpack/appl/testapp_dev.html`.
+   At this point you can start a browser and enter `localhost:3080/dist_test/webpack/appl/testapp_dev.html`.  Any changes to the source code(\*.js|*.ts) files should be reflected in the browser auto reload. Running the application from the source directory should also work, e.g., `localhost:3080/webpack/appl/testapp_dev.html`.
 
 3\. ***Test Driven Development(tdd) Window*** -
 
@@ -369,9 +391,9 @@ You can build a complete test/develpment environment on a Docker vm with the sup
 
 **Linux as Parent Host**(assumes docker is installed and daemon is running)-
 
-In directory containing the Dockerfile execute the following commands;
+In the top parent directory, usually `..../embedded-acceptance-tests-ng/` execute the following commands;
 
-1\. ```docker build -t embedded .```
+1\. ```docker build -t embedded fedora``` or ```docker build -t embedded centos```
 
 2\. ```docker run -ti --privileged  -p 3080:3080 -e DISPLAY=$DISPLAY  -v /tmp/.X11-unix:/tmp/.X11-unix --name test_env embedded bash```
 

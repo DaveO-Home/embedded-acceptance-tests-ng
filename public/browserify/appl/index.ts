@@ -3,7 +3,6 @@ import './polyfills'
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './entry';
-
 import './js/config'
 import App from './js/app'
 import Default from './js/utils/default'

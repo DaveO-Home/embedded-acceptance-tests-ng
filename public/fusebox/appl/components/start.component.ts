@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import 'rxjs/add/operator/map';
-import { StartService } from '../services/start.service';
+import 'rxjs/operator/map';
+import { StartService } from 'ts/start.service';
 
 @Component({
   template: '<span [innerHTML]="htmldata"></span>',
