@@ -105,7 +105,8 @@ const testBuild = function (cb) {
         isHmr: false,
         isWatch: false,
         env: "development",
-        useServer: false
+        useServer: false,
+        ftl: false
     };
     let mode = "test";
     const debug = true;
@@ -128,7 +129,8 @@ const build = function (cb) {
         isHmr: false,
         isWatch: false,
         env: "production",
-        useServer: false
+        useServer: false,
+        ftl: false
     };
     let mode = "prod";
     const debug = true;
@@ -148,7 +150,8 @@ const preview = function (cb) {
         isHmr: false,
         isWatch: false,
         env: "production",
-        useServer: true
+        useServer: true,
+        ftl: false
     };
     let mode = "preview";
     const debug = true;
@@ -168,7 +171,8 @@ const fuseboxHmr = function (cb) {
         isHmr: true,
         isWatch: true,
         env: "development",
-        useServer: true
+        useServer: true,
+        ftl: true
     };
     let mode = "test";
     const debug = true;
@@ -188,7 +192,8 @@ const fuseboxRebuild = function (cb) {
         isHmr: false,
         isWatch: false,
         env: "development",
-        useServer: false
+        useServer: false,
+        ftl: false
     };
     let mode = "test";
     const debug = true;
@@ -328,7 +333,7 @@ function fuseboxConfig(mode, props) {
         cache: {
             root: path.join(__dirname, ".cache"),
             enabled: !isProduction,
-            FTL: false
+            FTL: typeof props.ftl === "undefined" ? true : props.ftl
         },
         sourceMap: !isProduction,
         webIndex: {

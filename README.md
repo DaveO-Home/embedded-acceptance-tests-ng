@@ -22,6 +22,8 @@ The basic idea is to build a production application ensuring consistent and stab
 
 [Docker](#viii-dockerfile)
 
+**Dodex**: Added for testing and demo. <https://github.com/DaveO-Home/dodex>
+
 ## Other Framworks
 
   1. **Canjs** - <https://github.com/DaveO-Home/embedded-acceptance-tests>
@@ -211,7 +213,7 @@ __Note__; When modifying project assets(.handlebars, .html, etc.) you can execut
 __A word on developing tests__; You can write and execute tests quicker by using the rebuild process of a given bundler and running the `acceptance` gulp task after the auto-rebuild, e.g. with __Fusebox__ you can;
 
 * `cd public/fusebox/build`
-* `gulp hmr`
+* `gulp hmr` or `gulp watch` as described each bundle tool section.
 * Develop or modify a test.
 * In another window execute `gulp acceptance` from the `build` directory to view the modified or new test results.
 
@@ -219,9 +221,9 @@ __Running Tests__-
 
   1. Run a full set of tests - `gulp test`, this will build the application and run all tests.
   1. Run e2e tests without build - `gulp e2e`.
-  1. Run angular2 tests without build - `gulp ngtest`.
+  1. Run angular2 unit tests without build - `gulp ngtest`.
 
-   **Both Chrome and Firefox are the default browsers.**  
+  **Both Chrome and Firefox are the default browsers.**  
 
 ### I. **Browserify**
 

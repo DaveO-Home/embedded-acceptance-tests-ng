@@ -8,6 +8,8 @@ import dodex from "dodex";
 import input from "dodex-input";
 import mess from "dodex-mess";
 
+declare const testit: boolean;
+
 @Component({
 	selector: 'test-app',
 	templateUrl: 'app_bootstrap.html'
@@ -30,16 +32,27 @@ export class TestApp {
 					replace: true,   	// append to or replace default content - default false(append only)
 					mess: mess
 				}).then(function () {
-						// Add in app/personal cards
-						for (var i = 0; i < 3; i++) {
-							dodex.addCard(getAdditionalContent());
-						}
-						/* Auto display of widget */
-						// dodex.openDodex();
-					});
+					// Add in app/personal cards
+					for (var i = 0; i < 3; i++) {
+						dodex.addCard(getAdditionalContent());
+					}
+					/* Auto display of widget */
+					// dodex.openDodex();
+				});
 			}, 1000) // Waiting for app_bootstrap.html to load
 		}
+/* develblock:start */
+		else { // For HMR testing
+			setTimeout(function () {
+				const dodexOpen: HTMLElement = document.querySelector(".dodex--open");
+				dodexOpen.onmousedown = event => {
+					dodex.openDodex(event);
+				};
+			}, 1000)
+		}
+/* develblock:end */
 	}
+
 	loginModal(event) {
 		Start['div .login click']()
 	}

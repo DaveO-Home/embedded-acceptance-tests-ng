@@ -162,7 +162,7 @@ const run = function (mode, configure, debug, cb) {
 }
 
 function addStripCodePlugin(config) {
-    const whichFiles = /(\/js\/.*\.js|index(\.js|\.ts))/;
+    const whichFiles = /(\/js\/.*\.js|index(\.js|\.ts)|entry(\.js|\.ts))/;
     const startComment = "develblock:start";
     const endComment = "develblock:end";
     try {
