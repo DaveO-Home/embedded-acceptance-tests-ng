@@ -285,6 +285,7 @@ __Note:__ Fusebox has been upgraed to version 4.
 
 * `cd public/fusebox/build`
 * `gulp hmr`
+* If using TDD you must execute hmr with `gulp hmr --noftl` flag so that karma can detect changes. Or you can execute `gulp development` to run both hmr and tdd.
 
    At this point you can start a browser and enter `localhost:3080/dist_test/fusebox/appl/testapp_dev.html`.  Any changes to the source code(\*.js|*.ts) files should be reflected in the browser auto reload.
 
@@ -346,7 +347,7 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 1\. ***Development Server Window*** -
 
 * `gulp test`
-* `gulp compile-only` - recompile typescript __Note__ Production build will remove all generated *.js files gernerated by typescript. If you get **entry not found**, run this command.
+* `gulp compile` - recompile typescript. __Note__ Production build will remove all generated *.js files gernerated by typescript. If you get **entry not found**, run this command.
 * `gulp prd` - build production without running tests
 
 2\. ***After a test run*** -
@@ -358,10 +359,14 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 
 3\. ***Test Driven Development(tdd) Window*** -
 
-* `cd public/steal/build`
+* In multiple windows, `cd public/steal/build` and execute one of these commands;
+* `gulp hmr`
+* `gulp server`
 * `gulp tdd`
 
-   __Note;__ After changing Angular code, i.e. *.ts files, execute `gulp compile-only` or `gulp test` to see changes.
+Or you can just try running `gulp development`.
+
+  __Note;__ After changing Angular code, i.e. *.ts files, execute `gulp compile` or `gulp test` to see changes.
 
 ### VII. **Webpack**
 
@@ -371,7 +376,6 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 
 * `cd public/webpack/build`
 * `gulp hmr`
-
 
 2\. ***Hot Module Reload(Watch) Window*** -
 

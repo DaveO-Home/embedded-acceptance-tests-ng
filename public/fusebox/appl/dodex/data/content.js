@@ -5,8 +5,8 @@
 			tab: "A",
 			front: {
 				content: `<h1>Application Access</h1>
-				<div class="mr-2" onclick="document.querySelector('.nav-login').click();">
-					Log in:<a href="#" class="login-a"><i class="fa fa-sign-in"></i></a>
+				<div class="mr-2 login-a" onclick="document.querySelector('.nav-login').click();">
+					Log in:<a href="#" class=""><i class="fa fa-sign-in"></i></a>
             	</div>`
 			},
 			back: {

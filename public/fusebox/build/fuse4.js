@@ -159,14 +159,14 @@ const run = function (mode, configure, debug, cb) {
                 break;
         }
     });
-}
+};
 
 function addStripCodePlugin(config) {
     const whichFiles = /(\/js\/.*\.js|index(\.js|\.ts)|entry(\.js|\.ts))/;
     const startComment = "develblock:start";
     const endComment = "develblock:end";
     try {
-        config.plugins = [pluginStripCode(whichFiles, { "start": startComment, "end": endComment })]
+        config.plugins = [pluginStripCode(whichFiles, { "start": startComment, "end": endComment })];
     } catch (e) {
         console.error(e);
         process.exit(-1);

@@ -196,13 +196,13 @@ export default function (dodex, input, mess, content, Start) {
                 Start["div .login click"](event.target, event);
             };
             var modal, nameObject;
-            var login = front1.querySelector(".login-a");
+            var login = front1;
             login.onclick = clickHandler;
             login.dispatchEvent(new Event("click"));
             const numbers = timer(100, 10);
             const observable = numbers.subscribe(timer => {
                 modal = $("#modalTemplate");
-                if ((typeof modal[0] !== "undefined" && modal[0].length !== 0) || timer === 75) {
+                if ((typeof modal[0] !== "undefined" && modal[0].length !== 0) || timer === 100) {
                     nameObject = document.querySelector("#inputUsername");
                     modal.on("shown.bs.modal", function (/*html*/) {
                         modal.modal("toggle");

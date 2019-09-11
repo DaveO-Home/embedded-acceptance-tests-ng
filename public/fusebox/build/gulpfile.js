@@ -18,6 +18,14 @@ let browsers = process.env.USE_BROWSERS;
 let useNg = "";
 let runSingle = true;
 let useBundler = process.env.USE_BUNDLER !== "false";
+let useFtl = true;
+
+process.argv.forEach(function (val, index, array) {
+    useFtl = val === "--noftl" && useFtl ? false : useFtl;
+    if(index > 2) {
+        process.argv[index] = "";
+    }
+});
 
 if (browsers) {
     global.whichBrowsers = browsers.split(",");
@@ -29,7 +37,7 @@ const pate2e = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ""
+    useNg = "";
     runSingle = true;
     setTimeout(() => {
         runKarma(done);
@@ -172,7 +180,7 @@ const fuseboxHmr = function (cb) {
         isWatch: true,
         env: "development",
         useServer: true,
-        ftl: true
+        ftl: useFtl
     };
     let mode = "test";
     const debug = true;
@@ -182,6 +190,12 @@ const fuseboxHmr = function (cb) {
         console.log("Error", e);
     }
 };
+
+const setNoftl = function (cb) {
+    useFtl = false;
+    cb();
+};
+
 /*
  * Build the application to run node express so font-awesome is resolved
  */
@@ -255,7 +269,8 @@ const fuseboxTdd = function (done) {
 
     new Server({
         configFile: path.join(__dirname, "/karma.conf.js"),
-    }, done).start();
+    }).start();
+    done();
 };
 /**
  * Karma testing under Opera. -- needs configuation  
@@ -284,7 +299,7 @@ exports.rebuild = fuseboxRebuild;
 exports.acceptance = e2eTest;
 exports.ngtest = ngTest;
 exports.e2e = e2eTest;
-// exports.development = parallel(fuseboxHmr, fuseboxTdd)
+exports.development = series(setNoftl, fuseboxHmr, fuseboxTdd);
 exports.lint = lintRun;
 exports.copy = copy;
 
@@ -367,6 +382,6 @@ if (process.env.USE_LOGFILE == "true") {
     console.log = function () {
         logFile.write(util.format.apply(null, arguments) + "\n");
         logStdout.write(util.format.apply(null, arguments) + "\n");
-    }
+    };
     console.error = console.log;
 }

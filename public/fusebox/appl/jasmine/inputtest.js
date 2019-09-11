@@ -86,7 +86,7 @@ export default function (dodex) { // , input, content, Start) {
 
             // The file upload handler is exposed for testing only.
             window.handleFileSelect(null, fArray);
-            const numbers = timer(75, 10);
+            const numbers = timer(100, 10);
             const observable = numbers.subscribe(timer => {
                 const results = getElement("#results");
 
@@ -98,7 +98,7 @@ export default function (dodex) { // , input, content, Start) {
                     done();
                     observable.unsubscribe();
                 }
-                else if (timer === 75) {
+                else if (timer === 100) {
                     done();
                     observable.unsubscribe();
                 }
