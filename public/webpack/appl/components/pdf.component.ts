@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from "@angular/platform-browser";
 import 'rxjs/add/operator/map';
-import App from '../js/app'
 
-const url = '../appl/views/prod/Test.pdf'
-declare var $: any;
+declare const $: JQueryStatic;
 
 @Component({
-  template: `<iframe id="data" name="pdfDO" src="${url}" class="col-lg-12" style="height: 750px"></iframe>`,
+  template: `<iframe id="data" name="pdfDO" [src]="url" class="col-lg-12" style="height: 750px"></iframe>`,
 })
 export class PdfComponent {
-  constructor() {
+  public url;
+  constructor(sanitizer : DomSanitizer) {
+    this.url = sanitizer.bypassSecurityTrustResourceUrl("views/prod/Test.pdf");
   }
 
   ngOnInit() {

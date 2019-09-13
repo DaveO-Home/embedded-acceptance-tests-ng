@@ -7,7 +7,7 @@ class StripAsset extends JSAsset {
     async load () {
         let code = await super.load();
         if (!this.options.production) {
-            return code
+            return code;
         }
         return code.replace(regexPattern, "");
     }

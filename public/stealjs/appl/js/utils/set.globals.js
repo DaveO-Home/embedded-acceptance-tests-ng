@@ -1,6 +1,6 @@
-import $ from "jquery"
-import popper from "popper.js"
+import $ from "jquery";
+import popper from "popper.js";
 
-window.jQuery = window.$ = $
-window._bundler = "fusebox"
-window.Popper = popper
+window.jQuery = window.$ = $;
+window._bundler = "fusebox";
+window.Popper = popper;

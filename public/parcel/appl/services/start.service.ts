@@ -5,7 +5,7 @@ import Helpers from '../js/utils/helpers'
 declare var Promise: any;
 
 export class StartService {
-  getHtml(obj):Promise<{response, obj}> {
+  getHtml(obj): Promise<{ response, obj }> {
     Setup.init()
     Start.initMenu()
     Start.index()
@@ -13,12 +13,10 @@ export class StartService {
     return new Promise(function (resolve, reject) {
       let count = 0
       Helpers.isLoaded(resolve, reject, '', Start, count, 10)
+    }).then(function (resolved: String) {
+      return { "response": resolved, "obj": obj };
+    }).catch(function (rejected) {
+      console.warn('Failed', rejected)
     })
-      .catch(function (rejected) {
-        console.warn('Failed', rejected)
-      })
-      .then(function (resolved: String) {
-        return {"response": resolved, "obj": obj};
-      })
   }
 }

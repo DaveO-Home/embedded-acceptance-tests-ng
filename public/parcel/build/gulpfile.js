@@ -1,3 +1,4 @@
+/*eslint no-console: 0 */
 /**
  * Successful acceptance tests & lints start the production build.
  * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint', 'bootlint') -> 'build'
@@ -6,19 +7,18 @@ const { src, dest, series, parallel, task } = require("gulp");
 const eslint = require("gulp-eslint");
 const csslint = require("gulp-csslint");
 const exec = require("child_process").exec;
-const env = require("gulp-env")
+const env = require("gulp-env");
 const copy = require("gulp-copy");
 const stripCode = require("gulp-strip-code");
 const del = require("del");
 const noop = require("gulp-noop");
 const log = require("fancy-log");
-const Bundler = require("parcel-bundler")
-const flatten = require("gulp-flatten")
+const Bundler = require("parcel-bundler");
+const flatten = require("gulp-flatten");
 const chalk = require("chalk");
 const browserSync = require("browser-sync");
 const uglify = require("gulp-uglify-es").default;
 const Server = require("karma").Server;
-const parcel = require("gulp-parcel")
 
 const startComment = "develblock:start",
     endComment = "develblock:end",
@@ -26,15 +26,14 @@ const startComment = "develblock:start",
         startComment + " ?[\\*\\/]?[\\s\\S]*?(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
         endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
 
-let lintCount = 0
-let isProduction = process.env.NODE_ENV == "production"
-let browsers = process.env.USE_BROWSERS
-let bundleTest = process.env.USE_BUNDLER
-let testDist = "dist_test/parcel"
-let prodDist = "dist/parcel"
-let dist = isProduction ? prodDist : testDist
+let lintCount = 0;
+let isProduction = process.env.NODE_ENV == "production";
+let browsers = process.env.USE_BROWSERS;
+let bundleTest = process.env.USE_BUNDLER;
+let testDist = "dist_test/parcel";
+let prodDist = "dist/parcel";
+let dist = isProduction ? prodDist : testDist;
 let useNg = "";
-let runSingle = true;
 
 if (browsers) {
     global.whichBrowsers = browsers.split(",");
@@ -52,7 +51,7 @@ const build_development = function (cb) {
 const parcel_prod = function (cb) {
     isProduction = true;
     dist = prodDist;
-    log(chalk.cyan("***** Starting Strip Development Code and Uglify *****"))
+    log(chalk.cyan("***** Starting Strip Development Code and Uglify *****"));
     var envs = env.set({
         NODE_ENV: "production",
     });
@@ -63,17 +62,17 @@ const parcel_prod = function (cb) {
         .pipe(dest("../../" + dist + "/appl"))
         .on("end", () => {
             log(chalk.cyan("***** Finished Build *****"));
-            cb()
+            cb();
         });
 };
 /**
  * Production Parcel 
  */
 const build = function (cb) {
-    process.env.NODE_ENV = "production"
+    process.env.NODE_ENV = "production";
     isProduction = true;
     dist = prodDist;
-    parcelBuild(false, cb)
+    parcelBuild(false, cb);
 };
 /**
  * Default: Production Acceptance Tests 
@@ -82,8 +81,7 @@ const pate2e = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ""
-    runSingle = true
+    useNg = "";
     runKarma(done);
 };
 /**
@@ -93,8 +91,7 @@ const pat = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
-    runSingle = true
+    useNg = ".ng";
     runKarma(done);
 };
 /*
@@ -120,7 +117,7 @@ const esLint = function (cb) {
 
     return stream.on("end", () => {
         log(chalk.cyan("# javascript files linted: " + lintCount));
-        cb()
+        cb();
     });
 };
 /*
@@ -159,9 +156,9 @@ const clean = function (done) {
 };
 
 const cleant = function (done) {
-    let dryRun = false
+    let dryRun = false;
     if (bundleTest && bundleTest === "false") {
-        dryRun = true
+        dryRun = true;
     }
     isProduction = false;
     dist = testDist;
@@ -200,7 +197,6 @@ const e2e_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
     return runKarma(done);
 };
 /**
@@ -210,8 +206,7 @@ const ng_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true
-    useNg = ".ng"
+    useNg = ".ng";
     return runKarma(done);
 };
 /**
@@ -249,37 +244,38 @@ const sync = function () {
 
 const watcher = function (done) {
     log(chalk.green("Watcher & BrowserSync Started - Waiting...."));
-    return done()
+    return done();
 };
 
 const watch_parcel = function (cb) {
-    return parcelBuild(true, cb)
+    return parcelBuild(true, cb);
 };
 
-const testRun = series(cleant, copy_images, copy_test, build_development)
-const lintRun = parallel(esLint, cssLint, bootLint)
-const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build, parcel_prod)
-prodRun.displayName = "prod"
+const testRun = series(cleant, copy_images, copy_test, build_development);
+const lintRun = parallel(esLint, cssLint, bootLint);
+const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build, parcel_prod);
+prodRun.displayName = "prod";
 
-task(prodRun)
-exports.default = prodRun
-exports.prd = series(clean, copyprod_images, copyprod, build, parcel_prod)
-exports.test = series(testRun, pate2e, pat)
-exports.tdd = series(/*testRun,*/ tdd_parcel)
-exports.acceptance = ng_test
-exports.watch = series(watch_parcel, sync, watcher)
-exports.rebuild = testRun
-exports.ngtest = ng_test
-exports.e2e = e2e_test
-exports.development = parallel(series(watch_parcel, sync, watcher), tdd_parcel)
-exports.lint = lintRun
+task(prodRun);
+exports.default = prodRun;
+exports.prd = series(clean, copyprod_images, copyprod, build, parcel_prod);
+exports.test = series(testRun, pate2e, pat);
+exports.tdd = series(/*testRun,*/ tdd_parcel);
+exports.acceptance = ng_test;
+exports.watch = series(watch_parcel, sync, watcher);
+exports.rebuild = testRun;
+exports.ngtest = ng_test;
+exports.e2e = e2e_test;
+exports.development = series(watch_parcel, parallel(sync, watcher, tdd_parcel));
+exports.lint = lintRun;
+exports.copy = parallel(copy_images, copy_test);
 
 function parcelBuild(watch, cb) {
     if (bundleTest && bundleTest === "false") {
-        return cb()
+        return cb();
     }
-    
-    const file = isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html"
+
+    const file = isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html";
     // Bundler options
     const options = {
         production: isProduction,
@@ -301,34 +297,35 @@ function parcelBuild(watch, cb) {
 
     // Initialises a bundler using the entrypoint location and options provided
     const bundler = new Bundler(file, options);
-    let isBundled = false
+    let isBundled = false;
 
     bundler.on("bundled", (bundle) => {
-        isBundled = true
-    })
+        isBundled = true;
+    });
     bundler.on("buildEnd", () => {
         if (isBundled) {
-            log(chalk.green("Build Successful"))
-            cb()
+            log(chalk.green("Build Successful"));
+            cb();
         }
         else {
-            log(chalk.red("Build Failed"))
-            cb()
-            process.exit(1)
+            log(chalk.red("Build Failed"));
+            cb();
+            process.exit(1);
         }
-    })
+    });
     // Run the bundler, this returns the main bundle
-    return bundler.bundle()
+    bundler.bundle();
 }
 
 function copySrc() {
-    return src(["../appl/view*/**/*", "../appl/temp*/**/*" /*, isProduction ? '../appl/testapp.html' : '../appl/testapp_dev.html'*/])
+    return src(["../appl/view*/**/*", "../appl/temp*/**/*", "../appl/dodex*/**/*" /*, isProduction ? '../appl/testapp.html' : '../appl/testapp_dev.html'*/])
         .pipe(flatten({ includeParents: -2 })
-            .pipe(dest("../../" + dist + "/appl")))
+            .pipe(dest("../../" + dist + "/appl")));
 }
 
 function copyImages() {
-    return src(["../images/*", "../../README.m*", "../appl/css/table.css", "../appl/app_bootstrap.html", "../appl/css/hello.world.css"])
+    return src(["../images/*", "../../README.m*", "../appl/css/table.css",
+        "../appl/app_bootstrap.html", "../appl/css/hello.world.css"])
         .pipe(copy("../../" + dist + "/appl"));
 }
 
@@ -346,31 +343,17 @@ function runKarma(done) {
         }
     }).start();
 }
-/*
- * From Stack Overflow - Node (Gulp) process.stdout.write to file
- * @type type
- */
+//From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
     var fs = require("fs");
-    var origstdout = process.stdout.write,
-        origstderr = process.stderr.write,
-        outfile = "node_output.log",
-        errfile = "node_error.log";
+    var util = require("util");
+    var logFile = fs.createWriteStream("log.txt", { flags: "w" });
+    // Or "w" to truncate the file every time the process starts.
+    var logStdout = process.stdout;
 
-    if (fs.exists(outfile)) {
-        fs.unlink(outfile);
-    }
-    if (fs.exists(errfile)) {
-        fs.unlink(errfile);
-    }
-
-    process.stdout.write = function (chunk) {
-        fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
-        origstdout.apply(this, arguments);
+    console.log = function () {
+        logFile.write(util.format.apply(null, arguments) + "\n");
+        logStdout.write(util.format.apply(null, arguments) + "\n");
     };
-
-    process.stderr.write = function (chunk) {
-        fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
-        origstderr.apply(this, arguments);
-    };
+    console.error = console.log;
 }

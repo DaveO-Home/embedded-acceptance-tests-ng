@@ -35,7 +35,7 @@ const bootLint = function (cb) {
     });
     
     return stream.on("end", function() {
-        cb()
+        cb();
     });   
 };
 

@@ -24,7 +24,28 @@ var appRoutes = [
     { path: 'contact', component: contactc_1.ContactComponent },
     { path: 'pdf/test', component: pdfc_1.PdfComponent },
     { path: 'table/tools', component: toolsc_1.ToolsComponent },
-    { path: 'welcome', component: helloc_1.HelloWorldComponent }
+    { path: 'welcome', component: helloc_1.HelloWorldComponent },
+    { path: 'close', redirectTo: "#close" },
+    { path: 'dodexInput', redirectTo: "#dodexInput" },
+    { path: 'commHandle', redirectTo: "#commHandle" },
+    { path: 'closeHandle', redirectTo: "#closeHandle" },
+    { path: 'dodexComm', redirectTo: "#dodexComm" },
+    /*
+      For navigating to anchors on README page.
+    */
+    { path: 'embedded-angular2-acceptance-testing-with-karma-and-jasmine', redirectTo: "/#top" },
+    { path: 'production-build', redirectTo: "/#production-build" },
+    { path: 'test-build', redirectTo: "/#test-build" },
+    { path: 'development', redirectTo: "/#development" },
+    { path: 'i-browserify', redirectTo: "/#browserify" },
+    { path: 'ii-brunch', redirectTo: "/#brunch" },
+    { path: 'iii-fusebox', redirectTo: "/#fusebox" },
+    { path: 'iv-parcel', redirectTo: "/#parcel" },
+    { path: 'v-rollup', redirectTo: "/#rollup" },
+    { path: 'vi-stealjs', redirectTo: "/#steal" },
+    { path: 'vii-webpack', redirectTo: "/#webpack" },
+    { path: 'viii-dockerfile', redirectTo: "/#docker" },
+    { path: 'installation', redirectTo: "/#installation" }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -42,6 +63,10 @@ var AppRoutingModule = /** @class */ (function () {
             imports: [
                 router_1.RouterModule.forRoot(appRoutes, {
                     enableTracing: false,
+                    anchorScrolling: "enabled",
+                    scrollPositionRestoration: 'enabled',
+                    useHash: false
+                    // preloadingStrategy: SelectivePreloadingStrategyService,
                 })
             ],
             exports: [

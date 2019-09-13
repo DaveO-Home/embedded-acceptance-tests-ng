@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from "@angular/platform-browser";
 import 'rxjs/add/operator/map';
 import { StartService } from 'starts';
 
@@ -8,20 +9,13 @@ import { StartService } from 'starts';
 export class StartComponent {
   public starts: StartService;
   public htmldata: String = 'Loading Index Page...';
-  
-  constructor(starts: StartService) {
+
+  constructor(starts: StartService, sanitizer: DomSanitizer) {
     this.starts = starts;
-  }
-  /*
-    Please note; to minimize code differences among the the demo-ed frameworks
-    (canjs, react, vue, angular), this code does not use the angular http module.
-    The proper design would be to use something like this; 
-      import {Http, Headers, HTTP_PROVIDERS, URLSearchParams} from '@angular/http';
-    with perhaps the Observable module.
-  */
-  ngOnInit(): Promise<void>{
-    return this.starts.getHtml(this).then(function(data) {
-      data.obj.htmldata = data.response;
+    this.starts.getHtml(this).then(function (data) {
+      data.obj.htmldata = sanitizer.bypassSecurityTrustHtml(data.response);
     });
-   }
+  }
+
+  ngOnInit(): void { }
 }

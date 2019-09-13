@@ -4,6 +4,7 @@
     "baseUrl": "../../",
     "outDir": "../appl",
     "typeRoots": [
+      "./types",
       "../../node_modules/@types"
     ],
     "lib": [
@@ -27,6 +28,8 @@
     "allowUnreachableCode": true,
     "allowJs": false,
     "types": [
+      "jqueryfn",
+      "jquery",
       "jasmine",
       "node"
     ],
@@ -54,6 +57,8 @@
       "logintest": ["stealjs/appl/jasmine/logintest.js"],
       "routertest": ["stealjs/appl/jasmine/routertest.js"],
       "toolstest": ["stealjs/appl/jasmine/toolstest.js"],
+      "dodextest": ["stealjs/appl/jasmine/dodextest.js"],
+      "inputtest": ["stealjs/appl/jasmine/inputtest.js"],
       "popper": ["node_modules/popper.js/dist/umd/popper.min.js"],
       "marked": ["node_modules/marked/lib/marked.js"],
       "css": ["stealjs/appl/css/css.js"],
@@ -66,7 +71,10 @@
       "toolsc": ["stealjs/appl/components/tools.component.ts"],
       "helloc": ["stealjs/appl/components/helloworld.component.ts"],
       "starts": ["stealjs/appl/services/start.service.ts"],
-      "tables": ["stealjs/appl/services/table.service.ts"]
+      "tables": ["stealjs/appl/services/table.service.ts"],
+      "dodex": ["node_modules/dodex/dist/dodex.min.js"],
+      "input": ["node_modules/dodex-input/dist/dodex-input.min.js"],
+      "mess": ["node_modules/dodex-mess/dist/dodex-mess.min.js"]
     },
   },
   "include": ["../appl/entry.ts"],

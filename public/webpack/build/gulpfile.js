@@ -18,10 +18,10 @@ const webpack = require('webpack')
 const webpackStream = require("webpack-stream")
 const WebpackDevServer = require('webpack-dev-server')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const Server = require('karma').Server
+const Server = require('karma').Server;
 
-const package = require('../../package.json')
-const webpackVersion = Number(/\d/.exec(package.devDependencies.webpack)[0])
+const pack = require('../../package.json')
+const webpackVersion = Number(/\d/.exec(pack.devDependencies.webpack)[0])
 const HOST = process.env.HOST || 'localhost'
 const PORT = process.env.PORT && Number(process.env.PORT)
 

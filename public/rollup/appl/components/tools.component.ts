@@ -2,18 +2,19 @@ import { Component, ViewEncapsulation, ViewChild, OnInit } from '@angular/core';
 import 'rxjs/add/operator/map';
 import ToolsSM from '../js/utils/tools.sm'
 import { TableService } from '../services/table.service';
-import Table from '../js/controller/table'
-import Helpers from '../js/utils/helpers'
-import App from '../js/app'
+import { DomSanitizer } from "@angular/platform-browser";
+import Table from '../js/controller/table';
+import Helpers from '../js/utils/helpers';
+import App from '../js/app';
 
-declare var $: any;
+declare const $: JQueryStatic;
 
 const dropdown =
     `<h4 class="center">
 Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
 </h4>
 <section>
-<div id="dropdown1" class="dropdown">
+<div id="dropdown1" class="dropdown pull-left">
 			<button class="dropdown-toggle smallerfont" 
 			type="button"
 			id="dropdown0"
@@ -84,40 +85,32 @@ export class ToolsSelect {
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    template: '<dropdown></dropdown><span id="data"></span>',
+    template: '<dropdown></dropdown><span id="data" [innerHTML]="htmldata"></span>',
     styleUrls: ['css/table.css'],
 })
 export class ToolsComponent implements OnInit {
     tables;
+    public htmldata: string = "Loading tools....";
 
-    @ViewChild(ToolsSelect, {static: false} ) dropdown: ToolsSelect;
+    @ViewChild(ToolsSelect, {static: false}) dropdown: ToolsSelect;
 
-    constructor(tableservice: TableService) {
+    constructor(tableservice: TableService, sanitizer: DomSanitizer) {
+        $('#side-nav').attr('hidden', "true");
         ToolsSM.toolsStateManagement()
         this.tables = tableservice;
-    }
-
-    ngOnInit(): Promise<void> {
-        return this.tables.getHtml(this).then(function (data) {
-			/*
-				By-passing angular sanitizing since it removes too much from template &
-				minimum checking for possible injection.
-			*/
-            const scriptCount = (data.response.match(/script/gi) || []).length;
-            const columnCount = (data.response.match(/th class/gi) || []).length;
-            const jsCount = (data.response.match(/javascript/gi) || []).length;
-            if (scriptCount === 0 && columnCount > 0 && jsCount === 0) {
-                $(document).ready(function () {
-                    $('#data').html(data.response);
-                    Helpers.scrollTop()
-                    if (App.controllers['Start']) {
-                        App.controllers['Start'].initMenu()
-                    }
-                    $('#top-nav').removeAttr('hidden')
-                    $('#side-nav').removeAttr('hidden')
-                    Table.decorateTable('tools')
-                });
-            }
+        this.tables.getHtml(this).then(function (data) {
+            data.obj.htmldata = sanitizer.bypassSecurityTrustHtml(data.response);
+            $(document).ready(function () {
+                Helpers.scrollTop();
+                if (App.controllers['Start']) {
+                    App.controllers['Start'].initMenu();
+                }
+                $('#top-nav').removeAttr('hidden');
+                $('#side-nav').removeAttr('hidden');
+                Table.decorateTable('tools')
+            });
         });
     }
+
+    ngOnInit(): void {}
 }

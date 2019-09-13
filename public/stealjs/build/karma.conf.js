@@ -14,7 +14,10 @@ module.exports = function (config) {
             "/app_bootstrap.html": "/base/" + bundler + "/appl/app_bootstrap.html",
             "/README.md": "/base/README.md",
             "stealjs/appl/": "/base/stealjs/appl/",
-            "/css/": "/base/stealjs/appl/css/"
+            "/css/": "/base/stealjs/appl/css/",
+            "../../../dodex/": "/base/dodex/",
+            "/dodex/": "/base/" + bundler + "/appl/dodex/",
+            "/images/": "/base/" + bundler + "/images/"
         },
         // list of files / patterns to load in the browser
         files: [
@@ -76,6 +79,10 @@ module.exports = function (config) {
             {pattern: "node_modules/bluebird/js/browser/**/*.js", watched: false, included: false},
             {pattern: "node_modules/events/**/*.js", watched: false, included: false},
             {pattern: "node_modules/handlebars/**/*.js", watched: false, included: false},
+            {pattern: bundler + "/appl/dodex/data/*.*", included: false, watched: false},
+            {pattern: "node_modules/dodex/dist/*", watched: false, included: false},
+            {pattern: "node_modules/dodex-input/dist/dodex-input.min.js", watched: false, included: false},
+            {pattern: "node_modules/dodex-mess/dist/dodex-mess.min.js", watched: false, included: false},
             //Jasmine/Steal tests and starts Karma
             bundler + "/build/karma.bootstrap.js"
         ],

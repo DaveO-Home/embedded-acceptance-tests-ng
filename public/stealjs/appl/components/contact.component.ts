@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 import App from 'app'
 import Setup from 'setup'
 
-declare var $: any;
+declare const $: any;
 
 @Component({
     templateUrl: "views/prod/contact.html"

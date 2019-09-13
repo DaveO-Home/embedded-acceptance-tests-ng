@@ -3,14 +3,14 @@
  * Tasks are run serially, 'pat' -> ('eslint', 'csslint') -> 'bootlint' -> 'build'
  */
 
-const chalk = require("chalk")
+const chalk = require("chalk");
 const csslint = require("gulp-csslint");
 const gulp = require("gulp");
 const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
 const log = require("fancy-log");
 const stealTools = require("steal-tools");
-const del = require("del")
+const del = require("del");
 const Server = require("karma").Server;
 
 
@@ -30,7 +30,7 @@ gulp.task("pate2e", ["clean-test"], function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ""
+    useNg = "";
     runKarma(done, true, false);
 });
 /**
@@ -40,7 +40,7 @@ gulp.task("pat", ["pate2e"], function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
+    useNg = ".ng";
     runKarma(done, true, false);
 });
 /*
@@ -87,14 +87,14 @@ gulp.task("csslint", ["pat"], function () {
  */
 gulp.task("build", ["clean", "bootlint"], function () {
 
-    return toolsBuild()
+    return toolsBuild();
 });
 /*
  * Build the application to the production distribution 
  */
 gulp.task("build-only", ["clean-only"], function () {
 
-    return toolsBuild()
+    return toolsBuild();
 });
 /*
  * Bootstrap html linter 
@@ -190,7 +190,7 @@ gulp.task("ng-test", function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
+    useNg = ".ng";
     return runKarma(done, true, false);
 });
 /**
@@ -210,7 +210,7 @@ gulp.task("steal-tdd", function (done) {
 gulp.task("compile", ["bootlint"], function (cb) {
     var osCommands = "touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build";
     if(isWindows) {
-	    osCommands = "copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build"
+	    osCommands = "copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build";
     }
     
     exec(osCommands, function (err, stdout, stderr) {
@@ -225,7 +225,7 @@ gulp.task("compile", ["bootlint"], function (cb) {
 gulp.task("compile-only", function (cb) {
     var osCommands = "touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build";
     if(isWindows) {
-	    osCommands = "copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build"
+	    osCommands = "copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build";
     }
     
     exec(osCommands, function (err, stdout, stderr) {
@@ -240,7 +240,7 @@ gulp.task("compile-only", function (cb) {
 gulp.task("live-reload", ["vendor"], function (cb) {
     var osCommands = "cd ../..; node_modules/.bin/steal-tools live-reload";
     if(isWindows) {
-	    osCommands = "cd ..\\.. & .\\node_modules\\.bin\\steal-tools live-reload"
+	    osCommands = "cd ..\\.. & .\\node_modules\\.bin\\steal-tools live-reload";
     }
     
     exec(osCommands, function (err, stdout, stderr) {
@@ -273,7 +273,7 @@ gulp.task("vendor", function (cb) {
  * Startup live reload monitor. 
  */
 gulp.task("web-server", function (cb) {
-    log.warn(chalk.cyan("Express started"))
+    log.warn(chalk.cyan("Express started"));
     return exec("npm run server", function (err, stdout, stderr) {
         log(stdout);
         log(stderr);
@@ -308,7 +308,7 @@ function runKarma(done, singleRun, watch) {
             process.exit(exitCode);
         }
     });
-    serv.start()
+    serv.start();
 }
 
 function toolsBuild() {
@@ -352,9 +352,9 @@ function toolsBuild() {
             "../appl/entry.js"
         ], { dryRun: false, force: true });
     }).catch(function(rejection) {
-        console.log("Build Failed:", rejection)
-        process.exit(1)
-    })
+        console.log("Build Failed:", rejection);
+        process.exit(1);
+    });
 }
 
 //From Stack Overflow - Node (Gulp) process.stdout.write to file

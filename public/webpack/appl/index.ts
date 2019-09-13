@@ -14,11 +14,11 @@ import 'zone.js/dist/zone-error';
 import apptest from './jasmine/apptest'
 /* develblock:end */
 
-declare var fail: any;
-declare var testit: any;
-declare var jasmine: any;
-declare var __karma__: any;
-declare var Promise: any;
+declare const fail: any;
+declare const testit: boolean;
+declare const jasmine: any;
+declare const __karma__: any;
+declare const Promise: any;
 
 /*
 * Using webpack NormalModuleReplacementPlugin to determine production env
@@ -52,7 +52,7 @@ if (!production) {
         if (typeof testit !== "undefined" && testit) {
             // Run acceptance tests. - To run only unit tests, comment the apptest call.
             apptest(App, AppModule, platformBrowserDynamic);
-            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 4000;
             __karma__.start();
         }
     })

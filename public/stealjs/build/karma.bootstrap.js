@@ -2,9 +2,9 @@
 var statusReporter = {
     jasmineStarted: function (suiteInfo) {
         const browser = get_browser_info();
-        let browserName = ""
+        let browserName = "";
         if (browser.name !== "Chrome") {
-            browserName = `${browser.name} ${browser.version}: `
+            browserName = `${browser.name} ${browser.version}: `;
         }
         console.log(`${browserName} You should get ${suiteInfo.totalSpecsDefined} successful specs.`);
     },
@@ -29,9 +29,9 @@ window.__karma__.loaded = function () {
     // steal.npmAlgorithm = 'flat';   
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
     jasmine.getEnv().addReporter(statusReporter);
-    const config = jasmine.getEnv().configuration()
+    const config = jasmine.getEnv().configuration();
     config.random = false;
-    jasmine.getEnv().configure(config)
+    jasmine.getEnv().configure(config);
 };
 // per gregoryvarghese.com/how-to-get-browser-name-and-version-via-javascript/
 function get_browser_info() {
@@ -42,7 +42,7 @@ function get_browser_info() {
             return { name: "IE ", version: (tem[1] || "") };
         }
         if (M[1] === "Chrome") {
-            tem = ua.match(/\bOPR\/(\d+)/)
+            tem = ua.match(/\bOPR\/(\d+)/);
             if (tem != null) { return { name: "Opera", version: tem[1] }; }
         }
         M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, "-?"];
@@ -52,6 +52,6 @@ function get_browser_info() {
             version: M[1]
         };
     } catch (e) {
-        return { name: "unknown", version: 0 }
+        return { name: "unknown", version: 0 };
     }
 }

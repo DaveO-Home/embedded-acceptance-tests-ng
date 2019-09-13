@@ -12,12 +12,19 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "typeRoots": [
+        "./types",
         "node_modules/@types"
       ],
       "lib": [
         "es2018",
         "dom"
-      ]
+      ],
+      "types": [
+        "jqueryfn",
+        "jasmine",
+        "jquery",
+        "node"
+      ],
     },
     "include": [
       "appl/**/*.ts", "appl/index.js"

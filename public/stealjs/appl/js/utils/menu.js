@@ -1,28 +1,28 @@
 
-import trimStart from "lodash-es/trimStart"
+import trimStart from "lodash-es/trimStart";
 
 export default {
     // Bootstrap activation
     activate (selector) {
-        let activated = false
+        let activated = false;
         // Ensure jquery
-        const el = selector instanceof $ ? selector : $(selector)
+        const el = selector instanceof $ ? selector : $(selector);
         // Element is likely a list
         el.each(function () {
-            const href = $("a", this).attr("href")
-            const url = href ? trimStart(href, "#") : "none"
-            const hash = trimStart(window.location.hash, "#")
+            const href = $("a", this).attr("href");
+            const url = href ? trimStart(href, "#") : "none";
+            const hash = trimStart(window.location.hash, "#");
             if (hash === url) {
                 // window.location.hash = ''
-                $(this).addClass("active").siblings().removeClass("active")
+                $(this).addClass("active").siblings().removeClass("active");
                 // window.location.hash = `#${hash}`
-                activated = true
+                activated = true;
 
-                return false
+                return false;
             }
-        })
+        });
         if (!activated) {
-            el.removeClass("active")
+            el.removeClass("active");
         }
     }
-}
+};

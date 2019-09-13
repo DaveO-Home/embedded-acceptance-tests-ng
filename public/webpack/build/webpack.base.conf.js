@@ -140,7 +140,7 @@ module.exports = (argv) => {
                     to: argv.dist,
                     ignore: [".*"]
                 },
-                { from: "../images/favicon.ico", to: argv.dist + "/images" },
+                // { from: "../images/favicon.ico", to: argv.dist + "/images" },
                 { from: resolve("/appl/index.html"), to: argv.dist },
                 { from: "../../README.md", to: "../" },
                 { from: resolve("/appl/css/hello.world.css"), to: argv.dist + "/appl/css" },
@@ -152,6 +152,20 @@ module.exports = (argv) => {
                         dot: false
                     },
                     to: argv.dist + "/appl"
+                },
+                {
+                    from: {
+                        glob: resolve("/appl/dodex/**/*"),
+                        dot: false
+                    },
+                    to: argv.dist + "/appl"
+                },
+                {
+                    from: {
+                        glob: resolve("/images/**/*"),
+                        dot: false
+                    },
+                    to: argv.dist + "/images"
                 },
                 {
                     from: {

@@ -3,8 +3,10 @@
     "compilerOptions": {
         "sourceMap": true,
         "typeRoots": [
+            "./types",
             "../node_modules/@types"
         ],
+        "outDir": "tsc/",
         "lib": ["es6", "dom"],
         "target": "es5",
         "module": "commonjs",
@@ -21,6 +23,8 @@
         "suppressImplicitAnyIndexErrors": false,
         "allowJs": true,
         "types": [
+            "jqueryfn",
+            "jquery",
             "jasmine",
             "node"
         ]

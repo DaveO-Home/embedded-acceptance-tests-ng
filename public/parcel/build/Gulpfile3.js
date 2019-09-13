@@ -6,15 +6,15 @@ const gulp = require("gulp");
 const eslint = require("gulp-eslint");
 const csslint = require("gulp-csslint");
 const exec = require("child_process").exec;
-const env = require("gulp-env")
+const env = require("gulp-env");
 const copy = require("gulp-copy");
 const stripCode = require("gulp-strip-code");
 const del = require("del");
 const noop = require("gulp-noop");
 const log = require("fancy-log");
-const Bundler = require("parcel-bundler")
-const parcel = require("gulp-parcel")
-const flatten = require("gulp-flatten")
+const Bundler = require("parcel-bundler");
+const parcel = require("gulp-parcel");
+const flatten = require("gulp-flatten");
 const chalk = require("chalk");
 const browserSync = require("browser-sync");
 const uglify = require("gulp-uglify-es").default;
@@ -26,13 +26,13 @@ const startComment = "develblock:start",
         startComment + " ?[\\*\\/]?[\\s\\S]*?(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
         endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
 
-let lintCount = 0
-let isProduction = process.env.NODE_ENV == "production"
-let browsers = process.env.USE_BROWSERS
-let bundleTest = process.env.USE_BUNDLER
-let testDist = "dist_test/parcel"
-let prodDist = "dist/parcel"
-let dist = isProduction ? prodDist : testDist
+let lintCount = 0;
+let isProduction = process.env.NODE_ENV == "production";
+let browsers = process.env.USE_BROWSERS;
+let bundleTest = process.env.USE_BUNDLER;
+let testDist = "dist_test/parcel";
+let prodDist = "dist/parcel";
+let dist = isProduction ? prodDist : testDist;
 let useNg = "";
 let runSingle = true;
 
@@ -50,7 +50,7 @@ gulp.task("build-development", ["copy"], (cb) => {
 * Strip development code from parcel build and uglify main.*.js
 */
 gulp.task("parcel-prod", ["parcel-build"], () => {
-    log(chalk.cyan("***** Starting Strip Development Code and Uglify *****"))
+    log(chalk.cyan("***** Starting Strip Development Code and Uglify *****"));
     var envs = env.set({
         NODE_ENV: "production",
     });
@@ -88,13 +88,13 @@ gulp.task("parcel-build", ["copyprod"], () => {
 
     return gulp.src("../appl/testapp.html", { read: false })
         .pipe(envs)
-        .pipe(parcel(options))
+        .pipe(parcel(options));
 });
 /**
  * Production Parcel 
  */
 gulp.task("build", ["copyprod"], (cb) => {
-    parcelBuild(false, cb)
+    parcelBuild(false, cb);
 });
 
 /**
@@ -114,8 +114,8 @@ gulp.task("pate2e", ["build-development"], done => {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ""
-    runSingle = true
+    useNg = "";
+    runSingle = true;
     runKarma(done);
 });
 
@@ -126,8 +126,8 @@ gulp.task("pat", ["pate2e"], function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
-    runSingle = true
+    useNg = ".ng";
+    runSingle = true;
     runKarma(done);
 });
 /*
@@ -192,9 +192,9 @@ gulp.task("clean", ["bootlint"], done => {
 });
 
 gulp.task("cleant", done => {
-    let dryRun = false
+    let dryRun = false;
     if (bundleTest && bundleTest === "false") {
-        dryRun = true
+        dryRun = true;
     }
     isProduction = false;
     dist = testDist;
@@ -245,8 +245,8 @@ gulp.task("ng-test", function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true
-    useNg = ".ng"
+    runSingle = true;
+    useNg = ".ng";
     return runKarma(done);
 });
 
@@ -285,11 +285,11 @@ gulp.task("sync", ["watch-parcel"], () => {
 
 gulp.task("watcher", ["sync"], done => {
     log(chalk.green("Watcher & BrowserSync Started - Waiting...."));
-    return done()
+    return done();
 });
 
 gulp.task("watch-parcel", ["copy"], cb => {
-    return parcelBuild(true, cb)
+    return parcelBuild(true, cb);
 });
 
 gulp.task("default", ["pat", "eslint", "csslint", "bootlint", "build"]);
@@ -304,9 +304,9 @@ gulp.task("e2e", ["e2e-test"]);
 
 function parcelBuild(watch, cb) {
     if (bundleTest && bundleTest === "false") {
-        return cb()
+        return cb();
     }
-    const file = isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html"
+    const file = isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html";
     // Bundler options
     const options = {
         production: isProduction,
@@ -328,29 +328,29 @@ function parcelBuild(watch, cb) {
 
     // Initialises a bundler using the entrypoint location and options provided
     const bundler = new Bundler(file, options);
-    let isBundled = false
+    let isBundled = false;
 
     bundler.on("bundled", (bundle) => {
-        isBundled = true
-    })
+        isBundled = true;
+    });
     bundler.on("buildEnd", () => {
         if (isBundled) {
-            log(chalk.green("Build Successful"))
+            log(chalk.green("Build Successful"));
         }
         else {
-            log(chalk.red("Build Failed"))
-            process.exit(1)
+            log(chalk.red("Build Failed"));
+            process.exit(1);
         }
-    })
+    });
     // Run the bundler, this returns the main bundle
-    return bundler.bundle()
+    return bundler.bundle();
 }
 
 function copySrc() {
     return gulp
         .src(["../appl/view*/**/*", "../appl/temp*/**/*" /*, isProduction ? '../appl/testapp.html' : '../appl/testapp_dev.html'*/])
         .pipe(flatten({ includeParents: -2 })
-            .pipe(gulp.dest("../../" + dist + "/appl")))
+            .pipe(gulp.dest("../../" + dist + "/appl")));
 }
 
 function copyImages() {

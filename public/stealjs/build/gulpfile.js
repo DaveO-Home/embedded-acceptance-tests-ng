@@ -1,15 +1,16 @@
+/*eslint no-console: 0 */
 /**
  * Successful acceptance tests & lints start the production build.
  * Tasks are run serially, 'pat' -> ('eslint', 'csslint') -> 'bootlint' -> 'build'
  */
-const { src, dest, series, parallel, task } = require("gulp");
-const chalk = require("chalk")
+const { src, /*dest,*/ series, parallel, task } = require("gulp");
+const chalk = require("chalk");
 const csslint = require("gulp-csslint");
 const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
 const log = require("fancy-log");
 const stealTools = require("steal-tools");
-const del = require("del")
+const del = require("del");
 const Server = require("karma").Server;
 
 let lintCount = 0;
@@ -19,7 +20,6 @@ if (browsers) {
 }
 let isWindows = /^win/.test(process.platform);
 let useNg = "";
-let runSingle = true;
 
 /**
  * Default: Production Acceptance Tests 
@@ -28,7 +28,7 @@ const pate2e = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ""
+    useNg = "";
     runKarma(done, true, false);
 };
 /**
@@ -38,7 +38,7 @@ const patng = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
+    useNg = ".ng";
     runKarma(done, true, false);
 };
 /*
@@ -63,7 +63,7 @@ const esLint = function (cb) {
 
     return stream.on("end", function () {
         log("# javascript files linted: " + lintCount);
-        cb()
+        cb();
     });
 };
 /*
@@ -94,20 +94,19 @@ const bootLint = function (cb) {
  * Build the application to the production distribution 
  */
 const build = function (cb) {
-    return toolsBuild(cb)
+    return toolsBuild(cb);
 };
 /*
  * Build the application to the production distribution 
  */
-const build_only = function (cb) {
-    return toolsBuild(cb)
-};
+// const build_only = function (cb) {
+//     return toolsBuild(cb);
+// };
 /**
  * Remove previous build
  */
 const clean = function (done) {
-    isProduction = true;
-    dist = "../../dist/";
+    const dist = "../../dist/";
     return del([
         dist + "stealjs/**/*",
         dist + "bundles/**/*",
@@ -117,15 +116,14 @@ const clean = function (done) {
 /**
  * Remove previous build
  */
-const clean_only = function (done) {
-    isProduction = true;
-    dist = "../../dist/";
-    return del([
-        dist + "stealjs/**/*",
-        dist + "bundles/**/*",
-        dist + "steal.production.js"
-    ], { dryRun: false, force: true }, done);
-};
+// const clean_only = function (done) {
+//     const dist = "../../dist/";
+//     return del([
+//         dist + "stealjs/**/*",
+//         dist + "bundles/**/*",
+//         dist + "steal.production.js"
+//     ], { dryRun: false, force: true }, done);
+// };
 /**
  * Run karma/jasmine tests using FirefoxHeadless 
  */
@@ -145,13 +143,13 @@ const steal_chrome = function (done) {
 /**
  * Run karma/jasmine tests once and exit
  */
-const steal_test = function (done) {
-    // Running both together as Headless has problems, tdd works
-    if (!browsers) {
-        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
-    }
-    return runKarma(done, true, false);
-};
+// const steal_test = function (done) {
+//     // Running both together as Headless has problems, tdd works
+//     if (!browsers) {
+//         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+//     }
+//     return runKarma(done, true, false);
+// };
 /**
  * Run karma/jasmine tests once and exit without rebuilding(requires a previous build)
  */
@@ -168,7 +166,7 @@ const ng_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
+    useNg = ".ng";
     return runKarma(done, true, false);
 };
 /**
@@ -183,25 +181,25 @@ const steal_tdd = function (done) {
 /*
  * Compile production angular typescript. 
  */
-const compile = function (cb) {
-    var osCommands = "touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build tsconfig_stealjs.json";
-    if (isWindows) {
-        osCommands = "copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build"
-    }
+// const compile = function (cb) {
+//     var osCommands = "touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build tsconfig_stealjs.json";
+//     if (isWindows) {
+//         osCommands = "copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build";
+//     }
 
-    exec(osCommands, function (err, stdout, stderr) {
-        log(stdout);
-        log(stderr);
-        cb(err);
-    });
-};
+//     exec(osCommands, function (err, stdout, stderr) {
+//         log(stdout);
+//         log(stderr);
+//         cb(err);
+//     });
+// };
 /*
  * Compile angular typescript. 
  */
 const compile_ts = function (cb) {
-    var osCommands = "touch ../appl/entry.ts; ../../node_modules/.bin/tsc --build";
+    var osCommands = "touch ../appl/entry.ts; npx tsc --build";
     if (isWindows) {
-        osCommands = "copy /b ..\\appl\\entry.ts +,, & ..\\..\\node_modules\\.bin/tsc --build"
+        osCommands = "copy /b ..\\appl\\entry.ts +,, & npx tsc --build";
     }
 
     exec(osCommands, function (err, stdout, stderr) {
@@ -216,7 +214,7 @@ const compile_ts = function (cb) {
 const live_reload = function (cb) {
     var osCommands = "cd ../..; node_modules/.bin/steal-tools live-reload";
     if (isWindows) {
-        osCommands = "cd ..\\.. & .\\node_modules\\.bin\\steal-tools live-reload"
+        osCommands = "cd ..\\.. & .\\node_modules\\.bin\\steal-tools live-reload";
     }
 
     exec(osCommands, function (err, stdout, stderr) {
@@ -239,17 +237,17 @@ const vendor = function (cb) {
     stealTools.bundle({
         config: "../../package.json!npm"
     }, {
-            filter: ["node_modules/**/*", "package.json"],
-            //dest: __dirname + "/../dist_test"
-        }).then(() => {
-            cb();
-        });
+        filter: ["node_modules/**/*", "package.json"],
+        //dest: __dirname + "/../dist_test"
+    }).then(() => {
+        cb();
+    });
 };
 /*
  * Startup live reload monitor. 
  */
 const web_server = function (cb) {
-    log.warn(chalk.cyan("Express started"))
+    log.warn(chalk.cyan("Express started"));
     return exec("npm run server", function (err, stdout, stderr) {
         log(stdout);
         log(stderr);
@@ -257,25 +255,26 @@ const web_server = function (cb) {
     });
 };
 
-const lintRun = parallel(esLint, cssLint, bootLint)
-const testRun = series(compile_ts, pate2e, patng)
-const prodRun = series(testRun, lintRun, clean, build)
-prodRun.displayName = "prod"
+const lintRun = parallel(esLint, cssLint, bootLint);
+const testRun = series(compile_ts, pate2e, patng);
+const prodRun = series(testRun, lintRun, clean, build);
+prodRun.displayName = "prod";
 
-task(prodRun)
-exports.default = prodRun
-exports.prd = series(clean, build)
-exports.test = testRun
-exports.tdd = steal_tdd
-exports.acceptance = ng_test
-exports.firefox = steal_firefox
-exports.chrome = steal_chrome
-exports.hmr = series(vendor, live_reload)
-exports.server = web_server
-exports.ngtest = ng_test
-exports.e2e = e2e_test
-exports.development = parallel(series(vendor, live_reload), web_server, steal_tdd)
-exports.lint = lintRun
+task(prodRun);
+exports.default = prodRun;
+exports.prd = series(clean, build);
+exports.test = testRun;
+exports.tdd = steal_tdd;
+exports.acceptance = ng_test;
+exports.firefox = steal_firefox;
+exports.chrome = steal_chrome;
+exports.hmr = series(vendor, live_reload);
+exports.server = web_server;
+exports.ngtest = ng_test;
+exports.e2e = e2e_test;
+exports.development = series(vendor, parallel(live_reload, steal_tdd, web_server));
+exports.lint = lintRun;
+exports.compile = compile_ts;
 
 function runKarma(done, singleRun, watch) {
     const serv = new Server({
@@ -291,7 +290,7 @@ function runKarma(done, singleRun, watch) {
             process.exit(exitCode);
         }
     });
-    serv.start()
+    serv.start();
 }
 
 function toolsBuild(cb) {
@@ -300,70 +299,60 @@ function toolsBuild(cb) {
         main: "stealjs/appl/main",
         baseURL: "../../"
     }, {
-            sourceMaps: false,
-            bundleAssets: {
-                infer: true,
-                glob: [
-                    "../images/favicon.ico",
-                    "../appl/testapp.html",
-                    "../appl/app_bootstrap.html",
-                    "../appl/index.html",
-                    "../index.html",
-                    "../appl/views/**/*",
-                    "../appl/assets/**/*",
-                    "../appl/templates/**/*",
-                    "../../README.md",
-                    "../appl/css/table.css",
-                    "../appl/css/hello.world.css"
-                ]
-            },
-            target: ["web"],
-            bundleSteal: false,
-            dest: "dist",
-            removeDevelopmentCode: true,
-            minify: true,
-            uglifyOptions: {
-                mangle: false,
-                compress: true
-            },
-            maxBundleRequests: 5,
-            maxMainRequests: 5
-        }).then(function (result) {
-            del([
-                "../appl/components/**/*.js",
-                "../appl/services/**/*.js",
-                "../appl/entry.js"
-            ], { dryRun: false, force: true });
-            cb();
-        }).catch(function (rejection) {
-            console.log("Build Failed:", rejection)
-            process.exit(1)
-        })
+        sourceMaps: false,
+        bundleAssets: {
+            infer: true,
+            glob: [
+                "../images/*",
+                "../appl/testapp.html",
+                "../appl/app_bootstrap.html",
+                "../appl/index.html",
+                "../index.html",
+                "../appl/views/**/*",
+                "../appl/assets/**/*",
+                "../appl/templates/**/*",
+                "../../README.md",
+                "../appl/css/table.css",
+                "../appl/css/hello.world.css",
+                "../appl/dodex/**/*"
+            ]
+        },
+        target: ["web"],
+        bundleSteal: false,
+        dest: "dist",
+        removeDevelopmentCode: true,
+        minify: true,
+        uglifyOptions: {
+            mangle: false,
+            compress: true
+        },
+        maxBundleRequests: 5,
+        maxMainRequests: 5
+    }).then(function (result) {
+        del([
+            "../appl/components/**/*.js",
+            "../appl/services/**/*.js",
+            "../appl/entry.js"
+        ], { dryRun: false, force: true });
+        cb();
+    }).catch(function (rejection) {
+        console.log("Build Failed:", rejection);
+        process.exit(1);
+    });
 }
 
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
     var fs = require("fs");
-    var proc = require("process");
-    var origstdout = process.stdout.write,
-        origstderr = process.stderr.write,
-        outfile = "production_build.log",
-        errfile = "production_error.log";
+    var util = require("util");
+    var logFile = fs.createWriteStream("log.txt", { flags: "w" });
+    // Or "w" to truncate the file every time the process starts.
+    var logStdout = process.stdout;
 
-    if (fs.exists(outfile)) {
-        fs.unlink(outfile);
-    }
-    if (fs.exists(errfile)) {
-        fs.unlink(errfile);
-    }
-
-    process.stdout.write = function (chunk) {
-        fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
-        origstdout.apply(this, arguments);
+    console.log = function () {
+        logFile.write(util.format.apply(null, arguments) + "\n");
+        logStdout.write(util.format.apply(null, arguments) + "\n");
     };
-
-    process.stderr.write = function (chunk) {
-        fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
-        origstderr.apply(this, arguments);
-    };
+    console.error = console.log;
 }
+
