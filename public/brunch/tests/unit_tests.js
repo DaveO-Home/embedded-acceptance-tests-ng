@@ -1,4 +1,4 @@
-"use strict"
+
 describe("Unit Tests - Suite 1", function () {
     //Application Tests use Promises
     it("Verify that browser supports Promises", function () {
@@ -12,7 +12,7 @@ describe("Unit Tests - Suite 1", function () {
             }
         }
         if (isNativePromise === isPolyfillPromise) {
-            console.warn("Promise support required, add polyfill to karma configuration.")
+            console.warn("Promise support required, add polyfill to karma configuration.");
         }
         expect(isNativePromise !== isPolyfillPromise).toBeTruthy();
     });

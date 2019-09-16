@@ -17,7 +17,7 @@ module.exports = {
         "strict": 1,
         "semi": 1,
         "quotes": 2,
-        "no-console": 1,
+        "no-console": [2, { allow: ["warn", "error"] }],
         "no-case-declarations": 1
     },
     "globals": {

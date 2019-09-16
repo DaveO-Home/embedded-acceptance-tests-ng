@@ -1,6 +1,6 @@
 const { src } = require("gulp");
 const bootlint = require("gulp-bootlint");
-const log = require("fancy-log")
+const log = require("fancy-log");
 
 const bootLint = function () {
     var fileIssues = [],

@@ -1,1 +1,1 @@
-window._bundler = "brunch"
+window._bundler = "brunch";

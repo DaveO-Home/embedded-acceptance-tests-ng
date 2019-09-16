@@ -1,10 +1,10 @@
-"use strict"
-const path = require("path")
-const merge = require("webpack-merge")
-const webpack = require("webpack")
-const baseWebpackConfig = require("./webpack.base.conf")
+
+const path = require("path");
+const merge = require("webpack-merge");
+const webpack = require("webpack");
+const baseWebpackConfig = require("./webpack.base.conf");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const watch = process.env.USE_WATCH
+const watch = process.env.USE_WATCH;
 
 const devWebpackConfig = merge(baseWebpackConfig({
     mode: "development",
@@ -23,6 +23,6 @@ const devWebpackConfig = merge(baseWebpackConfig({
                 template: "../appl/testapp_dev.html"
             }),
         ]
-    })
+    });
 
 module.exports = devWebpackConfig;

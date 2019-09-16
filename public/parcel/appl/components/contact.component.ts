@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import 'rxjs/add/operator/map';
-import App from '../js/app'
-import Setup from '../js/utils/setup'
+import { Component } from "@angular/core";
+import "rxjs/add/operator/map";
+import App from "../js/app";
+import Setup from "../js/utils/setup";
 
 declare const $: any;
 
@@ -14,22 +14,22 @@ export class ContactComponent {
     }
 
     ngOnInit() {
-        const controllerName = 'Start'
-        const actionName = 'init'
-        const failMsg = `Load problem with: '${controllerName}/${actionName}'.`
+        const controllerName = "Start";
+        const actionName = "init";
+        const failMsg = `Load problem with: '${controllerName}/${actionName}'.`;
         $(document).ready(function () {
-            const el = $($('[name=contact]')[0])
+            const el = $($("[name=contact]")[0]);
             App.loadController(controllerName, {}, controller => {
                 if (controller &&
                     controller[actionName]) {
-                    controller.initMenu()
-                    controller.contactListener(el, controller)
+                    controller.initMenu();
+                    controller.contactListener(el, controller);
                 } else {
-                    console.error(failMsg)
+                    console.error(failMsg);
                 }
             }, err => {
-                console.error(`${failMsg} - ${err}`)
-            })
-        })
+                console.error(`${failMsg} - ${err}`);
+            });
+        });
     }
 }

@@ -1,16 +1,16 @@
+.pointer {
+    cursor: pointer;
+}
+.smallerfont {
+    font-size: 14px;
+}
 span #data table tbody {
     font-size: 13px;  
     line-height: 1.2; 
     padding: 5px;
 }
 #table_info {
-    font-size: 14px;
     color: #99bfe6;
     cursor: pointer;
-}
-.smallerfont {
     font-size: 14px;
-}
-.pointer {
-    cursor: pointer;
 }

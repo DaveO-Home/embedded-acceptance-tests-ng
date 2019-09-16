@@ -2,7 +2,7 @@
  * Successful acceptance tests & lints start the production build.
  * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint') -> 'bootlint' -> 'build'
  */
-const env = require("gulp-env")
+const env = require("gulp-env");
 const log = require("fancy-log");
 const rmf = require("rimraf");
 const copy = require("gulp-copy");
@@ -11,7 +11,7 @@ const gulp = require("gulp");
 const noop = require("gulp-noop");
 const assign = require("lodash.assign");
 const buffer = require("vinyl-buffer");
-const envify = require("loose-envify/custom") // require('envify/custom');
+const envify = require("loose-envify/custom"); // require('envify/custom');
 const eslint = require("gulp-eslint");
 const source = require("vinyl-source-stream");
 const uglify = require("gulp-uglify-es").default;
@@ -23,7 +23,7 @@ const browserify = require("browserify");
 const removeCode = require("gulp-remove-code");
 const sourcemaps = require("gulp-sourcemaps");
 const browserSync = require("browser-sync").create("devl");
-const tsify = require("tsify")
+const tsify = require("tsify");
 
 const startComment = "develblock:start",
         endComment = "develblock:end",
@@ -86,8 +86,8 @@ gulp.task("pate2e", ["build-development"], function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ""
-    runSingle = true
+    useNg = "";
+    runSingle = true;
     return runKarma(done);
 });
 /**
@@ -97,8 +97,8 @@ gulp.task("pat", ["pate2e"], function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
-    runSingle = true
+    useNg = ".ng";
+    runSingle = true;
     runKarma(done);
 });
 /*
@@ -162,9 +162,9 @@ gulp.task("clean", ["bootlint"], function (done) {
     dist = prodDist;
     return rmf("../../" + prodDist, [], (err) => {
         if (err) {
-            log(err)
+            log(err);
         }
-        done()
+        done();
         });
     });
 /**
@@ -225,8 +225,8 @@ gulp.task("ng-test", function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true
-    useNg = ".ng"
+    runSingle = true;
+    useNg = ".ng";
     return runKarma(done);  
 });
 
@@ -285,7 +285,7 @@ function browserifyBuild() {
     }
     var envs = env.set({
         NODE_ENV: isProduction? "production": "development",
-    })
+    });
 
     var stream = browserifyInited
             // .transform(
@@ -351,7 +351,7 @@ function applicationBuild() {
 function browserifyApp() {
     var envs = env.set({
         NODE_ENV: isProduction? "production": "development",
-    })
+    });
     var stream = browserifyInited
             // .transform(
             //     { global: true },

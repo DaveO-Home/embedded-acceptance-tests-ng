@@ -1,18 +1,18 @@
-import './js/utils/set.globals'
-import { NgModule, Component } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import 'rxjs/add/operator/map';
-import { AppRoutingModule } from './router'
-import Start from './js/controller/start.js'
+import "./js/utils/set.globals";
+import { NgModule, Component } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import "rxjs/add/operator/map";
+import { AppRoutingModule } from "./router";
+import Start from "./js/controller/start.js";
 import dodex from "dodex";
 import input from "dodex-input";
 import mess from "dodex-mess";
 
-declare var testit: any
+declare let testit: any;
 
 @Component({
-	selector: 'test-app',
-	templateUrl: 'app_bootstrap.html'
+	selector: "test-app",
+	templateUrl: "app_bootstrap.html"
 })
 
 export class TestApp {
@@ -33,17 +33,17 @@ export class TestApp {
 					mess: mess
 				}).then(function () {
 						// Add in app/personal cards
-						for (var i = 0; i < 3; i++) {
+						for (let i = 0; i < 3; i++) {
 							dodex.addCard(getAdditionalContent());
 						}
 						/* Auto display of widget */
 						// dodex.openDodex();
 					});
-			}, 1000) // Waiting for app_bootstrap.html to load
+			}, 1000); // Waiting for app_bootstrap.html to load
 		}
 	}
 	loginModal(event) {
-		Start['div .login click']()
+		Start["div .login click"]();
 	}
 }
 
@@ -94,5 +94,5 @@ function getAdditionalContent() {
 				}
 			}
 		}
-	}
+	};
 }

@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-import 'rxjs/add/operator/map';
-import { StartService } from 'starts';
+import "rxjs/add/operator/map";
+import { StartService } from "starts";
 
 @Component({
-  template: '<span [innerHTML]="htmldata"></span>',
+  template: "<span [innerHTML]=\"htmldata\"></span>",
 })
 export class StartComponent {
   public starts: StartService;
-  public htmldata: String = 'Loading Index Page...';
+  public htmldata = "Loading Index Page...";
 
   constructor(starts: StartService, sanitizer: DomSanitizer) {
     this.starts = starts;
@@ -17,5 +17,7 @@ export class StartComponent {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    //
+  }
 }

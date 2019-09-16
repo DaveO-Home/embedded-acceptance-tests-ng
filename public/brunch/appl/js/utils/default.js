@@ -4,4 +4,4 @@ module.exports = {
     errorNotify: false,
     errorLog: false,
     bundler: window._bundler
-}
+};

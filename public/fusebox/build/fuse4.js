@@ -26,9 +26,9 @@ const run = function (mode, configure, debug, cb) {
     if ("-d" === process.argv[3] || debug) {
         console.log(configure);
     }
-    distDir = mode !== "test" ? path.join(__dirname, "../../dist/fusebox") : 
+    distDir = mode !== "test" ? path.join(__dirname, "../../dist/fusebox") :
         path.join(__dirname, "../../dist_test/fusebox");
-    copyDir = mode !== "test" ? path.join(__dirname, "../../dist/fusebox/appl") : 
+    copyDir = mode !== "test" ? path.join(__dirname, "../../dist/fusebox/appl") :
         path.join(__dirname, "../../dist_test/fusebox/appl");
     isProduction = mode !== "test";
     config = configure;
@@ -108,7 +108,13 @@ const run = function (mode, configure, debug, cb) {
         fuse.runDev(handler => {
             handler.onComplete(output => {
                 if (typeof cb === "function") {
-                    cb(); // restart gulp task, tests will start
+                    if (!config.cache.FTL) { // We may be doing tdd (gulp development)
+                        setTimeout(function () { // The build finishes before resources are completed.
+                            cb();
+                        }, 500);
+                    } else {
+                        cb(); // restart gulp task, tests will start
+                    }
                 }
             });
         });
@@ -142,10 +148,10 @@ const run = function (mode, configure, debug, cb) {
     task("default", context => {
         switch (mode) {
             case "preview":
-                    exec("preview");
+                exec("preview");
                 break;
             case "prod":
-                    exec("prod");
+                exec("prod");
                 break;
             case "copy":
                 copyDir = path.join(__dirname, "../../dist_test/fusebox/appl");

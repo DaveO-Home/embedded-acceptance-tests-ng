@@ -12,9 +12,9 @@ const log = require("fancy-log");
 // const Server = require("karma").Server;
 const chalk = require("chalk");
 
-let lintCount = 0
+let lintCount = 0;
 // let dist = "dist_test/brunch"
-let browsers = process.env.USE_BROWSERS
+let browsers = process.env.USE_BROWSERS;
 if (browsers) {
     global.whichBrowser = browsers.split(",");
 }
@@ -33,21 +33,21 @@ const pat = function (done) {
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_KARMA=true & set USE_HMR=false & ";
     }
-    log(chalk.cyan("E2E Testing - please wait......"))
+    log(chalk.cyan("E2E Testing - please wait......"));
 
     let cmd = exec(osCommands + "npm run bt");
     cmd.stdout.on("data", (data) => {
         if (data && data.length > 0) {
-            console.log(data.trim());
+            log(data.trim());
         }
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data.trim())
+            log(data.trim());
     });
     return cmd.on("exit", (code) => {
-        done()
-        console.log(`Child exited with code ${code}`);
+        done();
+        log(`Child exited with code ${code}`);
     });
 };
 /*
@@ -70,8 +70,32 @@ const esLint = function (cb) {
         process.exit(1);
     });
     return stream.on("end", function () {
-        log("# javascript files linted: " + lintCount);
-        cb()
+        log(chalk.blue.bold("# javascript files linted: " + lintCount));
+        cb();
+    });
+};
+/*
+ * typescript linter
+ */
+const esLintts = function (cb) {
+    var stream = src(["../appl/**/*.ts"])
+        .pipe(eslint({
+            configFile: "../../.eslintts.js",
+            quiet: 1,
+        }))
+        .pipe(eslint.format())
+        .pipe(eslint.result(() => {
+            //Keeping track of # of javascript files linted.
+            lintCount++;
+        }))
+        .pipe(eslint.failAfterError());
+
+    stream.on("error", function () {
+        process.exit(1);
+    });
+    return stream.on("end", function () {
+        log(chalk.blue.bold("# typescript files linted: " + lintCount));
+        cb();
     });
 };
 /*
@@ -86,7 +110,7 @@ const cssLint = function (cb) {
     stream.on("error", function () {
         process.exit(1);
     }).on("end", function () {
-        cb()
+        cb();
     });
 };
 /*
@@ -94,14 +118,14 @@ const cssLint = function (cb) {
  */
 const bootLint = function (cb) {
     return exec("npx gulp --gulpfile Gulpboot.js", function (err, stdout, stderr) {
-        log(stdout)
-        log(stderr)
+        log(stdout);
+        log(stderr);
         if (err) {
             log("ERROR", err);
         } else {
-            log(chalk.green("Bootstrap linting a success"))
+            log(chalk.green("Bootstrap linting a success"));
         }
-        cb()
+        cb();
     });
 };
 /*
@@ -113,24 +137,24 @@ const build = function (cb) {
     if (isWindows) {
         osCommands = "cd ..\\ & set NODE_ENV=production & set USE_KARMA=false & set USE_HMR=false & ";
     }
-    log(chalk.cyan("Building Production - please wait......"))
+    log(chalk.cyan("Building Production - please wait......"));
 
     let cmd = exec(osCommands + "npm run bp");
     cmd.stdout.on("data", (data) => {
         if (data && data.length > 0) {
-            console.log(data.trim());
+            log(data.trim());
         }
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data.trim())
+            log(data.trim());
     });
     return cmd.on("exit", (code) => {
-        cb()
+        cb();
         if(code && code > 0) {
-            console.log(`Test Driven Development exited with code ${code}`);
+            log(`Test Driven Development exited with code ${code}`);
         } else {
-            log(chalk.green("Production build a success"))
+            log(chalk.green("Production build a success"));
         }
 
     });
@@ -147,16 +171,16 @@ const brunch_watch = function (cb) {
     let cmd = exec(osCommands + "npm run bw");
     cmd.stdout.on("data", (data) => {
         if (data && data.length > 0) {
-            console.log(data.trim());
+            log(data.trim());
         }
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data.trim())
+            log(data.trim());
     });
     return cmd.on("exit", (code) => {
-        cb()
-        console.log(`Watch exited with code ${code}`);
+        cb();
+        log(`Watch exited with code ${code}`);
     });
 };
 /*
@@ -168,16 +192,16 @@ const brunch_rebuild = function (cb) {
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_TDD & set USE_KARMA=false & set USE_HMR=false & ";
     }
-    log(chalk.cyan("Re-building Development - please wait......"))
+    log(chalk.cyan("Re-building Development - please wait......"));
     exec(osCommands + "brunch build", function (err, stdout, stderr) {
-        log(stdout)
-        log(stderr)
+        log(stdout);
+        log(stderr);
         if (err) {
             log("ERROR", err);
         } else {
-            log(chalk.green("Rebuild a success"))
+            log(chalk.green("Rebuild a success"));
         }
-        cb()
+        cb();
     });
 };
 /**
@@ -193,34 +217,35 @@ const brunch_tdd = function (done) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_TDD=true; set USE_KARMA=true & set USE_HMR=false & ";
     }
 
-    log(chalk.cyan("Test Driven Development - please wait......"))
+    log(chalk.cyan("Test Driven Development - please wait......"));
     let cmd = exec(osCommands + "npm run bt");
     cmd.stdout.on("data", (data) => {
         if (data && data.length > 0) {
-            console.log(data.trim());
+            log(data.trim());
         }
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data.trim())
+            log(data.trim());
     });
     return cmd.on("exit", (code) => {
-        done()
-        console.log(`Test Driven Development exited with code ${code}`);
+        done();
+        log(`Test Driven Development exited with code ${code}`);
     });
 };
 
-const prodRun = series(pat, parallel(esLint, cssLint, bootLint), build)
-prodRun.displayName = "prod"
+const prodRun = series(pat, parallel(esLint, esLintts, cssLint, bootLint), build);
+prodRun.displayName = "prod";
 
-task(prodRun)
-exports.default = prodRun
-exports.prd = series(parallel(esLint, cssLint, bootLint), build)
-exports.test = pat
-exports.acceptance = pat
-exports.tdd = brunch_tdd
-exports.watch = brunch_watch
-exports.rebuild = brunch_rebuild
+task(prodRun);
+exports.default = prodRun;
+exports.prd = series(parallel(esLint, esLintts, cssLint, bootLint), build);
+exports.test = pat;
+exports.acceptance = pat;
+exports.tdd = brunch_tdd;
+exports.watch = brunch_watch;
+exports.rebuild = brunch_rebuild;
+exports.lint = parallel(esLint, esLintts, cssLint, bootLint);
 
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {

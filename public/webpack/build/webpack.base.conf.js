@@ -1,5 +1,5 @@
 const AngularCompilerPlugin = require("@ngtools/webpack").AngularCompilerPlugin;
-const CopyWebpackPlugin = require("copy-webpack-plugin")
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const webpack = require("webpack");
@@ -186,7 +186,7 @@ module.exports = (argv) => {
         watchOptions: {
             ignored: /node_modules/
         }
-    }
+    };
 
     function setSideEffects(version) {
         if (version > 4) {
@@ -202,8 +202,8 @@ module.exports = (argv) => {
                 });
         }
     }
-}
+};
 
 function resolve(dir) {
-    return path.join(__dirname, "..", dir)
+    return path.join(__dirname, "..", dir);
 }

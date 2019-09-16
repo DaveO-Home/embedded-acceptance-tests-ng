@@ -34,7 +34,7 @@ exports.files = {
   }
 };
 
-pluginsObject = {
+const pluginsObject = {
   stripcode: {
     start: 'develblock:start',
     end: 'develblock:end'
@@ -56,6 +56,7 @@ pluginsObject = {
   copycat: {
     'views': ['brunch/appl/views'],
     'templates': ['brunch/appl/templates'],
+    'dodex': ['brunch/appl/dodex'],
     './': ['README.md', htmlFile, 'brunch/appl/app_bootstrap.html'],
     'images': ['brunch/images'],
     'css': ["brunch/appl/css/table.css", "brunch/appl/css/hello.world.css"],
@@ -65,7 +66,8 @@ pluginsObject = {
 };
 
 pluginsObject.copycat[fontLocation] = ['node_modules/font-awesome/fonts']
-exports.plugins = pluginsObject
+
+exports.plugins = pluginsObject;
 
 exports.npm = {
   enabled: true,
@@ -81,7 +83,8 @@ exports.npm = {
     tablesorter: [
       'dist/css/jquery.tablesorter.pager.min.css',
       'dist/css/theme.blue.min.css'
-    ]
+    ],
+    dodex: ["dist/dodex.min.css"]
   },
   aliases: {
     handlebars: "handlebars/dist/handlebars.min.js",
@@ -96,7 +99,7 @@ exports.server = {
 }
 
 pluginsObject.karma = require('./brunch/build/karma.conf')
-pluginsObject.karma.singleRun = singleRun
+pluginsObject.karma.singleRun = singleRun;
 
 exports.overrides = {
   production: {

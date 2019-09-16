@@ -1,6 +1,6 @@
 const gulp = require("gulp");
 const bootlint = require("gulp-bootlint");
-const log = require("fancy-log")
+const log = require("fancy-log");
 
 gulp.task("bootlint", () => {
     var fileIssues = [],

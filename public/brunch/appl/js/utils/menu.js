@@ -1,30 +1,30 @@
 
-var trimStart = require("lodash/trimStart")
+var trimStart = require("lodash/trimStart");
 
 module.exports = {
     // Bootstrap activation
     activate (selector) {
-        var activated = false
+        var activated = false;
         // Ensure jquery
-        var el = selector instanceof $ ? selector : $(selector)
+        var el = selector instanceof $ ? selector : $(selector);
         // Element is likely a list
         el.each(function () {
-            var href = $("a", this).attr("href")
-            var url = href ? trimStart(href, "#") : "none"
-            var hash = trimStart(window.location.hash, "#")
+            var href = $("a", this).attr("href");
+            var url = href ? trimStart(href, "#") : "none";
+            var hash = trimStart(window.location.hash, "#");
 
             if (hash === url) {
                 // window.location.hash = ''
-                $(this).addClass("active").siblings().removeClass("active")
+                $(this).addClass("active").siblings().removeClass("active");
                 // window.location.hash = `#${hash}`
-                activated = true
+                activated = true;
 
-                return false
+                return false;
             }
-        })
+        });
 
         if (!activated) {
-            el.removeClass("active")
+            el.removeClass("active");
         }
     }
-}
+};

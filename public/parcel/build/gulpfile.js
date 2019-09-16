@@ -116,7 +116,31 @@ const esLint = function (cb) {
     });
 
     return stream.on("end", () => {
-        log(chalk.cyan("# javascript files linted: " + lintCount));
+        log(chalk.blue.bold("# javascript files linted: " + lintCount));
+        cb();
+    });
+};
+/*
+ * typescript linter
+ */
+const esLintts = function (cb) {
+    var stream = src(["../appl/**/*.ts"])
+        .pipe(eslint({
+            configFile: "../../.eslintts.js",
+            quiet: 1,
+        }))
+        .pipe(eslint.format())
+        .pipe(eslint.result(() => {
+            //Keeping track of # of javascript files linted.
+            lintCount++;
+        }))
+        .pipe(eslint.failAfterError());
+
+    stream.on("error", function () {
+        process.exit(1);
+    });
+    return stream.on("end", function () {
+        log(chalk.blue.bold("# typescript files linted: " + lintCount));
         cb();
     });
 };
@@ -252,7 +276,7 @@ const watch_parcel = function (cb) {
 };
 
 const testRun = series(cleant, copy_images, copy_test, build_development);
-const lintRun = parallel(esLint, cssLint, bootLint);
+const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
 const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build, parcel_prod);
 prodRun.displayName = "prod";
 

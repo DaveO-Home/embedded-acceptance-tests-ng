@@ -3,7 +3,7 @@
 
 <i id='table_info' class='table_info fa fa-info-circle fa-2x float-left' aria-hidden='true' data-toggle='tooltip' title="To filter rows enter a value from the Tool column. To filter a group of rows enter one of the values that is in parentheses."></i>
 
-<table id="tools" class="tablesorter">
+<table id="tools" class="tablesorter hide">
     <thead>
         <tr>
             <th>Tool</th>

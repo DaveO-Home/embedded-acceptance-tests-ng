@@ -1,8 +1,8 @@
-"use strict"
 
-const merge = require("webpack-merge")
-const webpack = require("webpack")
-const baseWebpackConfig = require("./webpack.base.conf")
+
+const merge = require("webpack-merge");
+const webpack = require("webpack");
+const baseWebpackConfig = require("./webpack.base.conf");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
@@ -58,6 +58,6 @@ const prdWebpackConfig = merge(baseWebpackConfig({
         }
       ]
     }
-  })
+  });
 
 module.exports = prdWebpackConfig;

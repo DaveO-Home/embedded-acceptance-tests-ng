@@ -1,9 +1,9 @@
-import 'js/set.globals'
-import { NgModule, Component } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import 'rxjs/add/operator/map';
-import { AppRoutingModule } from 'ts/router';
-import Start from 'js/start';
+import "js/set.globals";
+import { NgModule, Component } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import "rxjs/add/operator/map";
+import { AppRoutingModule } from "ts/router";
+import Start from "js/start";
 import dodex from "dodex";
 import input from "dodex-input";
 import mess from "dodex-mess";
@@ -11,8 +11,8 @@ import mess from "dodex-mess";
 declare const testit: boolean;
 
 @Component({
-	selector: 'test-app',
-	templateUrl: 'app_bootstrap.html'
+	selector: "test-app",
+	templateUrl: "app_bootstrap.html"
 })
 
 export class TestApp {
@@ -33,13 +33,13 @@ export class TestApp {
 					mess: mess
 				}).then(function () {
 					// Add in app/personal cards
-					for (var i = 0; i < 3; i++) {
+					for (let i = 0; i < 3; i++) {
 						dodex.addCard(getAdditionalContent());
 					}
 					/* Auto display of widget */
 					// dodex.openDodex();
 				});
-			}, 1000) // Waiting for app_bootstrap.html to load
+			}, 1000); // Waiting for app_bootstrap.html to load
 		}
 /* develblock:start */
 		else { // For HMR testing
@@ -48,13 +48,13 @@ export class TestApp {
 				dodexOpen.onmousedown = event => {
 					dodex.openDodex(event);
 				};
-			}, 1000)
+			}, 1000);
 		}
 /* develblock:end */
 	}
 
 	loginModal(event) {
-		Start['div .login click']()
+		Start["div .login click"]();
 	}
 }
 
@@ -105,5 +105,5 @@ function getAdditionalContent() {
 				}
 			}
 		}
-	}
+	};
 }

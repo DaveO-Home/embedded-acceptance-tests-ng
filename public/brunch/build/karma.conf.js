@@ -2,14 +2,14 @@ var bundler = "brunch";
 var startupHtml = bundler + "/appl/testapp_karma.html";
 // Karma configuration
 //whichBrowser to use from gulp task.
-const browsers = process.env.USE_BROWSERS
+const browsers = process.env.USE_BROWSERS;
 if (browsers) {
     global.whichBrowser = browsers.split(",");
 }
 if (!global.whichBrowser && !process.env.USE_TDD) {
-    global.whichBrowser = ["ChromeHeadless", "FirefoxHeadless"]
+    global.whichBrowser = ["ChromeHeadless", "FirefoxHeadless"];
 } else if (!global.whichBrowser && process.env.USE_TDD) {
-    global.whichBrowser = ["Chrome", "Firefox"]
+    global.whichBrowser = ["Chrome", "Firefox"];
 }
 
 module.exports = {
@@ -24,7 +24,11 @@ module.exports = {
         "/app_bootstrap.html": "/base/" + bundler + "/appl/app_bootstrap.html",
         "/README.md": "/base/README.md",
         "brunch/appl/": "/base/" + bundler + "/appl/",
-        "/css/": "/base/" + bundler + "/appl/css/"
+        "/css/": "/base/" + bundler + "/appl/css/",
+        "../../../dodex/": "/base/dodex/",
+        "/dodex/": "/base/" + bundler + "/appl/dodex/",
+        "/images/": "/base/" + bundler + "/images/",
+        "/appl/": "/base/" + bundler + "/appl/"
     },
     // list of files / patterns to load in the browser
     files: [
@@ -36,6 +40,7 @@ module.exports = {
         bundler + "/tests/unit_tests*.js",
         //'node_modules/promise-polyfill/promise.js',
         { pattern: bundler + "/appl/**/*.*", included: false, watched: false },
+        { pattern: bundler + "/images/*.*", included: false, watched: false },
         { pattern: "package.json", watched: false, included: false },
         { pattern: "README.md", included: false },
         //Looking for changes via HMR - tdd should run with Brunch Hot Moudule Reload.

@@ -1,17 +1,17 @@
-import 'babel-polyfill';
-import 'polyfills'
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from 'ts/entry';
-import 'js/config';
-import App from 'js/app';
-import Default from 'js/default';
-import Setup from 'js/setup';
+import "babel-polyfill";
+import "polyfills";
+import { enableProdMode } from "@angular/core";
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from "ts/entry";
+import "js/config";
+import App from "js/app";
+import Default from "js/default";
+import Setup from "js/setup";
 import "tablesorter/dist/js/extras/jquery.tablesorter.pager.min";
 
 /* develblock:start */
-import 'zone.js/dist/zone-error';
-import apptest from 'js/apptest';
+import "zone.js/dist/zone-error";
+import apptest from "js/apptest";
 /* develblock:end */
 
 declare const testit: boolean;
@@ -21,7 +21,7 @@ let production = true;
 production = false;
 /* develblock:end */
 
-if (typeof production === 'undefined' || production) {
+if (typeof production === "undefined" || production) {
     enableProdMode();
 }
 
@@ -30,8 +30,8 @@ if (typeof testit === "undefined" || !testit) {
         .catch(err => console.error(err));
 }
 
-App.init(Default)
-Setup.init()
+App.init(Default);
+Setup.init();
 
 /* develblock:start */
 /**

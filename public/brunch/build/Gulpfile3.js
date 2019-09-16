@@ -12,10 +12,10 @@ const log = require("fancy-log");
 const Server = require("karma").Server;
 const chalk = require("chalk");
 
-let lintCount = 0
-let dist = "dist_test/brunch"
-let isProduction = false
-let browsers = process.env.USE_BROWSERS
+let lintCount = 0;
+let dist = "dist_test/brunch";
+let isProduction = false;
+let browsers = process.env.USE_BROWSERS;
 if (browsers) {
     global.whichBrowser = browsers.split(",");
 }
@@ -34,7 +34,7 @@ gulp.task("pat",/* ['accept'],*/ function (done) {
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_KARMA=true & set USE_HMR=false & ";
     }
-    log(chalk.cyan("E2E Testing - please wait......"))
+    log(chalk.cyan("E2E Testing - please wait......"));
 
     // This displays output in realtime - output distorted
     // let cmd = exec(osCommands + 'npm run bt');
@@ -54,14 +54,14 @@ gulp.task("pat",/* ['accept'],*/ function (done) {
 
     // This waits for completion before output - clean output
     return exec(osCommands + "npm run bt", function (err, stdout, stderr) {
-        log(stdout)
-        log(stderr)
+        log(stdout);
+        log(stderr);
         if (err) {
             log("ERROR", err);
         } else {
-            log(chalk.green("Success"))
+            log(chalk.green("Success"));
         }
-        done()
+        done();
     });
 });
 /*
@@ -111,16 +111,16 @@ gulp.task("build", ["boot"], function (cb) { // ['boot'],
     if (isWindows) {
         osCommands = "cd ..\\ & set NODE_ENV=production & set USE_KARMA=false & set USE_HMR=false & ";
     }
-    log(chalk.cyan("Building Production - please wait......"))
+    log(chalk.cyan("Building Production - please wait......"));
     return exec(osCommands + "npm run bp", function (err, stdout, stderr) {
-        log(stdout)
-        log(stderr)
+        log(stdout);
+        log(stderr);
         if (err) {
             log("ERROR", err);
         } else {
-            log(chalk.green("Production build a success"))
+            log(chalk.green("Production build a success"));
         }
-        cb()
+        cb();
     });
 });
 
@@ -129,14 +129,14 @@ gulp.task("build", ["boot"], function (cb) { // ['boot'],
  */
 gulp.task("boot", ["eslint", "csslint"], function (cb) {
     return exec("gulp --gulpfile Gulpboot.js", function (err, stdout, stderr) {
-        log(stdout)
-        log(stderr)
+        log(stdout);
+        log(stderr);
         if (err) {
             log("ERROR", err);
         } else {
-            log(chalk.green("Bootstrap linting a success"))
+            log(chalk.green("Bootstrap linting a success"));
         }
-        cb()
+        cb();
     });
 });
 /*
@@ -156,10 +156,10 @@ gulp.task("brunch-watch", function (cb) {
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data)
+            console.log(data);
     });
     return cmd.on("exit", (code) => {
-        cb()
+        cb();
         console.log(`Watch exited with code ${code}`);
     });
 });
@@ -172,16 +172,16 @@ gulp.task("brunch-rebuild", function (cb) {
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_TDD & set USE_KARMA=false & set USE_HMR=false & ";
     }
-    log(chalk.cyan("Re-building Development - please wait......"))
+    log(chalk.cyan("Re-building Development - please wait......"));
     exec(osCommands + "brunch build", function (err, stdout, stderr) {
-        log(stdout)
-        log(stderr)
+        log(stdout);
+        log(stderr);
         if (err) {
             log("ERROR", err);
         } else {
-            log(chalk.green("Rebuild a success"))
+            log(chalk.green("Rebuild a success"));
         }
-        cb()
+        cb();
     });
 });
 
@@ -198,7 +198,7 @@ gulp.task("brunch-tdd", function (done) { //,['accept']
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_TDD=true; set USE_KARMA=true & set USE_HMR=false & ";
     }
 
-    log(chalk.cyan("Test Driven Development - please wait......"))
+    log(chalk.cyan("Test Driven Development - please wait......"));
     let cmd = exec(osCommands + "npm run bt");
     cmd.stdout.on("data", (data) => {
         if(data && data.length > 0) {
@@ -207,10 +207,10 @@ gulp.task("brunch-tdd", function (done) { //,['accept']
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data)
+            console.log(data);
     });
     return cmd.on("exit", (code) => {
-        done()
+        done();
         console.log(`Test Driven Development exited with code ${code}`);
     });
 });
