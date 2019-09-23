@@ -1,3 +1,7 @@
+public/stealjs/appl/entry.js
+public/stealjs/appl/services/*.js
+public/stealjs/appl/components/*.js
+copy*.sh
 trash
 .cache
 dist_test

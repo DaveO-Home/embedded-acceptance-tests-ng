@@ -39,8 +39,8 @@ module.exports = {
         //Jasmine tests
         bundler + "/tests/unit_tests*.js",
         //'node_modules/promise-polyfill/promise.js',
-        { pattern: bundler + "/appl/**/*.*", included: false, watched: false },
-        { pattern: bundler + "/images/*.*", included: false, watched: false },
+        { pattern: bundler + "/appl/**/*", included: false, watched: false },
+        { pattern: bundler + "/images/*", included: false, watched: false },
         { pattern: "package.json", watched: false, included: false },
         { pattern: "README.md", included: false },
         //Looking for changes via HMR - tdd should run with Brunch Hot Moudule Reload.

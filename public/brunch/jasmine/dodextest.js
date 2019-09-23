@@ -185,7 +185,7 @@ export default function (dodex, input, mess, content, Start, timer) {
 
             var tab = window.getComputedStyle(
                 card28.querySelector(".front28"), ":after"
-            ).getPropertyValue("content");
+            ).getPropertyValue("--tab");
 
             expect(tab).toBe("\"F01\"");
 

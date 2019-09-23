@@ -61,7 +61,7 @@ const pat = function (done) {
 const esLint = function (cb) {
     var stream = src(["../appl/js/**/*.js"])
         .pipe(eslint({
-            configFile: "../../.eslintrc.js", // "eslintConf.json",
+            configFile: "../../.eslintrc.js",
             quiet: 1,
         }))
         .pipe(eslint.format())

@@ -58,7 +58,7 @@ export default function (dodex) { // , input, content, Start) {
             expect(popupElement).toBeDefined();
             let numbers = timer(75, 10);
             let observable = numbers.subscribe(timer => {
-                const target = getElement(".content-input:target");
+                const target = getElement(".content-input"); //:target");
                 // Waiting for the popup to fade in
                 if (getComputedStyle(target).opacity === "1") {
                     expect(isVisible(target)).toBeTruthy();
@@ -120,6 +120,8 @@ export default function (dodex) { // , input, content, Start) {
                 } else if (timer === 75) {
                     observable.unsubscribe();
                     done();
+                    const target = getElement(".content-input");
+                    expect(isVisible(target)).toBeFalsy();
                 }
             });
         });
