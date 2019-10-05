@@ -98,6 +98,7 @@ To run the production application:
   1. `cd <install>/acceptance_tests`
   1. `npm start`  -  This should start a Node Server with port 3080.
   1. Start a browser and enter `localhost:3080/dist/<bundler>/appl/testapp.html`
+  1. For Parcel the Production Url is `localhost:3080/dist/parcel/testapp.html`
 
 You can repeat the procedure with any of the supported bundlers. Output from the build can be logged by setting the environment variable `USE_LOGFILE=true`.
 
@@ -220,8 +221,8 @@ __A word on developing tests__; You can write and execute tests quicker by using
 __Running Tests__-
 
   1. Run a full set of tests - `gulp test`, this will build the application and run all tests.
-  1. Run e2e tests without build - `gulp e2e`.
-  1. Run angular2 unit tests without build - `gulp ngtest`.
+  2. Run e2e tests without build - `gulp e2e`.
+  3. Run angular2 unit tests without build - `gulp ngtest`.
 
   **Both Chrome and Firefox are the default browsers.**  
 
@@ -312,7 +313,7 @@ __Note:__ Fusebox has been upgraed to version 4.
 * `cd public/parcel/build`
 * `gulp watch`
 
-At this point you can start a browser and enter `localhost:3080/dist_test/parcel/appl/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(\*.js|*.ts and *.css files) should be reflected in the browser auto reload.
+At this point you can start a browser and enter `localhost:3080/dist_test/parcel/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(\*.js|*.ts and *.css files) should be reflected in the browser auto reload.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
