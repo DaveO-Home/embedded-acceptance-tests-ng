@@ -145,7 +145,7 @@ const testBuild = function (cb) {
     try {
         return runFusebox(mode, fuseboxConfig(mode, props), debug, cb);
     } catch (e) {
-        console.log("Error", e);
+        log("Error", e);
     }
 };
 /*

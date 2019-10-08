@@ -32,6 +32,7 @@ const run = function (mode, configure, debug, cb) {
         path.join(__dirname, "../../dist_test/fusebox/appl");
     isProduction = mode !== "test";
     config = configure;
+    config.plugins = [];
 
     if (mode !== "test") {
         addStripCodePlugin(config);
@@ -172,7 +173,7 @@ function addStripCodePlugin(config) {
     const startComment = "develblock:start";
     const endComment = "develblock:end";
     try {
-        config.plugins = [pluginStripCode(whichFiles, { "start": startComment, "end": endComment })];
+        config.plugins.push(pluginStripCode(whichFiles, { "start": startComment, "end": endComment }));
     } catch (e) {
         console.error(e);
         process.exit(-1);
