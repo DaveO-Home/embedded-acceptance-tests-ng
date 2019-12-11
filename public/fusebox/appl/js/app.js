@@ -3,7 +3,7 @@
 import _startsWith from "lodash/startsWith";
 import _capitalize from "lodash/capitalize";
 import "bootstrap";
-import "tablesorter/dist/js/jquery.tablesorter.combined.min.js";
+import "tablesorter"; // "tablesorter/dist/js/jquery.tablesorter.combined.min.js";
 
 /* develblock:start */
 // Specs can be inserted at initialization(before karma is started).

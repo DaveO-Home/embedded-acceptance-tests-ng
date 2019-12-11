@@ -13,7 +13,15 @@ import App from "./js/app";
 import "zone.js/dist/zone-error";
 import apptest from "./jasmine/apptest";
 /* develblock:end */
+// import { Elm } from "./elm/Main.elm";
+// import { register } from "./elm/elm-console-debug";
 
+// register({ simple_mode: true, debug: false, sizeLimit: 1000 });
+// setTimeout(() => {
+// Elm.Main.init({
+//     node: document.getElementById("root"),
+// });
+// }, 1500);
 let production = true;  // This will work if "parcel-plugin-strip" is linked in - see README
 /* develblock:start */
 production = false;
@@ -27,8 +35,8 @@ if(typeof testit === "undefined" || !testit) {
         .catch(err => console.error(err));
 }
 
-App.init(Default)
-Setup.init()
+App.init(Default);
+Setup.init();
 /* develblock:start */
 //Code between the ..start and ..end tags will be removed by the BlockStrip plugin during the production build.
 //testit is true if running under Karma - see testapp_dev.html

@@ -412,7 +412,7 @@ You should be logged into the test container(test_env). There will be 4 embedded
 
 For Pro and Enterpise OS's, follow the Docker instructions on installation.  For the Home OS version you can use the legacy **Docker Desktop** client. It is best to have a Pro or Enterpise Windows OS to use a WSL(Windows bash) install. Use following commands with Windows;
 
-1\. ```docker build -t embedded .```
+1\. ```docker build -t embedded fedora``` or ```docker build -t embedded centos```
 
 2\. ```docker run -ti --privileged  -p 3080:3080 --name test_env embedded bash```
 
