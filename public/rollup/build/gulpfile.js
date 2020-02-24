@@ -3,11 +3,10 @@
  * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint', 'bootlint') -> 'build'
  */
 const { src, dest, series, parallel, task } = require("gulp");
-const alias = require("rollup-plugin-alias");
+var fs = require("fs");
+const alias = require("@rollup/plugin-alias");
 const chalk = require("chalk");
-const compilerPackage = require("google-closure-compiler");
-const closureCompiler = compilerPackage.gulp();
-const commonjs = require("rollup-plugin-commonjs");
+const commonjs = require("@rollup/plugin-commonjs");
 const copy = require("gulp-copy");
 const csslint = require("gulp-csslint");
 const del = require("del");
@@ -15,7 +14,7 @@ const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
 const livereload = require("rollup-plugin-livereload");
 const log = require("fancy-log");
-const nodeResolve = require("rollup-plugin-node-resolve");
+const nodeResolve = require("@rollup/plugin-node-resolve");
 const noop = require("gulp-noop");
 const path = require("path");
 const postcss = require("rollup-plugin-postcss");
@@ -25,6 +24,7 @@ const rmf = require("rimraf");
 const rollup = require("rollup");
 const serve = require("rollup-plugin-serve");
 const stripCode = require("gulp-strip-code");
+const terser = require("rollup-plugin-terser").terser;
 const ts = require("gulp-typescript");
 const Server = require("karma").Server;
 
@@ -381,6 +381,7 @@ function buildBundle(cb) {
                 "process.env.NODE_ENV": JSON.stringify(isProduction ? "production" : "development")
             }),
             alias(aliases()),
+            isProduction ? terser() : noop()
         ],
     }).catch(function (err) {
         log(chalk.red(`Build ${err}`));
@@ -388,15 +389,16 @@ function buildBundle(cb) {
         process.exit(1);
     }).then(function (bundle) {
         if(isProduction) {
-            console.log("Timings:", bundle.getTimings());
+            console.warn("Timings:", bundle.getTimings());
         }
+        log(chalk.cyan("Writing bundle..."));
         bundle.write({
             banner: "var fs",
             format: "iife",
             name: "bundle",
             sourcemap: isProduction === false,
             file: `../../${dist}/bundle.js`,
-        }).then(function (/*result*/) {
+        }).then(function () {
             if (isProduction) {
                 del.sync([
                     `../../${dist}/appl/components`,
@@ -406,7 +408,7 @@ function buildBundle(cb) {
                     `../../${dist}/appl/js`,
                     `../../${dist}/appl/*.js`
                 ], { dryRun: false, force: true });
-                googleCompiler(cb);
+                cb();
             }
             else {
                 log(chalk.green("*** Build finished ***"));
@@ -416,53 +418,39 @@ function buildBundle(cb) {
     });
 }
 
-function googleCompiler(cb) {
-    log(chalk.cyan("Compressing bundle..."));
-    return closureCompiler({
-        js: "../../dist/rollup/bundle.js",
-        compilation_level: "SIMPLE",
-        warning_level: "QUIET",
-        js_output_file: "bundle.js"
-    }, {
-        platform: ["native", "java", "javascript"]
-      })
-        .src()
-        .pipe(dest("../../dist/rollup"))
-        .on("end", function () {
-            log(chalk.green("*** Build finished ***"));
-            cb();
-        });
-}
-
 function modResolve(dir) {
     return path.join(__dirname, "..", dir);
 }
 
 function aliases() {
     return {
-        app: modResolve("appl/js/app.js"),
-        basecontrol: modResolve("appl/js/utils/base.control"),
-        config: modResolve("appl/js/config"),
-        default: modResolve("appl/js/utils/default"),
-        helpers: modResolve("appl/js/utils/helpers"),
-        menu: modResolve("appl/js/utils/menu.js"),
-        pdf: modResolve("appl/js/controller/pdf"),
-        router: modResolve("appl/router"),
-        start: modResolve("appl/js/controller/start"),
-        setup: modResolve("appl/js/utils/setup"),
-        setglobals: modResolve("appl/js/utils/set.globals"),
-        setimports: modResolve("appl/js/utils/set.imports"),
-        table: modResolve("appl/js/controller/table"),
-        pager: "tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js",
-        popper: "popper.js/dist/esm/popper.js",
-        handlebars: "handlebars/dist/handlebars.min.js",
-        bootstrap: "bootstrap/dist/js/bootstrap.min.js",
-        "apptest": "../appl/jasmine/apptest.js",
-        "contacttest": "./contacttest.js",
-        "domtest": "./domtest.js",
-        "logintest": "./logintest.js",
-        "routertest": "./routertest.js",
-        "toolstest": "./toolstest.js"
+        entries: [
+            {find: "setglobals", replacement: modResolve("appl/js/utils/set.globals")},
+            {find: "setimports", replacement: modResolve("appl/js/utils/set.imports")},
+            {find: "app", replacement: modResolve("appl/js/app.js")},
+            {find: "router", replacement: modResolve("appl/router")},
+            {find: "config", replacement: modResolve("appl/js/config")},
+            {find: "helpers", replacement: modResolve("appl/js/utils/helpers")},
+            {find: "setup", replacement: modResolve("appl/js/utils/setup")},
+            {find: "menu", replacement: modResolve("appl/js/utils/menu.js")},
+            {find: "default", replacement: modResolve("appl/js/utils/default")},
+            {find: "basecontrol", replacement: modResolve("appl/js/utils/base.control")},
+            {find: "start", replacement: modResolve("appl/js/controller/start")},
+            {find: "pdf", replacement: modResolve("appl/js/controller/pdf")},
+            {find: "table", replacement: modResolve("appl/js/controller/table")},
+            {find: "pager", replacement: "tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js"},
+            {find: "popper", replacement: "popper.js/dist/esm/popper.js"},
+            {find: "handlebars", replacement: "handlebars/dist/handlebars.min.js"},
+            {find: "bootstrap", replacement: "bootstrap/dist/js/bootstrap.min.js"},
+            {find: "apptest", replacement: "../appl/jasmine/apptest.js"},
+            {find: "contacttest", replacement: "./contacttest.js"},
+            {find: "domtest", replacement: "./domtest.js"},
+            {find: "logintest", replacement: "./logintest.js"},
+            {find: "routertest", replacement: "./routertest.js"},
+            {find: "toolstest", replacement: "./toolstest.js"},
+            {find: "dodextest", replacement: "./dodextest.js"},
+            {find: "inputtest", replacement: "./inputtest.js"}
+     ]
     };
 }
 
@@ -523,7 +511,6 @@ function millisToMinutesAndSeconds(millis) {
  * @type type
  */
 if (process.env.USE_LOGFILE == "true") {
-    var fs = require("fs");
     var origstdout = process.stdout.write,
         origstderr = process.stderr.write,
         outfile = "node_output.log",
