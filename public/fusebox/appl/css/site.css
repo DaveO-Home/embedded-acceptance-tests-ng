@@ -2,8 +2,6 @@
 
 hidden { display: none; }
 
-.hide { visibility: hidden; }
-
 .btn-primary + .raised {
    box-shadow: 0 3px 0 0 #007299;
 }
@@ -160,3 +158,28 @@ html {
 .sidebar-nav {
     padding: 9px 0;
 }
+
+/* <style> */
+/* #app span,table,div tbody {
+    font-size: 13px;  
+    line-height: 1.2; 
+    padding: 5px;
+}
+#app table tr td { 
+    margin:5px; padding:5px;
+}
+h4,h3 {
+    text-align: center;
+}
+.table_info {
+    font-size: 14px;
+    color: #99bfe6;
+    cursor: pointer;
+}
+.smallerfont {
+    font-size: 14px;
+}
+.pointer {
+    cursor: pointer;
+} */
+/* </style> */

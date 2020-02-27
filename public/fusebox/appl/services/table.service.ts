@@ -1,34 +1,34 @@
-import Helpers from "js/helpers";
-import App from "js/app";
-import Table from "js/table";
+import Helpers from '../js/utils/helpers'
+import App from '../js/app'
+import Table from '../js/controller/table'
 
-declare let Promise: any;
+declare var Promise: any;
 
 export class TableService {
-  getHtml(obj): Promise<{ response; obj }> {
-    const controllerName = "Table";
-    const actionName = "tools";
-    const failMsg = `Load problem with: '${controllerName}/${actionName}'.`;
-    App.loadController(controllerName, Table, controller => {
+  getHtml(obj: this): Promise<{ response: any, obj: any }> {
+    const controllerName = 'Table'
+    const actionName = 'tools'
+    const failMsg = `Load problem with: '${controllerName}/${actionName}'.`
+    App.loadController(controllerName, Table, (controller: { [x: string]: (arg0: {}) => void; }) => {
       if (controller &&
         controller[actionName]) {
-        controller[actionName]({});
+        controller[actionName]({})
       } else {
-        console.error(failMsg);
+        console.error(failMsg)
       }
-    }, err => {
-      console.error(`${failMsg} - ${err}`);
-    });
-
-    return new Promise(function (resolve, reject) {
-      const count = 0;
-      Helpers.isLoaded(resolve, reject, "", Table, count, 10);
+    }, (err: any) => {
+      console.error(`${failMsg} - ${err}`)
     })
-      .catch(function (rejected) {
-        console.warn("Failed", rejected);
+
+    return new Promise(function (resolve: any, reject: any) {
+      let count = 0
+      Helpers.isLoaded(resolve, reject, '', Table, count, 10)
+    })
+      .catch(function (rejected: any) {
+        console.warn('Failed', rejected)
       })
-      .then(function (resolved) {
-        return { "response": resolved, "obj": obj };
-      });
+      .then(function (resolved: any) {
+        return { "response": resolved, "obj": obj }
+      })
   }
 }

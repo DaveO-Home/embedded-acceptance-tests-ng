@@ -40,7 +40,7 @@ export default function (dodex, input, mess, content, Start) {
                 const observable = numbers.subscribe(timer => {
                     dodexTopElement = getElement(".top--dodex");
 
-                    if ((typeof dodexTopElement !== "undefined" && dodexTopElement.length !== 0) &&
+                    if ((typeof dodexTopElement !== "undefined") &&
                         dodexTopElement.classList.contains("plus-thousand")) {
                         dodexElement = getElement(".dodex");
                         card1 = getElement(".card1");
@@ -72,6 +72,7 @@ export default function (dodex, input, mess, content, Start) {
             expect(dodexElement).toBeDefined();
             expect(isVisible(dodexTopElement)).toBeTruthy();
             dodexToggle.onmousedown();
+
             expect(isVisible(dodexTopElement)).toBeFalsy();
             dodexToggle.onmousedown(); // Make visible again
 
@@ -196,13 +197,12 @@ export default function (dodex, input, mess, content, Start) {
                 Start["div .login click"](event.target, event);
             };
             var modal, nameObject;
-            var login = front1;
-            login.onclick = clickHandler;
-            login.dispatchEvent(new Event("click"));
+            front1.onclick = clickHandler;
+            front1.dispatchEvent(new Event("click"));
             const numbers = timer(100, 10);
             const observable = numbers.subscribe(timer => {
                 modal = $("#modalTemplate");
-                if ((typeof modal[0] !== "undefined" && modal[0].length !== 0) || timer === 100) {
+                if ((typeof modal[0] !== "undefined" && modal[0].length !== 0) || timer === 75) {
                     nameObject = document.querySelector("#inputUsername");
                     modal.on("shown.bs.modal", function (/*html*/) {
                         modal.modal("toggle");

@@ -4,32 +4,30 @@
  * Tasks are run serially, 'pat' -> 'accept' -> ('eslint', 'csslint', 'bootlint') -> 'build'
  */
 const { src, series, parallel /*, dest, task*/ } = require("gulp");
-const runFusebox = require("./fuse4.js");
 const path = require("path");
+// const copy = require("gulp-copy");
 const csslint = require("gulp-csslint");
+// const env = require("gulp-env");
 const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
 const log = require("fancy-log");
 const Server = require("karma").Server;
 const chalk = require("chalk");
+const rmf = require("rimraf");
 
-let lintCount = 0;
-let browsers = process.env.USE_BROWSERS;
+let lintCount = 0
+let dist = "dist_test/fusebox"
+let distProd = "dist/fusebox"
+// let isProduction = false
+let browsers = process.env.USE_BROWSERS
 let useNg = "";
 let runSingle = true;
-let useBundler = process.env.USE_BUNDLER !== "false";
-let useFtl = true;
-
-process.argv.forEach(function (val, index, array) {
-    useFtl = val === "--noftl" && useFtl ? false : useFtl;
-    if(index > 2) {
-        process.argv[index] = "";
-    }
-});
 
 if (browsers) {
     global.whichBrowsers = browsers.split(",");
 }
+var isWindows = /^win/.test(process.platform);
+// var initialTask;
 /**
  * Default: Production Acceptance Tests 
  */
@@ -37,22 +35,19 @@ const pate2e = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = "";
-    runSingle = true;
-    setTimeout(() => {
-        runKarma(done);
-    }, 500);
+    useNg = ""
+    runSingle = true
+    runKarma(done);
 };
 /**
  * Add in Angular unit tests 
  */
 const pat = function (done) {
-    log(chalk.cyan("Starting Angular unit tests"));
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng";
-    runSingle = true;
+    useNg = ".ng"
+    runSingle = true
     runKarma(done);
 };
 /*
@@ -61,7 +56,7 @@ const pat = function (done) {
 const esLint = function (cb) {
     var stream = src(["../appl/js/**/*.js"])
         .pipe(eslint({
-            configFile: "../../.eslintrc.js",
+            configFile: "../../.eslintrc.js", // "eslintConf.json",
             quiet: 1,
         }))
         .pipe(eslint.format())
@@ -75,31 +70,7 @@ const esLint = function (cb) {
         process.exit(1);
     });
     return stream.on("end", function () {
-        log(chalk.blue.bold.underline("# javascript files linted: " + lintCount));
-        cb();
-    });
-};
-/*
- * typescript linter
- */
-const esLintts = function (cb) {
-    var stream = src(["../appl/**/*.ts"])
-        .pipe(eslint({
-            configFile: "../../.eslintts.js",
-            quiet: 1,
-        }))
-        .pipe(eslint.format())
-        .pipe(eslint.result(() => {
-            //Keeping track of # of javascript files linted.
-            lintCount++;
-        }))
-        .pipe(eslint.failAfterError());
-
-    stream.on("error", function () {
-        process.exit(1);
-    });
-    return stream.on("end", function () {
-        log(chalk.blue.bold("# typescript files linted: " + lintCount));
+        log("# javascript files linted: " + lintCount);
         cb();
     });
 };
@@ -108,14 +79,16 @@ const esLintts = function (cb) {
  */
 const cssLint = function (cb) {
     var stream = src(["../appl/css/site.css"
-    ]).pipe(csslint())
+    ])
+        .pipe(csslint())
         .pipe(csslint.formatter());
 
     stream.on("error", function () {
         process.exit(1);
-    }).on("end", function () {
-        cb();
-    });
+    })
+        .on("end", function () {
+            cb();
+        });
 };
 /*
  * Bootstrap html linter 
@@ -130,142 +103,147 @@ const bootLint = function (cb) {
 /*
  * Build the application to run karma acceptance tests
  */
-const testBuild = function (cb) {
-    process.argv[2] = "";
-    const props = {
-        isKarma: true,
-        isHmr: false,
-        isWatch: false,
-        env: "development",
-        useServer: false,
-        ftl: false
-    };
-    let mode = "test";
-    const debug = true;
-    try {
-        return runFusebox(mode, fuseboxConfig(mode, props), debug, cb);
-    } catch (e) {
-        log("Error", e);
+const test_build = function (cb) {
+    var osCommands = "cd ..; export NODE_ENV=development; export USE_KARMA=true; export USE_HMR=false; ";
+
+    if (isWindows) {
+        osCommands = "cd ..\\ & set NODE_ENV=development & set USE_KARMA=true & set USE_HMR=false & ";
     }
+
+    exec(osCommands + "node fuse.js", function (/*err, stdout, stderr*/) {
+        log(chalk.cyan("Building Test - please wait......"))
+        let cmd = exec(osCommands + "node fuse.js");
+        cmd.stdout.on("data", (data) => {
+            if (data && data.length > 0) {
+                console.log(data.trim());
+            }
+        });
+        cmd.stderr.on("data", (data) => {
+            if (data && data.length > 0)
+                console.log(data.trim())
+        });
+        return cmd.on("exit", (code) => {
+            log(chalk.green(`Build successful - ${code}`));
+            cb()
+        });
+    });
 };
 /*
  * Build the application to the production distribution 
  */
 const build = function (cb) {
-    process.argv[2] = "";
-    if(!useBundler) {
-        return cb();
+    var osCommands = "cd ..; export NODE_ENV=production; export USE_KARMA=false; export USE_HMR=false; ";
+
+    if (isWindows) {
+        osCommands = "cd ..\\ & set NODE_ENV=production & set USE_KARMA=false & set USE_HMR=false & ";
     }
-    const props = {
-        isKarma: false,
-        isHmr: false,
-        isWatch: false,
-        env: "production",
-        useServer: false,
-        ftl: false
-    };
-    let mode = "prod";
-    const debug = true;
-    try {
-        return runFusebox(mode, fuseboxConfig(mode, props), debug, cb);
-    } catch (e) {
-        console.log("Error", e);
-    }
+
+    log(chalk.cyan("Production Build - please wait......"))
+    let cmd = exec(osCommands + "node fuse.js");
+    cmd.stdout.on("data", (data) => {
+        if (data && data.length > 0) {
+            console.log(data.trim());
+        }
+    });
+    cmd.stderr.on("data", (data) => {
+        if (data && data.length > 0)
+            console.log(data.trim())
+    });
+    return cmd.on("exit", (code) => {
+        log(chalk.green(`Build successful - ${code}`));
+        cb()
+    });
 };
-/*
- * Build the application to preview the production distribution 
+/**
+ * Remove previous build
  */
-const preview = function (cb) {
-    process.argv[2] = "";
-    const props = {
-        isKarma: false,
-        isHmr: false,
-        isWatch: false,
-        env: "production",
-        useServer: true,
-        ftl: false
-    };
-    let mode = "preview";
-    const debug = true;
-    try {
-        return runFusebox(mode, fuseboxConfig(mode, props), debug, cb);
-    } catch (e) {
-        console.log("Error", e);
-    }
+const clean = function (done) {
+    return rmf("../../" + distProd, [], (err) => {
+        if (err) {
+            log(err)
+        }
+        done()
+    });
+};
+/**
+ * Remove previous test build
+ */
+const clean_test = function (done) {
+    return rmf("../../" + dist, [], (err) => {
+        if (err) {
+            log(err)
+        }
+        done()
+    });
 };
 /*
  * Build the application to run karma acceptance tests with hmr
  */
-const fuseboxHmr = function (cb) {
-    process.argv[2] = "";
-    const props = {
-        isKarma: false,
-        isHmr: true,
-        isWatch: true,
-        env: "development",
-        useServer: true,
-        ftl: useFtl
-    };
-    let mode = "test";
-    const debug = true;
-    try {
-        runFusebox(mode, fuseboxConfig(mode, props), debug, cb);
-    } catch (e) {
-        console.log("Error", e);
+const fusebox_hmr = function (cb) {
+    var osCommands = "cd ..; export NODE_ENV=development; export USE_KARMA=false; export USE_HMR=true; ";
+
+    if (isWindows) {
+        osCommands = "cd ..\\ & set NODE_ENV=development & set USE_KARMA=false & set USE_HMR=true & ";
     }
-};
 
-const setNoftl = function (cb) {
-    useFtl = false;
-    cb();
+    log(chalk.cyan("Configuring HMR - please wait......"))
+    let cmd = exec(osCommands + "node fuse.js");
+    cmd.stdout.on("data", (data) => {
+        if (data && data.length > 0) {
+            console.log(data.trim());
+        }
+    });
+    cmd.stderr.on("data", (data) => {
+        if (data && data.length > 0)
+            console.log(data.trim())
+    });
+    return cmd.on("exit", (code) => {
+        log(chalk.green(`Build successful - ${code}`));
+        cb()
+    });
 };
-
 /*
  * Build the application to run node express so font-awesome is resolved
  */
-const fuseboxRebuild = function (cb) {
-    process.argv[2] = "";
-    const props = {
-        isKarma: false,
-        isHmr: false,
-        isWatch: false,
-        env: "development",
-        useServer: false,
-        ftl: false
-    };
-    let mode = "test";
-    const debug = true;
-    try {
-        return runFusebox(mode, fuseboxConfig(mode, props), debug, cb);
-    } catch (e) {
-        console.log("Error", e);
+const fusebox_rebuild = function (cb) {
+    var osCommands = "cd ..; export NODE_ENV=development; export USE_KARMA=false; export USE_HMR=false; ";
+
+    if (isWindows) {
+        osCommands = "cd ..\\ & set NODE_ENV=development & set USE_KARMA=false & set USE_HMR=false & ";
     }
+
+    exec(osCommands + "node fuse.js", function (err, stdout, stderr) {
+        log(chalk.cyan("Rebuilding - please wait......"))
+        let cmd = exec(osCommands + "node fuse.js");
+        cmd.stdout.on("data", (data) => {
+            if (data && data.length > 0) {
+                console.log(data.trim());
+            }
+        });
+        cmd.stderr.on("data", (data) => {
+            if (data && data.length > 0)
+                console.log(data.trim())
+        });
+        return cmd.on("exit", (code) => {
+            log(chalk.green(`Build successful - ${code}`));
+            cb()
+        });
+    });
 };
-/*
- * copy assets for development
+/**
+ * Run karma/jasmine tests once and exit
  */
-const copy = async function (cb) {
-    process.argv[2] = "";
-    const props = {
-        isKarma: false,
-        isHmr: false,
-        isWatch: false,
-        env: "development",
-        useServer: false
-    };
-    let mode = "copy";
-    const debug = true;
-    try {
-        runFusebox(mode, fuseboxConfig(mode, props), debug);
-    } catch (e) {
-        console.log("Error", e);
-    }
-    cb();
-};
+// const fb_test = function (done) {
+//     if (!browsers) {
+//         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+//     }
+//     runSingle = true;
+//     return runKarma(done);
+// };
 /**
  * Run karma/jasmine tests once and exit without rebuilding(requires a previous build)
  */
-const e2eTest = function (done) {
+const e2e_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
@@ -275,26 +253,25 @@ const e2eTest = function (done) {
 /**
  * Run karma/jasmine tests once and exit without rebuilding(requires a previous build)
  */
-const ngTest = function (done) {
+const ng_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
-    useNg = ".ng";
+    runSingle = true
+    useNg = ".ng"
     return runKarma(done);
 };
 /**
  * Continuous testing - test driven development.  
  */
-const fuseboxTdd = function (done) {
+const fusebox_tdd = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
 
     new Server({
         configFile: path.join(__dirname, "/karma.conf.js"),
-    }).start();
-    done();
+    }, done).start();
 };
 /**
  * Karma testing under Opera. -- needs configuation  
@@ -308,24 +285,22 @@ const tddo = function (done) {
     }, done).start();
 };
 
-const testRun = series(testBuild, pate2e, pat);
-const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
+const testRun = series(clean_test, test_build, pate2e, pat)
+const lintRun = parallel(esLint, cssLint, bootLint)
 
-exports.default = series(testRun, lintRun, build);
-exports.prod = series(testRun, lintRun, build);
-exports.preview = preview;
-exports.prd = series(build);
-exports.test = testRun;
-exports.tdd = fuseboxTdd;
-exports.tddo = tddo;
-exports.hmr = fuseboxHmr;
-exports.rebuild = fuseboxRebuild;
-exports.acceptance = e2eTest;
-exports.ngtest = ngTest;
-exports.e2e = e2eTest;
-exports.development = series(setNoftl, fuseboxHmr, fuseboxTdd);
-exports.lint = lintRun;
-exports.copy = copy;
+exports.default = series(testRun, lintRun, clean, build)
+exports.prod = series(testRun, lintRun, clean, build)
+exports.prd = series(clean, build)
+exports.test = testRun
+exports.tdd = fusebox_tdd
+exports.tddo = tddo
+exports.hmr = fusebox_hmr
+exports.rebuild = fusebox_rebuild
+exports.acceptance = e2e_test
+exports.ngtest = ng_test
+exports.e2e = e2e_test
+exports.development = parallel(fusebox_hmr, fusebox_tdd)
+exports.lint = lintRun
 
 function runKarma(done) {
     const karmaPath = "/karma" + useNg + ".conf.js";
@@ -343,69 +318,29 @@ function runKarma(done) {
     }).start();
 }
 
-function fuseboxConfig(mode, props) {
-    mode = mode || "test";
-    // if(process.argv[2]) {
-    //     mode = process.argv[2];
-    // }
-    if (typeof props === "undefined") {
-        props = {};
-    }
-    const appSrc = path.join(__dirname, "../appl");
-    let toDist = "";
-    let isProduction = mode !== "test";
-    let distDir = isProduction ? path.join(__dirname, "../../dist/fusebox") : path.join(__dirname, "../../dist_test/fusebox");
-    let defaultServer = props.useServer;
-    let devServe = {
-        httpServer: {
-            root: "../../",
-            port: 3080,
-            open: false
-        },
-    };
-    const configure = {
-        target: "browser",
-        env: { NODE_ENV: isProduction ? "production" : "development" },
-        homeDir: appSrc,
-        entry: path.join(__dirname, "../appl/main.ts"),
-        output: `${distDir}${toDist}`,
-        cache: {
-            root: path.join(__dirname, ".cache"),
-            enabled: !isProduction,
-            FTL: typeof props.ftl === "undefined" ? true : props.ftl
-        },
-        sourceMap: !isProduction,
-        webIndex: {
-            distFileName: isProduction ? path.join(__dirname, "../../dist/fusebox/appl/testapp.html") : path.join(__dirname, "../../dist_test/fusebox/appl/testapp_dev.html"),
-            publicPath: "../",
-            template: isProduction ? path.join(__dirname, "../appl/index.html") : path.join(__dirname, "../appl/index_dev.html")
-        },
-        tsConfig: path.join(__dirname, "tsconfig.json"),
-        watch: props.isWatch && !isProduction,
-        hmr: props.isHmr && !isProduction,
-        devServer: defaultServer ? devServe : false,
-        logging: { level: "succinct" },
-        turboMode: true,
-        exclude: isProduction ? "**/*test.js" : "",
-        resources: {
-            resourceFolder: "./appl/resources",
-            resourcePublicRoot: isProduction ? "appl/resources" : "./resources",
-        }
-    };
-    return configure;
-}
-
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
     var fs = require("fs");
-    var util = require("util");
-    var logFile = fs.createWriteStream("log.txt", { flags: "w" });
-    // Or "w" to truncate the file every time the process starts.
-    var logStdout = process.stdout;
+    // var proc = require("process");
+    var origstdout = process.stdout.write,
+        origstderr = process.stderr.write,
+        outfile = "node_output.log",
+        errfile = "node_error.log";
 
-    console.log = function () {
-        logFile.write(util.format.apply(null, arguments) + "\n");
-        logStdout.write(util.format.apply(null, arguments) + "\n");
+    if (fs.stat(outfile)) {
+        fs.unlink(outfile);
+    }
+    if (fs.stat(errfile)) {
+        fs.unlink(errfile);
+    }
+
+    process.stdout.write = function (chunk) {
+        fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
+        origstdout.apply(this, arguments);
     };
-    console.error = console.log;
+
+    process.stderr.write = function (chunk) {
+        fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
+        origstderr.apply(this, arguments);
+    };
 }

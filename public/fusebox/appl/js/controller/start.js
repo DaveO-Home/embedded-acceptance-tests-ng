@@ -1,33 +1,33 @@
 /* eslint no-unused-vars: ['error', { 'args': 'none' }] */
 
-import App from "js/app";
-import Base from "js/base.control";
-import Menu from "js/menu";
-import * as Marked from "marked";
-let me;
+import App from "app"
+import Base from "basecontrol"
+import Menu from "menu"
+import * as Marked from "marked"
+let me
 
 export default App.controllers.Start ||
     (App.controllers.Start = Object.assign({ // new (Base.extend({
         name: "start",
         init () {
-            me = this;
-            this.setLocation();
-            Base.init();
+            me = this
+            this.setLocation()
+            Base.init()
         },
         initMenu () {
-            me = this;
-            this.setLocation();
-            Menu.activate("#top-nav div ul li");
-            Menu.activate("#side-nav nav ul li");
+            me = this
+            this.setLocation()
+            Menu.activate("#top-nav div ul li")
+            Menu.activate("#side-nav nav ul li")
         },
         setLocation () {
-            const hash = window.location.hash;
-            this.location = hash === "#/contact" ? this.location : hash;
+            const hash = window.location.hash
+            this.location = hash === "#/contact" ? this.location : hash
         },
         location: "#/",
         index (options) {
-            const indexUrl = "views/prod/index.html";
-            const markdownUrl = "../../README.md";
+            const indexUrl = "views/prod/index.html"
+            const markdownUrl = "../../README.md"
             this.view({
                 url: indexUrl,
                 urlMd: markdownUrl,
@@ -37,13 +37,13 @@ export default App.controllers.Start ||
                 ng: true,
                 fnLoad (el) {
                 }
-            });
+            })
         },
         getHtml () {
-            return this.html;
+            return this.html
         },
         "div .login click": function (e) {
-            const loginUrl = "views/prod/login.html";
+            const loginUrl = "views/prod/login.html"
             me.modal({
                 url: loginUrl,
                 title: "Account Log In",
@@ -54,14 +54,14 @@ export default App.controllers.Start ||
                 foot: me.footer,
                 close: "Close",
                 contactFooter: me.contactFooter
-            });
+            })
         },
         ".modal .submit-login click": function (sender, e) {
-            alert("Not implemented");
-            $(sender.target).closest(".modal").modal("hide");
+            alert("Not implemented")
+            $(sender.target).closest(".modal").modal("hide")
         },
         "div .modal-footer .contact click": function (sender, e) {
-            $(sender.target).closest(".modal").modal("hide");
+            $(sender.target).closest(".modal").modal("hide")
         },
         contact (ev) {
             this.view({
@@ -69,35 +69,35 @@ export default App.controllers.Start ||
                 selector: window.rmain_container || "#main_container",
                 fade: true,
                 contactListener: me.contactListener
-            });
+            })
         },
         contactListener (el, me) {
-            const form = $("form", el);
+            const form = $("form", el)
 
             const formFunction = e => {
                 /* develblock:start */
                 if (window.__karma__) { // To prevent firefox testing from clearing context
-                    e.preventDefault();
+                    e.preventDefault()
                 }
                 /* develblock:end */
                 const validateForm = isValid => {
-                    const inputs = Array.prototype.slice.call(document.querySelectorAll("form input"));
-                    inputs.push(document.querySelector("form textarea"));
+                    const inputs = Array.prototype.slice.call(document.querySelectorAll("form input"))
+                    inputs.push(document.querySelector("form textarea"))
                     for (let i = 0; i < inputs.length; i++) {
-                        isValid = !inputs[i].checkValidity() ? false : isValid;
-                        inputs[i].setCustomValidity("");
+                        isValid = !inputs[i].checkValidity() ? false : isValid
+                        inputs[i].setCustomValidity("")
                         if (inputs[i].validity.valueMissing && !isValid) {
-                            inputs[i].setCustomValidity("Please enter data for required field");
+                            inputs[i].setCustomValidity("Please enter data for required field")
                         }
                     }
-                    return isValid;
-                };
+                    return isValid
+                }
 
-                const isValid = validateForm(true) ? true : validateForm(true);
+                const isValid = validateForm(true) ? true : validateForm(true)
 
                 if (isValid) {
-                    e.preventDefault();
-                    me.showAlert(me);
+                    e.preventDefault()
+                    me.showAlert(me)
                     // TODO: do something with collected data
                     // var data = $('form.form-modal').serializeArray()
                     //     .reduce(function (a, x) {
@@ -105,19 +105,19 @@ export default App.controllers.Start ||
                     //        return a
                     // }, {})
 
-                    let secs = 3000;
+                    let secs = 3000
                     /* develblock:start */
                     if (window.__karma__) {
-                        secs = 10;
+                        secs = 10
                     }
                     /* develblock:end */
                     setTimeout(() => {
-                        $("#data").empty();
-                        window.location.hash = me.location;
-                    }, secs);
+                        $("#data").empty()
+                        window.location.hash = me.location
+                    }, secs)
                 }
-            };
-            form.find("input[type=submit]", el).click(formFunction);
+            }
+            form.find("input[type=submit]", el).click(formFunction)
         },
         footer: "<button class=\"btn btn-sm btn-primary submit-modal mr-auto raised submit-login\">{{submit}}</button>" +
                      "<button class=\"btn btn-sm close-modal raised\" data-dismiss=\"modal\" aria-hidden=\"true\">{{close}}</button>",
@@ -131,17 +131,17 @@ export default App.controllers.Start ||
                     "<strong>Thank You!</strong> Your request is being processed." +
                     "</div>",
         showAlert (me) {
-            $("form.form-horizontal").append(me.alert);
+            $("form.form-horizontal").append(me.alert)
         },
         finish (options) {
-            me = this;
+            me = this
             const mdFunction = data => {
-                me.html = `${App.html} ${Marked(data)}`;
-            };
+                me.html = `${App.html} ${Marked(data)}`
+            }
             $.get(options.urlMd, mdFunction, "text")
             .fail(err => {
-                console.warn("IT FAILED", err);
-            });
+                console.warn("IT FAILED", err)
+            })
         },
         html: ""
-    }, Base));
+    }, Base))

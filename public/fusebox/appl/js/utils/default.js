@@ -4,4 +4,4 @@ export default {
     errorNotify: false,
     errorLog: false,
     bundler: window._bundler
-};
+}

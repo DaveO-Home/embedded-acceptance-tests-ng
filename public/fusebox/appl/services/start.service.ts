@@ -1,24 +1,24 @@
-import Start from "js/start";
-import Setup from "js/setup";
-import Helpers from "js/helpers";
+import Start from '../js/controller/start'
+import Setup from '../js/utils/setup'
+import Helpers from '../js/utils/helpers'
 
-declare let Promise: any;
+declare var Promise: any;
 
 export class StartService {
-  getHtml(obj): Promise<{response; obj}> {   
-    Setup.init();
-    Start.initMenu();
-    Start.index();
+  getHtml(obj: this):Promise<{response: any, obj: any}> {   
+    Setup.init()
+    Start.initMenu()
+    Start.index()
 
-    return new Promise(function (resolve, reject) {
-      const count = 0;
-      Helpers.isLoaded(resolve, reject, "", Start, count, 10);
+    return new Promise(function (resolve: any, reject: any) {
+      let count = 0
+      Helpers.isLoaded(resolve, reject, '', Start, count, 10)
     })
-      .catch(function (rejected) {
-        console.warn("Failed", rejected);
+      .catch(function (rejected: any) {
+        console.warn('Failed', rejected)
       })
-      .then(function (resolved: string) {
+      .then(function (resolved: String) {
         return {"response": resolved, "obj": obj};
-      });
+      })
   }
 }

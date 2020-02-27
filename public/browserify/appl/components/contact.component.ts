@@ -3,7 +3,7 @@ import "rxjs/add/operator/map";
 import App from "../js/app";
 import Setup from "../js/utils/setup";
 
-declare let $: any;
+declare let $: JQueryStatic;
 
 @Component({
     templateUrl: "views/prod/contact.html"

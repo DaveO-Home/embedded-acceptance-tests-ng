@@ -1,20 +1,19 @@
-import "js/set.globals";
-import { NgModule, Component } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import "rxjs/add/operator/map";
-import { AppRoutingModule } from "ts/router";
-import Start from "js/start";
+import './js/utils/set.globals';
+import { NgModule, Component } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import 'rxjs/add/operator/map';
+import { AppRoutingModule } from './router';
+import Start from './js/controller/start';
 import dodex from "dodex";
 import input from "dodex-input";
 import mess from "dodex-mess";
 
-declare const testit: boolean;
+declare let testit: any;
 
 @Component({
-	selector: "test-app",
-	templateUrl: "app_bootstrap.html"
+	selector: 'test-app',
+	templateUrl: 'app_bootstrap.html'
 })
-
 export class TestApp {
 	constructor() {
 		if ((typeof testit === "undefined" || !testit) &&
@@ -32,29 +31,18 @@ export class TestApp {
 					replace: true,   	// append to or replace default content - default false(append only)
 					mess: mess
 				}).then(function () {
-					// Add in app/personal cards
-					for (let i = 0; i < 3; i++) {
-						dodex.addCard(getAdditionalContent());
-					}
-					/* Auto display of widget */
-					// dodex.openDodex();
-				});
+						// Add in app/personal cards
+						for (let i = 0; i < 3; i++) {
+							dodex.addCard(getAdditionalContent());
+						}
+						/* Auto display of widget */
+						// dodex.openDodex();
+					});
 			}, 1000); // Waiting for app_bootstrap.html to load
 		}
-/* develblock:start */
-		else { // For HMR testing
-			setTimeout(function () {
-				const dodexOpen: HTMLElement = document.querySelector(".dodex--open");
-				dodexOpen.onmousedown = event => {
-					dodex.openDodex(event);
-				};
-			}, 1000);
-		}
-/* develblock:end */
 	}
-
-	loginModal(event) {
-		Start["div .login click"]();
+	loginModal(event: any) {
+		Start['div .login click']();
 	}
 }
 
