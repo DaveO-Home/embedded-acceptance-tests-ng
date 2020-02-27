@@ -1,25 +1,26 @@
-/*eslint "no-console": 0 camelcase: 0 */
+/*eslint camelcase: 0 */
 /**
  * Successful acceptance tests & lints start the production build.
  * Tasks are run serially, 'pat' -> 'accept' -> ('eslint', 'csslint', 'bootlint') -> 'build'
  */
-const { src, series, parallel /*, dest, task*/ } = require("gulp");
-const path = require("path");
-// const copy = require("gulp-copy");
+const { src, series, parallel , dest/*, task*/ } = require("gulp");
+const chalk = require("chalk");
 const csslint = require("gulp-csslint");
-// const env = require("gulp-env");
 const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
+const fs = require("fs");
 const log = require("fancy-log");
+const path = require("path");
 const Server = require("karma").Server;
-const chalk = require("chalk");
+const rename = require("gulp-rename");
 const rmf = require("rimraf");
+const uglify = require("gulp-uglify");
 
-let lintCount = 0
-let dist = "dist_test/fusebox"
-let distProd = "dist/fusebox"
+let lintCount = 0;
+let dist = "dist_test/fusebox";
+let distProd = "dist/fusebox";
 // let isProduction = false
-let browsers = process.env.USE_BROWSERS
+let browsers = process.env.USE_BROWSERS;
 let useNg = "";
 let runSingle = true;
 
@@ -35,8 +36,8 @@ const pate2e = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ""
-    runSingle = true
+    useNg = "";
+    runSingle = true;
     runKarma(done);
 };
 /**
@@ -46,8 +47,8 @@ const pat = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng"
-    runSingle = true
+    useNg = ".ng";
+    runSingle = true;
     runKarma(done);
 };
 /*
@@ -111,20 +112,20 @@ const test_build = function (cb) {
     }
 
     exec(osCommands + "node fuse.js", function (/*err, stdout, stderr*/) {
-        log(chalk.cyan("Building Test - please wait......"))
+        log(chalk.cyan("Building Test - please wait......"));
         let cmd = exec(osCommands + "node fuse.js");
         cmd.stdout.on("data", (data) => {
             if (data && data.length > 0) {
-                console.log(data.trim());
+                log(data.trim());
             }
         });
         cmd.stderr.on("data", (data) => {
             if (data && data.length > 0)
-                console.log(data.trim())
+                log(data.trim());
         });
         return cmd.on("exit", (code) => {
             log(chalk.green(`Build successful - ${code}`));
-            cb()
+            cb();
         });
     });
 };
@@ -138,20 +139,21 @@ const build = function (cb) {
         osCommands = "cd ..\\ & set NODE_ENV=production & set USE_KARMA=false & set USE_HMR=false & ";
     }
 
-    log(chalk.cyan("Production Build - please wait......"))
+    log(chalk.cyan("Production Build - please wait......"));
     let cmd = exec(osCommands + "node fuse.js");
     cmd.stdout.on("data", (data) => {
         if (data && data.length > 0) {
-            console.log(data.trim());
+            log(data.trim());
         }
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data.trim())
+            log(data.trim());
     });
-    return cmd.on("exit", (code) => {
+    cmd.on("exit", async (code) => {
+        await compressBundles();
         log(chalk.green(`Build successful - ${code}`));
-        cb()
+        cb();
     });
 };
 /**
@@ -160,9 +162,9 @@ const build = function (cb) {
 const clean = function (done) {
     return rmf("../../" + distProd, [], (err) => {
         if (err) {
-            log(err)
+            log(err);
         }
-        done()
+        done();
     });
 };
 /**
@@ -171,9 +173,9 @@ const clean = function (done) {
 const clean_test = function (done) {
     return rmf("../../" + dist, [], (err) => {
         if (err) {
-            log(err)
+            log(err);
         }
-        done()
+        done();
     });
 };
 /*
@@ -186,20 +188,20 @@ const fusebox_hmr = function (cb) {
         osCommands = "cd ..\\ & set NODE_ENV=development & set USE_KARMA=false & set USE_HMR=true & ";
     }
 
-    log(chalk.cyan("Configuring HMR - please wait......"))
+    log(chalk.cyan("Configuring HMR - please wait......"));
     let cmd = exec(osCommands + "node fuse.js");
     cmd.stdout.on("data", (data) => {
         if (data && data.length > 0) {
-            console.log(data.trim());
+            log(data.trim());
         }
     });
     cmd.stderr.on("data", (data) => {
         if (data && data.length > 0)
-            console.log(data.trim())
+            log(data.trim());
     });
     return cmd.on("exit", (code) => {
         log(chalk.green(`Build successful - ${code}`));
-        cb()
+        cb();
     });
 };
 /*
@@ -213,20 +215,20 @@ const fusebox_rebuild = function (cb) {
     }
 
     exec(osCommands + "node fuse.js", function (err, stdout, stderr) {
-        log(chalk.cyan("Rebuilding - please wait......"))
+        log(chalk.cyan("Rebuilding - please wait......"));
         let cmd = exec(osCommands + "node fuse.js");
         cmd.stdout.on("data", (data) => {
             if (data && data.length > 0) {
-                console.log(data.trim());
+                log(data.trim());
             }
         });
         cmd.stderr.on("data", (data) => {
             if (data && data.length > 0)
-                console.log(data.trim())
+                log(data.trim());
         });
         return cmd.on("exit", (code) => {
             log(chalk.green(`Build successful - ${code}`));
-            cb()
+            cb();
         });
     });
 };
@@ -257,8 +259,8 @@ const ng_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true
-    useNg = ".ng"
+    runSingle = true;
+    useNg = ".ng";
     return runKarma(done);
 };
 /**
@@ -285,22 +287,22 @@ const tddo = function (done) {
     }, done).start();
 };
 
-const testRun = series(clean_test, test_build, pate2e, pat)
-const lintRun = parallel(esLint, cssLint, bootLint)
+const testRun = series(clean_test, test_build, pate2e, pat);
+const lintRun = parallel(esLint, cssLint, bootLint);
 
-exports.default = series(testRun, lintRun, clean, build)
-exports.prod = series(testRun, lintRun, clean, build)
-exports.prd = series(clean, build)
-exports.test = testRun
-exports.tdd = fusebox_tdd
-exports.tddo = tddo
-exports.hmr = fusebox_hmr
-exports.rebuild = fusebox_rebuild
-exports.acceptance = e2e_test
-exports.ngtest = ng_test
-exports.e2e = e2e_test
-exports.development = parallel(fusebox_hmr, fusebox_tdd)
-exports.lint = lintRun
+exports.default = series(testRun, lintRun, clean, build);
+exports.prod = series(testRun, lintRun, clean, build);
+exports.prd = series(clean, build);
+exports.test = testRun;
+exports.tdd = fusebox_tdd;
+exports.tddo = tddo;
+exports.hmr = fusebox_hmr;
+exports.rebuild = fusebox_rebuild;
+exports.acceptance = e2e_test;
+exports.ngtest = ng_test;
+exports.e2e = e2e_test;
+exports.development = parallel(fusebox_hmr, fusebox_tdd);
+exports.lint = lintRun;
 
 function runKarma(done) {
     const karmaPath = "/karma" + useNg + ".conf.js";
@@ -318,9 +320,52 @@ function runKarma(done) {
     }).start();
 }
 
+function compressBundles() {
+    let files = [];
+
+    fs.readdirSync(`../../${distProd}`).forEach(file => {
+        if(file.endsWith(".js")) {
+            files.push(file);
+            fs.renameSync(`../../${distProd}/${file}`, `../../${distProd}/${file}T`);
+        }
+    });
+
+    let count = 0;
+    const length = files.length;
+    
+    log(chalk.bold.cyan("compressing bundles..."));
+
+    return new Promise((resolve, reject) => {
+        files.forEach(file => {
+            src([`../../${distProd}/${file}T`])
+                .pipe(uglify())
+                .pipe(rename(file))
+                .pipe(dest(`../../${distProd}`))
+                .on("error", err => {
+                        log(err);
+                        reject();
+                    })
+                .on("end", function () {
+                    count++;
+                    rmf(`../../${distProd}/${file}T`, err => {
+                        if(err) {
+                            log(chalk.bold.red(err));
+                            reject();
+                        } else {
+                            log(chalk.bold.blue(file, ": uglified"));
+                        }
+
+                        if(length === count) {
+                            resolve();
+                        }
+                    });
+                });
+            });
+        });
+}
+
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
-    var fs = require("fs");
     // var proc = require("process");
     var origstdout = process.stdout.write,
         origstderr = process.stderr.write,
