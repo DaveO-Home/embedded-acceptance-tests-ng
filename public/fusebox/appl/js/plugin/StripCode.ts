@@ -1,20 +1,23 @@
 
-import { Context } from "fuse-box/core/Context";
+import { Context } from "fuse-box/core/context";
 import { parsePluginOptions } from "fuse-box/plugins/pluginUtils";
 
 export type IPluginStripProps = { [key: string]: any };
 export function pluginStripCode(a?: IPluginStripProps | string | RegExp, b?: IPluginStripProps) {
   const [opts, matcher] = parsePluginOptions<IPluginStripProps>(a, b, {});
+
   return (ctx: Context) => {
-    ctx.ict.on("assemble_fast_analysis", props => {
-      if ((matcher && !matcher.test(props.module.props.absPath)) || 
-        /node_modules/.test(props.module.props.absPath)) {
+
+    ctx.ict.on("module_init", props => {
+    const { module } = props;
+      if ((matcher && !matcher.test(module.absPath)) || 
+        /node_modules/.test("can")) {
         return;
       }
+      
 
-      const { module } = props;
       ctx.log.info("pluginStripCode", "stripping code in $file \n", {
-        file: module.props.fuseBoxPath,
+        file: module.publicPath,
       });
 
       const startComment =  opts.start || "develblock:start"; 
@@ -25,7 +28,7 @@ export function pluginStripCode(a?: IPluginStripProps | string | RegExp, b?: IPl
 
       module.read();
       module.contents = module.contents.replace(regexPattern, "");
-      return props;
+      
     });
   };
 }

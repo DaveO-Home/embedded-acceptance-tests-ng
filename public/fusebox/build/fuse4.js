@@ -29,10 +29,11 @@ const run = function (mode, configure, debug, cb) {
     distDir = mode !== "test" ? path.join(__dirname, "../../dist/fusebox") :
         path.join(__dirname, "../../dist_test/fusebox");
     copyDir = mode !== "test" ? path.join(__dirname, "../../dist/fusebox/appl") :
-        path.join(__dirname, "../../dist_test/fusebox/appl");
+        path.join(__dirname, "/../../dist_test/fusebox/appl");
     isProduction = mode !== "test";
     config = configure;
     config.plugins = [];
+    // config.alias = aliases(); // Can't get this to work
 
     if (mode !== "test") {
         addStripCodePlugin(config);
@@ -60,7 +61,7 @@ const run = function (mode, configure, debug, cb) {
                 .dest(`${copyDir}`, "appl")
                 .exec();
             await src(path.join(__dirname, `../images/*.*`))
-                .dest(`${copyDir}/..`, "fusebox")
+                .dest(`${copyDir}/../..`, "public")
                 .exec();
             await src(path.join(__dirname, `../appl/app_bootstrap.html`))
                 .dest(`${copyDir}`, "appl")
@@ -73,11 +74,12 @@ const run = function (mode, configure, debug, cb) {
                 .exec();
             if (isProduction) {
                 await src(path.join(__dirname, `../index.html`))
-                    .dest(`${copyDir}/..`, "fusebox")
+                    .dest(`${copyDir}/../..`, "public")
                     .exec();
-            } else {
+            } 
+            else {
                 await src(path.join(__dirname, `../static/index.html`))
-                    .dest(`${copyDir}/..`, "static")
+                    .dest(`${copyDir}/../..`, "public")
                     .exec();
             }
             await src(path.join(__dirname, `../appl/dodex/data/**/**.*`))
@@ -105,8 +107,9 @@ const run = function (mode, configure, debug, cb) {
         await exec("copy");
         await exec("copytable");
         await exec("copyhello");
+
         const fuse = context.getConfig();
-        fuse.runDev(handler => {
+        fuse.runDev({ bundles: { distRoot: path.join(__dirname, "../../dist_test/fusebox"), app: "app.js" } }).then(handler => {
             handler.onComplete(output => {
                 if (typeof cb === "function") {
                     if (!config.cache.FTL) { // We may be doing tdd (gulp development)
@@ -128,10 +131,23 @@ const run = function (mode, configure, debug, cb) {
         await exec("copytable");
         await exec("copyhello");
         const fuse = context.getConfig();
-        await fuse.runProd({ uglify: false });
-        if (typeof cb === "function") {
-            cb();
-        }
+        
+        await fuse.runProd({
+            uglify: false,
+            bundles: { distRoot: path.join(__dirname, "../../dist/fusebox"), app: "app.js" }
+        }).then(handler => {
+            handler.onComplete(output => {
+                if (typeof cb === "function") {
+                    if (!config.cache.FTL) { // We may be doing tdd (gulp development)
+                        setTimeout(function () { // The build finishes before resources are completed.
+                            cb();
+                        }, 500);
+                    } else {
+                        cb(); // restart gulp task, tests will start
+                    }
+                }
+            });
+        });
     });
 
     task("prod", async context => {
@@ -140,10 +156,27 @@ const run = function (mode, configure, debug, cb) {
         await exec("copytable");
         await exec("copyhello");
         const fuse = context.getConfig();
-        await fuse.runProd({ uglify: true });
-        if (typeof cb === "function") {
-            cb();
-        }
+        
+        await fuse.runProd({
+            uglify: true,
+            bundles: {
+                distRoot: path.join(__dirname, "../../dist/fusebox"),
+                app: { path: "app.$hash.js" },
+                vendor: { path: "vendor.$hash.js" }
+            }
+        }).then(handler => {
+            handler.onComplete(output => {
+                if (typeof cb === "function") {
+                    if (!config.cache.FTL) { // We may be doing tdd (gulp development)
+                        setTimeout(function () { // The build finishes before resources are completed.
+                            cb();
+                        }, 500);
+                    } else {
+                        cb(); // restart gulp task, tests will start
+                    }
+                }
+            });
+        });
     });
 
     task("default", context => {
@@ -178,6 +211,47 @@ function addStripCodePlugin(config) {
         console.error(e);
         process.exit(-1);
     }
+}
+
+function resolve(dir) {
+    return path.join(__dirname, "../appl/", dir);
+}
+
+function aliases() {
+    return {
+        "apptest": "./jasmine/apptest.js",
+        "contacttest": "./contacttest.js",
+        "domtest": "./domtest.js",
+        "logintest": "./logintest.js",
+        "routertest": "./routertest.js",
+        "toolstest": "./toolstest.js",
+        "dodextest": "./dodextest.js",
+        "inputtest": "./inputtest.js",
+        "app": "./js/app",
+        "config": "./js/config",
+        "default": "./js/utils/default",
+        "helpers": "./js/utils/helpers",
+        "pager": "../../node_modules/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js",
+        "pdf": "./js/controller/pdf",
+        "menu": "./js/utils/menu",
+        "basecontrol": "./js/utils/base.control",
+        "setup": "./js/utils/setup",
+        "setglobals": "./js/utils/set.globals",
+        "toolssm": "./js/utils/tools.sm",
+        "start": "./js/controller/start",
+        "table": "~/fusebox/appl/js/controller/table",
+        "contactc": "./components/contact.component",
+        "helloworldc": "./components/helloworld.component",
+        "pdfc": "./components/pdf.component",
+        "startc": "./components/start.component",
+        "toolsc": "./components/tools.component",
+        "tableservice": "./services/table.service",
+        "startservice": "./services/start.service",
+        // "handlebars": "handlebars/dist/handlebars.min.js",
+        "router": "./router", //resolve("router"),
+        "index": "./index", // resolve("index.ts"),
+        "entry": "./entry" // resolve("entry")
+    };
 }
 
 module.exports = run;

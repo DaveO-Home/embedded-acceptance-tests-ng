@@ -1,4 +1,4 @@
-"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
 var copy = require("copy");
 /*eslint no-extra-semi: "warn"*/

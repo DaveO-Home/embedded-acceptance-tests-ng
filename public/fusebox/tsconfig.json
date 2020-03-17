@@ -1,34 +1,33 @@
 {
-    "name": "daveo",
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "commonjs",
         "moduleResolution": "node",
         "isolatedModules": false,
+        "jsx": "react",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "noUnusedLocals": true,
         "declaration": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "noImplicitUseStrict": false,
-        "strictNullChecks": true,
-        "noEmitHelpers": false,
+        "removeComments": true,
         "importHelpers": true,
         "noLib": false,
-        "removeComments": false,
+        "lib": ["dom", "es5"],
+        "outDir": "tsc/",
+        "noEmitHelpers": true,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "outDir": "dist/",
-        "allowJs": true
-    },
-    "exclude": [
-      "loader/**/*",
-      "modules/**/*",
-      "node_modules"
-    ],
-    "compileOnSave": true,
-    "buildOnSave": false,
-    "atom": {
-        "rewriteTsconfig": false
+        "baseUrl": "appl",
+        "typeRoots": [
+            "./types",
+            "../node_modules/@types"
+         ],
+        "types": [
+            "jquery",
+            "jasmine",
+            "jquery",
+            "node"
+        ]
     }
 }

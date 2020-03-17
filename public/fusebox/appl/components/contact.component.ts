@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import 'rxjs/add/operator/map';
-import App from '../js/app'
-import Setup from '../js/utils/setup'
+import { Component } from "@angular/core";
+import "rxjs/operator/map";
+import App from "../js/app";
+import Setup from "../js/utils/setup";
 
-declare var $: JQueryStatic;
+declare const $: any;
 
 @Component({
     templateUrl: "views/prod/contact.html"
@@ -14,22 +14,22 @@ export class ContactComponent {
     }
 
     ngOnInit() {
-        const controllerName = 'Start'
-        const actionName = 'init'
-        const failMsg = `Load problem with: '${controllerName}/${actionName}'.`
+        const controllerName = "Start";
+        const actionName = "init";
+        const failMsg = `Load problem with: '${controllerName}/${actionName}'.`;
         $(document).ready(function () {
-            const el = $($('[name=contact]')[0])
-            App.loadController(controllerName, {}, (controller: { [x: string]: any; initMenu: () => void; contactListener: (arg0: JQuery<HTMLElement>, arg1: any) => void; }) => {
+            const el = $($("[name=contact]")[0]);
+            App.loadController(controllerName, {}, controller => {
                 if (controller &&
                     controller[actionName]) {
-                    controller.initMenu()
-                    controller.contactListener(el, controller)
+                    controller.initMenu();
+                    controller.contactListener(el, controller);
                 } else {
-                    console.error(failMsg)
+                    console.error(failMsg);
                 }
-            }, (err: any) => {
-                console.error(`${failMsg} - ${err}`)
-            })
-        })
+            }, err => {
+                console.error(`${failMsg} - ${err}`);
+            });
+        });
     }
 }

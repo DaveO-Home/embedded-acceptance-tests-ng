@@ -23,14 +23,10 @@ const aliases = {
     "logintest": "./logintest.js",
     "routertest": "./routertest.js",
     "toolstest": "./toolstest.js",
-    "dodextest": "./dodextest.js",
-    "inputtest": "./inputtest.js",
     "app": "~/js/app",
     "config": "~/js/config",
     "default": "~/js/utils/default",
     "helpers": "~/js/utils/helpers",
-    "tableservice": "~/services/table.service",
-    "startservice": "~/services/start.service",
     "pager": "tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js",
     "pdf": "~/js/controller/pdf",
     "menu": "~/js/utils/menu",
@@ -45,7 +41,7 @@ const aliases = {
 let isKarma = process.env.USE_KARMA === "true";
 let isProduction = process.env.NODE_ENV === "production";
 let distDir = isProduction ? "../dist/fusebox" : "../dist_test/fusebox";
-let useQuantum = false;
+let useQuantum = true;
 let useHMR = process.env.USE_HMR === "true";
 let resources = (f) => (!isProduction && isKarma ? `/base/dist_test/fusebox/resources/${f}` : isProduction ? `../resources/${f}` : `/dist_test/fusebox/resources/${f}`);
 let src = "appl";
@@ -120,8 +116,7 @@ const fuse = FuseBox.init({
             { from: "../README.md", to: distDir },
             { from: "appl/css/table.css", to: distDir + "/" },
             { from: "appl/css/hello.world.css", to: distDir + "/" },
-            { from: "appl/app_bootstrap.html", to: distDir + "/" },
-            { from: "appl/dodex/**/*", to: distDir + "/appl/dodex" }
+            { from: "appl/app_bootstrap.html", to: distDir + "/" }
             ]
         })
     ]

@@ -4,14 +4,14 @@ var pluginUtils_1 = require("fuse-box/plugins/pluginUtils");
 function pluginStripCode(a, b) {
     var _a = pluginUtils_1.parsePluginOptions(a, b, {}), opts = _a[0], matcher = _a[1];
     return function (ctx) {
-        ctx.ict.on("assemble_fast_analysis", function (props) {
-            if ((matcher && !matcher.test(props.module.props.absPath)) ||
-                /node_modules/.test(props.module.props.absPath)) {
+        ctx.ict.on("module_init", function (props) {
+            var module = props.module;
+            if ((matcher && !matcher.test(module.absPath)) ||
+                /node_modules/.test("can")) {
                 return;
             }
-            var module = props.module;
             ctx.log.info("pluginStripCode", "stripping code in $file \n", {
-                file: module.props.fuseBoxPath
+                file: module.publicPath
             });
             var startComment = opts.start || "develblock:start";
             var endComment = opts.end || "develblock:end";
@@ -20,7 +20,6 @@ function pluginStripCode(a, b) {
                 + endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
             module.read();
             module.contents = module.contents.replace(regexPattern, "");
-            return props;
         });
     };
 }

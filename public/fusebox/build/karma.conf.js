@@ -1,8 +1,7 @@
-let startupHtml = "/appl/testapp_karma.html";
+let startupHtml = "dist_test/fusebox/appl/testapp_dev.html";
 let bundler = "fusebox";
 // Karma configuration
 module.exports = function (config) {
-
     if (!global.whichBrowsers) {
         global.whichBrowsers = ["ChromeHeadless, FirefoxHeadless"];
     }
@@ -11,6 +10,7 @@ module.exports = function (config) {
         basePath: "../..",
         frameworks: ["jasmine-jquery", "jasmine"],
         proxies: {
+            "/resources": "/base/dist_test/" + bundler + "/appl/resources",
             "/views": "/base/dist_test/" + bundler + "/appl/views",
             "/templates": "/base/dist_test/" + bundler + "/appl/templates",
             "/css": "/base/dist_test/" + bundler + "/appl/css",
@@ -22,7 +22,7 @@ module.exports = function (config) {
             "../../../dodex/": "/base/dodex/",
             "/dodex/": "/base/" + bundler + "/appl/dodex/",
             "/images/": "/base/dist_test/" + bundler + "/images/",
-            "/node_modules/dodex": "/base/node_modules/dodex"
+            "/styles/": "/base/dist_test/" + bundler + "/styles/"
         },
         files: [
             //Webcomponents for Firefox - used for link tag with import attribute.
@@ -30,17 +30,15 @@ module.exports = function (config) {
             //Jasmine unit tests
             bundler + "/tests/unit_test*.js",
             //Application and Acceptance specs.
-            bundler + startupHtml,
+            startupHtml,
             { pattern: "package.json", watched: false, included: false },
             { pattern: "dist_test/README.md", included: false },
-            { pattern: "node_modules/dodex/dist/dodex.min.css", watched: false, included: false },
             { pattern: "node_modules/font-awesome/**/*", watched: false, included: false },
             { pattern: "node_modules/tablesorter/dist/css/**/*", watched: false, included: false },
             { pattern: "node_modules/bootstrap/dist/css/bootstrap.min.css", watched: false, included: false },
-            { pattern: "dist_test/" + bundler + "/vendor.js", included: false, watched: false, served: true },
-            { pattern: "dist_test/" + bundler + "/index.js", included: false, watched: true, served: true },  //watching bundle to get changes during tdd/test
+            { pattern: "dist_test/" + bundler + "/*app.js", included: false, watched: true, served: true },
             { pattern: "dist_test/" + bundler + "/**/*.*", included: false, watched: false },
-            { pattern: bundler + "/appl/dodex/data/*.*", included: false, watched: false },
+            {pattern: bundler + "/appl/dodex/data/*.*", included: false, watched: false},
             //Karma/Jasmine/Loader
             bundler + "/build/karma.bootstrap.js"
         ],
