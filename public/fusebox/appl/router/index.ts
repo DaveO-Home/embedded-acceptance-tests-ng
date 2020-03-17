@@ -6,9 +6,9 @@ import { StartComponent } from "../components/start.component";
 import { ContactComponent } from "../components/contact.component";
 import { PdfComponent } from "../components/pdf.component";
 import { ToolsComponent, ToolsSelect } from "../components/tools.component";
-import { HelloWorldComponent } from "../components/helloworld.component";
-import { StartService } from "../services/start.service";
-import { TableService } from "../services/table.service";
+import { HelloWorldComponent } from "ts/helloworld.component";
+import { StartService } from "ts/start.service";
+import { TableService } from "ts/table.service";
 
 const appRoutes: Routes = [
   { path: "", component: StartComponent },

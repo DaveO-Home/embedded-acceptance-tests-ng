@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation, ViewChild, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import "rxjs/operator/map";
-import ToolsSM from "../js/utils/tools.sm";
-import { TableService } from "../services/table.service";
-import Table from "../js/controller/table";
-import Helpers from "../js/utils/helpers";
-import App from "../js/app";
+import ToolsSM from "js/tools.sm";
+import { TableService } from "ts/table.service";
+import Table from "js/table";
+import Helpers from "js/helpers";
+import App from "js/app";
 
 declare const $: JQueryStatic;
 

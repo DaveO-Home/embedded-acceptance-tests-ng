@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import "rxjs/operator/map";
-import { StartService } from "../services/start.service";
+import { StartService } from "ts/start.service";
 
 @Component({
   template: "<span [innerHTML]=\"htmldata\"></span>",

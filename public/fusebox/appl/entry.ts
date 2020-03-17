@@ -1,9 +1,9 @@
-import "./js/utils/set.globals";
+import "js/set.globals";
 import { NgModule, Component } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import "rxjs/add/operator/map";
-import { AppRoutingModule } from "./router";
-import Start from "./js/controller/start";
+import { AppRoutingModule } from "ts/router";
+import Start from "js/start";
 import dodex from "dodex";
 import input from "dodex-input";
 import mess from "dodex-mess";

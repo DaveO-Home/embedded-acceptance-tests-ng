@@ -160,7 +160,7 @@
     "resolve-url-loader": "^3.1.1",
     "rollup": "^2.0.6",
     "rollup-plugin-livereload": "^1.0.4",
-    "rollup-plugin-postcss": "^2.4.1",
+    "rollup-plugin-postcss": "^2.5.0",
     "rollup-plugin-progress": "^1.1.1",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-serve": "^1.0.1",
@@ -187,7 +187,7 @@
     "webpack-merge": "^4.2.2",
     "webpack-stream": "^5.2.1",
     "webpack-strip-block": "^0.2.0",
-    "zone.js": "^0.10.2"
+    "zone.js": "^0.10.3"
   },
   "browserslist": [
     "defaults"

@@ -1,18 +1,18 @@
 import "babel-polyfill";
-import "./polyfills";
+import "ts/polyfills";
 import { enableProdMode } from "@angular/core";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-import { AppModule } from "./entry";
-import "./js/config";
-import App from "./js/app";
-import Default from "./js/utils/default";
-import Setup from "./js/utils/setup";
+import { AppModule } from "ts/entry";
+import "js/config";
+import App from "js/app";
+import Default from "js/default";
+import Setup from "js/setup";
 // import "pager";
 import "tablesorter/dist/js/extras/jquery.tablesorter.pager.min";
 
 /* develblock:start */
 import "zone.js/dist/zone-error";
-import apptest from "./jasmine/apptest";
+import apptest from "js/apptest";
 /* develblock:end */
 
 declare const testit: boolean;

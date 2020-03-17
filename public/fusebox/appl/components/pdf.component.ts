@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import "rxjs/operator/map";
-import App from "../js/app";
+import App from "js/app";
 // Setting up for optional Karma/Jasmine
-import "../js/utils/set.globals";
+import "js/set.globals";
 App.init();
 
 declare let $: JQueryStatic;

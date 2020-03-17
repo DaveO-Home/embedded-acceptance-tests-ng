@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import "rxjs/operator/map";
-import App from "../js/app";
-import Setup from "../js/utils/setup";
+import App from "js/app";
+import Setup from "js/setup";
 
 declare const $: any;
 

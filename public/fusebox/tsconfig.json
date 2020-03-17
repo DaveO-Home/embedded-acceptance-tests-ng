@@ -28,6 +28,10 @@
             "jasmine",
             "jquery",
             "node"
-        ]
+        ],
+        "paths": {
+            "js/*": ["./js/controller/*", "./js/utils/*", "./js/*", "./jasmine/*"],
+            "ts/*": ["./components/*", "./services/*", "./*"]
+          }
     }
 }

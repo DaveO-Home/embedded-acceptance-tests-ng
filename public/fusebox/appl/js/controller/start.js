@@ -1,8 +1,8 @@
 /* eslint no-unused-vars: ['error', { 'args': 'none' }] */
 
-import App from "../app";
-import Base from "../utils/base.control";
-import Menu from "../utils/menu";
+import App from "js/app";
+import Base from "js/base.control";
+import Menu from "js/menu";
 import * as Marked from "marked";
 let me;
 

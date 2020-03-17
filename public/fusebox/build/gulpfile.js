@@ -297,6 +297,21 @@ const fuseboxTdd = function (done) {
     done();
 };
 /**
+ * Continuous testing - test driven development with hmr(see task "development").  
+ */
+const fuseboxTddWait = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["Chrome", "Firefox"];
+    }
+    setTimeout(function() {
+        new Server({
+            configFile: path.join(__dirname, "/karma.conf.js"),
+        }).start();
+        done();
+    }, 10000);  // wait for hmr to compile - increase as needed
+};
+
+/**
  * Karma testing under Opera. -- needs configuation  
  */
 const tddo = function (done) {
@@ -323,7 +338,7 @@ exports.rebuild = fuseboxRebuild;
 exports.acceptance = e2eTest;
 exports.ngtest = ngTest;
 exports.e2e = e2eTest;
-exports.development = series(setNoftl, fuseboxHmr, fuseboxTdd);
+exports.development = series(setNoftl, parallel(fuseboxHmr, fuseboxTddWait));
 exports.lint = lintRun;
 exports.copy = copy;
 
@@ -395,7 +410,11 @@ function fuseboxConfig(mode, props) {
         codeSplitting: {
             useHash: isProduction ? true : false
         },
-        // alias: { "ts/index": "./index.ts" }
+        // "fuse-box-typechecker": true,
+        compilerOptions: {
+            buildTarget: "browser",
+            tsConfig: path.join(__dirname, "../tsconfig.json"),
+        }
     };
     return configure;
 }

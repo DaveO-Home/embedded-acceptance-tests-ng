@@ -1,5 +1,5 @@
 import handlebars from "handlebars";
-import Menu from "./menu";
+import Menu from "js/menu";
 window.Stache = handlebars;
 
 export default {
