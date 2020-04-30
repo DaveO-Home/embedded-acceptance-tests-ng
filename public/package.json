@@ -47,7 +47,7 @@
     "font-awesome": "^4.7.0",
     "handlebars": "^4.7.3",
     "helpers": "0.0.6",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lodash": "^4.17.15",
     "lodash-es": "^4.17.15",
     "marked": "^0.7.0",
