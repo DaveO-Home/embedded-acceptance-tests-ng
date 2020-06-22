@@ -4,6 +4,8 @@
 const path = require("path");
 const { fusebox, sparky } = require("fuse-box");
 const { pluginStripCode } = require("../appl/js/plugin/StripCode");
+// const { pluginTypeChecker } = require("fuse-box-typechecker");
+
 let isProduction = process.env.NODE_ENV === "production";
 let distDir;
 let copyDir;
@@ -32,7 +34,7 @@ const run = function (mode, configure, debug, cb) {
         path.join(__dirname, "/../../dist_test/fusebox/appl");
     isProduction = mode !== "test";
     config = configure;
-    config.plugins = [];
+    config.plugins = []; // [ pluginTypeChecker({ name: "frontend", basePath: "../", tsConfig: "tsconfig" }) ];
 
     if (mode !== "test") {
         addStripCodePlugin(config);

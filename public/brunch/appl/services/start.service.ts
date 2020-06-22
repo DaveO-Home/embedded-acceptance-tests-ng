@@ -5,7 +5,7 @@ const Helpers = require("../js/utils/helpers");
 const Start = require("../js/controller/start");
 
 export class StartService {
-  getHtml(obj: object): Promise<{response: string; obj: object}> {   
+  getHtml(obj: unknown): Promise<{response: string; obj: unknown}> {   
     Setup.init();
     Start.initMenu();
     Start.index();

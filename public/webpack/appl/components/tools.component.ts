@@ -37,7 +37,9 @@ Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
     template: dropdown
 })
 export class ToolsSelect {
-    public state: {};
+    public state: {
+        items: []
+    };
     public message = "Combined";
 
     constructor() {

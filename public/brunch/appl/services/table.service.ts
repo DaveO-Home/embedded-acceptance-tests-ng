@@ -5,7 +5,7 @@ const Table = require("../js/controller/table");
 declare let Promise: any;
 
 export class TableService {
-  getHtml(obj: object): Promise<object> {
+  getHtml(obj: unknown): Promise<unknown> {
     const controllerName = "Table";
     const actionName = "tools";
     const failMsg = `Load problem with: '${controllerName}/${actionName}'.`;

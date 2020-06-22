@@ -9,7 +9,7 @@ export class TableService {
     const controllerName = "Table";
     const actionName = "tools";
     const failMsg = `Load problem with: '${controllerName}/${actionName}'.`;
-    App.loadController(controllerName, Table, (controller: object) => {
+    App.loadController(controllerName, Table, (controller: unknown) => {
       if (controller &&
         controller[actionName]) {
         controller[actionName]({});

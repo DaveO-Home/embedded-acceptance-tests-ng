@@ -410,7 +410,6 @@ function fuseboxConfig(mode, props) {
         codeSplitting: {
             useHash: isProduction ? true : false
         },
-        // "fuse-box-typechecker": true,
         compilerOptions: {
             buildTarget: "browser",
             tsConfig: path.join(__dirname, "../tsconfig.json"),

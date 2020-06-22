@@ -17,5 +17,6 @@
     "jade": "1.11.0",
     "less-middleware": "0.1.15",
     "three": "^0.89.0"
-  }
+  },
+  "devDependencies": {}
 }
