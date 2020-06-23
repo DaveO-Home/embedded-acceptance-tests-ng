@@ -347,6 +347,8 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 
 1\. ***Development Server Window*** -
 
+***Important:*** Upgraded Karma from 4.4.1 to 5.1.0 - StealJs may open too many files so downgrade Karma to 4.4.1 or change your `ulimit -n 30000`.
+
 * `gulp test`
 * `gulp compile` - recompile typescript. __Note__ Production build will remove all generated *.js files gernerated by typescript. If you get **entry not found**, run this command.
 * `gulp prd` - build production without running tests
