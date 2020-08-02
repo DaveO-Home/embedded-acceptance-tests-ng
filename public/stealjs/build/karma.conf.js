@@ -42,7 +42,7 @@ module.exports = function (config) {
             {pattern: "node_modules/jquery/**/*.js", watched: false, served: true, included: false},
             {pattern: "node_modules/tablesorter/**/*.js", watched: false, served: true, included: false},
             {pattern: "package.json", watched: false, included: false},
-            {pattern: "node_modules/lodash-es/**/*js", watched: false, included: false},
+
             {pattern: "node_modules/moment/**/*.js", watched: false, included: false},
             {pattern: "node_modules/marked/**/*.js", watched: false, included: false},
             {pattern: "README.md", included: false},

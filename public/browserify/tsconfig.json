@@ -6,7 +6,6 @@
             "./types",
             "../node_modules/@types"
         ],
-        "outDir": "tsc/",
         "lib": ["es6", "dom"],
         "target": "es5",
         "module": "commonjs",
@@ -15,8 +14,6 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noUnusedLocals": true,
-        "declaration": false,
-        "noImplicitAny": false,
         "noImplicitUseStrict": false,
         "removeComments": false,
         "preserveConstEnums": true,
@@ -35,8 +32,5 @@
       "node_modules"
     ],
     "compileOnSave": true,
-    "buildOnSave": false,
-    "atom": {
-        "rewriteTsconfig": false
-    }
+    "buildOnSave": false
 }

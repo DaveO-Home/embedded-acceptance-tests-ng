@@ -1,5 +1,4 @@
 /* eslint "comma-style": [0, "last"] */
-import capitalize from "lodash-es/capitalize";
 import "bootstrap";
 import "tablesorter";
 import "tablepager";
@@ -66,7 +65,7 @@ export default {
                     expect(typeof fnLoad === "function").toBe(true);
                 }
                 //!steal-remove-end
-                me.controllers[capitalize(controllerName)] = appController;
+                me.controllers[controllerName.replace(/^\w/, c => c.toUpperCase())] = appController;
 
                 fnLoad(me.controllers[controllerName]);
             } catch (e) {
@@ -77,8 +76,8 @@ export default {
     },
     loadView (options, fnLoad) {
         if (options && fnLoad) {
-            const resolvedUrl = options.url;
-            const currentController = this.controllers[capitalize(options.controller)];
+            const resolvedUrl = options.url; 
+            const currentController = this.controllers[options.controller ? options.controller.replace(/^\w/, c => c.toUpperCase()) : options.controller];
 
             if (options.url) {
                 $.get(resolvedUrl, fnLoad)
@@ -99,7 +98,7 @@ export default {
         }
     },
     renderTools (options) {
-        const currentController = this.controllers[capitalize(options.controller)];
+        const currentController = this.controllers[options.controller.replace(/^\w/, c => c.toUpperCase())];
         let template;
         const jsonUrl = "templates/tools_ful.json";
 

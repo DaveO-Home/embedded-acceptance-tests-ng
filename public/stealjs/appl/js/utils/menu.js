@@ -1,5 +1,4 @@
 
-import trimStart from "lodash-es/trimStart";
 
 export default {
     // Bootstrap activation
@@ -10,8 +9,8 @@ export default {
         // Element is likely a list
         el.each(function () {
             const href = $("a", this).attr("href");
-            const url = href ? trimStart(href, "#") : "none";
-            const hash = trimStart(window.location.hash, "#");
+            const url = href ? trimHash(href) : "none";
+            const hash = trimHash(window.location.hash);
             if (hash === url) {
                 // window.location.hash = ''
                 $(this).addClass("active").siblings().removeClass("active");
@@ -26,3 +25,9 @@ export default {
         }
     }
 };
+
+function trimHash(href) {
+    const thisHref = href !== null && href.trim().startsWith("#") ? 
+        href.trim().replace("#", "") : href;
+    return thisHref;
+}
