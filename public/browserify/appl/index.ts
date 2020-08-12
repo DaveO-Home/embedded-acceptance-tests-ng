@@ -1,3 +1,4 @@
+import Setup from "./js/utils/setup";
 import "babel-polyfill";
 import "./polyfills";
 import { enableProdMode } from "@angular/core";
@@ -6,7 +7,6 @@ import { AppModule } from "./entry";
 import "./js/config";
 import App from "./js/app";
 import Default from "./js/utils/default";
-import Setup from "./js/utils/setup";
 import "b/pager";
 //removeIf(production)
 import "zone.js/dist/zone-error";

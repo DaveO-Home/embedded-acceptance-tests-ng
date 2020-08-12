@@ -1,5 +1,5 @@
 /* eslint "comma-style": [0, "last"] */
-import * as _ from "lodash";
+import _ from "lodash";
 import "bootstrap";
 import "tablesorter";
 /* develblock:start */

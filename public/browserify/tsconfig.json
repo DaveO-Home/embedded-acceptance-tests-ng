@@ -11,6 +11,8 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "isolatedModules": false,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noUnusedLocals": true,

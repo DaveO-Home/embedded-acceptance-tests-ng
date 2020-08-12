@@ -3,7 +3,7 @@
 import App from "b/app";
 import Base from "b/basecontrol";
 import Menu from "b/menu";
-import * as Marked from "marked";
+import Marked from "marked";
 let me;
 
 export default App.controllers.Start ||
