@@ -16,5 +16,6 @@ if [ "$1" = "watch" ]
    export NODE_ENV=development
    export USE_KARMA=false
    export USE_HMR=true
+   export USE_WATCH=true
    npm run bw
 fi

@@ -56,7 +56,7 @@ export default function (Helpers, timer) {
 
             expect(tools[0]).toBeInDOM();
             expect(".disabled").toBeDisabled();
-            expect("#dropdown1 a").toHaveLength(3);
+            expect(("#dropdown1 > div a").length > 2).toBe(true);
             // Required for Firefox
             selectorObject[0] = document.activeElement;
             expect(selectorObject).toBeFocused();

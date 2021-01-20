@@ -9,7 +9,7 @@ module.exports = function (config) {
 
     config.set({
         basePath: "../..",
-        frameworks: ["jasmine-jquery", "jasmine"],
+        frameworks: ["jasmine-jquery"],
         proxies: {
             "/views": "/base/dist_test/" + bundler + "/appl/views",
             "/templates": "/base/dist_test/" + bundler + "/appl/templates",
@@ -44,11 +44,12 @@ module.exports = function (config) {
         bowerPackages: [
         ],
         plugins: [
+            // "karma-*",
+            "@metahub/karma-jasmine-jquery",
             "karma-chrome-launcher",
             "karma-firefox-launcher",
             "karma-opera-launcher",
             "karma-jasmine",
-            "karma-jasmine-jquery",
             "karma-mocha-reporter"           
         ],
         /* Karma uses <link href="/base/appl/testapp_dev.html" rel="import"> -- you will need webcomponents polyfill to use browsers other than Chrome.

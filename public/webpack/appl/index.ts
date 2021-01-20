@@ -56,5 +56,5 @@ if (!production) {
             __karma__.start();
         }
     });
-    /* develblock:end */
 }
+/* develblock:end */

@@ -1,4 +1,4 @@
-import handlebars from "handlebars";
+import handlebars from "handlebars/dist/handlebars.min";
 import Menu from "./menu";
 window.Stache = handlebars;
 

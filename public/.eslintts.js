@@ -36,6 +36,8 @@ module.exports = {
         "rmain_container": true,
         "FuseBox": true,
         "__karma__": true,
-        "spyOnEvent": true
+        "spyOnEvent": true,
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
     }
 };

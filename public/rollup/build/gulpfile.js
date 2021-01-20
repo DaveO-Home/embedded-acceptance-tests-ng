@@ -5,6 +5,7 @@
 const { src, dest, series, parallel, task } = require("gulp");
 var fs = require("fs");
 const alias = require("@rollup/plugin-alias");
+const buble = require("@rollup/plugin-buble");
 const chalk = require("chalk");
 const commonjs = require("@rollup/plugin-commonjs");
 const copy = require("gulp-copy");
@@ -14,7 +15,7 @@ const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
 const livereload = require("rollup-plugin-livereload");
 const log = require("fancy-log");
-const nodeResolve = require("@rollup/plugin-node-resolve");
+const { nodeResolve } = require("@rollup/plugin-node-resolve");
 const noop = require("gulp-noop");
 const path = require("path");
 const postcss = require("rollup-plugin-postcss");
@@ -254,9 +255,8 @@ const rollup_watch = function (cb) {
                 clearLine: isProduction === false
             }),
             postcss(),
-            commonjs({
-            }),
-            nodeResolve({ mainFields: ["module", "main"], browser: true }),
+            commonjs(),
+            nodeResolve({ extensions: [".js", ".ts", ".json"] }),
             replaceEnv({
                 "process.env.NODE_ENV": JSON.stringify(isProduction ? "production" : "development")
             }),
@@ -274,8 +274,10 @@ const rollup_watch = function (cb) {
                 verbose: true,
             })
         ],
+        external: ["fs"],
         output: {
             name: "acceptance",
+            globals: {"fs": "fs"},
             file: "../../" + dist + "/bundle.js",
             format: "iife",
             sourcemap: true,
@@ -372,11 +374,12 @@ function buildBundle(cb) {
         perf: isProduction === true, 
         plugins: [
             progress({
-                clearLine: isProduction === false
+                clearLine: true
             }),
             postcss(),
+            buble({ exclude: "../../node_modules/**" }),
             commonjs(),
-            nodeResolve({ mainFields: ["module", "main"], browser: true }),
+            nodeResolve({ extensions: [".js", ".ts", ".json"] }),
             replaceEnv({
                 "process.env.NODE_ENV": JSON.stringify(isProduction ? "production" : "development")
             }),
@@ -393,11 +396,15 @@ function buildBundle(cb) {
         }
         log(chalk.cyan("Writing bundle..."));
         bundle.write({
-            banner: "var fs",
-            format: "iife",
-            name: "bundle",
-            sourcemap: isProduction === false,
-            file: `../../${dist}/bundle.js`,
+            external: ["fs"],
+            output: {
+                globals: {"fs": "fs"},
+                file: `../../${dist}/bundle.js`,
+                banner: "var fs",
+                format: "iife",
+                name: "bundle",
+                sourcemap: isProduction === false,
+            },
         }).then(function () {
             if (isProduction) {
                 del.sync([

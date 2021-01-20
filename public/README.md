@@ -1,6 +1,13 @@
-# Embedded Angular2 Acceptance Testing with Karma and Jasmine
+# Embedded Angular11 Acceptance Testing with Karma and Jasmine
 
 The basic idea is to build a production application ensuring consistent and stable code using JavaScript, CSS and bootstrap linting and automated unit and e2e testing. This will be in part, assisted by the development tools, detailed in the [Development Overview](#development) and bundle sections.
+
+__Latest;__ Upgraded to Angular11 and the latest for all but a few dependencies. Execute `npm outdated` to view. The following modules were not upgraded because of various issues;
+
+> 1. `core-js` because of failure with the `stealjs` bundler.
+> 1. `autoprefixer`, `postcss-import` and `postcss-url` because of issues with both `parcel 2` and `rollup` bundlers.
+> 1. `karma/Jasmine` testing issues with `Webpack/Angular11`. All tests with other bundlers passed.
+> 1. `parcel 2` with `typescript` and `angular11` failed.
 
 [Production Build](#production-build)
 
@@ -98,7 +105,6 @@ To run the production application:
   1. `cd <install>/acceptance_tests`
   1. `npm start`  -  This should start a Node Server with port 3080.
   1. Start a browser and enter `localhost:3080/dist/<bundler>/appl/testapp.html`
-  1. For Parcel the Production Url is `localhost:3080/dist/parcel/testapp.html`
 
 You can repeat the procedure with any of the supported bundlers. Output from the build can be logged by setting the environment variable `USE_LOGFILE=true`.
 
@@ -258,9 +264,9 @@ __Running Tests__-
 * `cd public/brunch/build`
 * `gulp watch` or `./cook watch` (output formatted better)
 
-At this point you can start a browser and enter `localhost:3080/testapp_dev.html`. Any changes to the source code(\*.js|*.ts) files and other assets such as *.html) should be reflected in the browser auto reload.
+At this point you can start a browser and enter `localhost:3080/appl/testapp_dev.html`. Any changes to the source code(\*.js|*.ts) files and other assets such as*.html) should be reflected in the browser auto reload.
 
-__Note__; The test url is `localhost:3080` since Brunch by default uses 'config.paths.public' as the server context. Also, the reload may fail at times, I've noticed that making a second code modification may work.
+__Note__; The test url is `localhost:3080/appl` since Brunch by default uses 'config.paths.public' as the server context. Also, the reload may fail at times, I've noticed that making a second code modification may work.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
@@ -313,7 +319,7 @@ __Note:__ Fusebox has been upgraed to version 4.
 * `cd public/parcel/build`
 * `gulp watch`
 
-At this point you can start a browser and enter `localhost:3080/dist_test/parcel/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(\*.js|*.ts and *.css files) should be reflected in the browser auto reload.
+At this point you can start a browser and enter `localhost:3080/dist_test/parcel/appl/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(\*.js|*.ts and*.css files) should be reflected in the browser auto reload.
 
 2\. ***Test Driven Development(tdd) Window*** -
 

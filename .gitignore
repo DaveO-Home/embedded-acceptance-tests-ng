@@ -1,3 +1,5 @@
+public/parcel/appl/router/index.js
+*.map
 public/stealjs/appl/entry.js
 public/stealjs/appl/services/*.js
 public/stealjs/appl/components/*.js
@@ -15,6 +17,7 @@ public/.fusebox
 node_modules/
 nbproject
 public/fusebox/appl/.cache
+public/.parcel-cache
 public/.cache
 public/.editorconfig
 public/dev-bundle.js

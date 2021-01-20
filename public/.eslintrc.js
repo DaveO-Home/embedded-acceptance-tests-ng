@@ -5,13 +5,12 @@ module.exports = {
         "jasmine": true, "jquery": true, "amd": true, "node": true
     },
     "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
     "parserOptions": {
         "ecmaVersion": 2018,
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "globalReturn": true
+          }
     },
     "rules": {
         "strict": 1,
@@ -30,5 +29,7 @@ module.exports = {
         "FuseBox": true,
         "__karma__": true,
         "spyOnEvent": true,
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
     }
 };

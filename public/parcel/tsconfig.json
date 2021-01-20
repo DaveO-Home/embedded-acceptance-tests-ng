@@ -1,32 +1,40 @@
 {
-    "compilerOptions": {
-      "baseUrl": "/appl",
-      "target": "ESNext",
-      "outDir": "/dist/out-tsc",
-      "moduleResolution": "node",
-      "removeComments": false,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "sourceMap": true,
-      "declaration": false,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "typeRoots": [
-        "./types",
-        "node_modules/@types"
-      ],
-      "lib": [
-        "es2018",
-        "dom"
-      ],
-      "types": [
-        "jqueryfn",
-        "jasmine",
-        "jquery",
-        "node"
-      ],
-    },
-    "include": [
-      "appl/**/*.ts", "appl/index.js"
-    ]
-  }
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "typeRoots": [
+      "./types",
+      "../node_modules/@types"
+    ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "pretty": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowJs": true,
+    "target": "es5",
+    "types": [
+      "jqueryfn",
+      "jasmine",
+      "jquery",
+      "node"
+    ],
+    "allowUnreachableCode": true,
+    "outDir": "./dist",
+  },
+  "files": [
+    "appl/main.ts"
+  ],
+  "include": [
+    "appl/**/*.ts", "appl/**.js"
+  ],
+  "exclude": [ "./dist" ]
+}

@@ -9,7 +9,7 @@ module.exports = function (config) {
 
     config.set({
         basePath: "../..",
-        frameworks: ["jasmine-jquery", "jasmine"],
+        frameworks: ["jasmine-jquery"],
         proxies: {
             "/views": "/base/dist_test/" + bundler + "/appl/views",
             "/appl/views": "/base/dist_test/" + bundler + "/appl/views",
@@ -22,7 +22,8 @@ module.exports = function (config) {
             "/node_modules/bootstrap/dist/css/bootstrap.min.css": "/base/node_modules/bootstrap/dist/css/bootstrap.min.css",
             "../../../dodex/": "/base/dodex/",
             "/dodex/": "/base/" + bundler + "/appl/dodex/",
-            "/images/": "/base/dist_test/" + bundler + "/images/"
+            "/images/": "/base/dist_test/" + bundler + "/images/",
+            "/base/dist_test/": "/base/dist_test/webpack/",
         },
         files: [
             //Webcomponents for Firefox - used for link tag with import attribute.
@@ -46,11 +47,12 @@ module.exports = function (config) {
         bowerPackages: [
         ],
         plugins: [
+            // "karma-*",
+            "@metahub/karma-jasmine-jquery",
             "karma-chrome-launcher",
             "karma-firefox-launcher",
             "karma-opera-launcher",
             "karma-jasmine",
-            "karma-jasmine-jquery",
             "karma-mocha-reporter"           
         ],
         /* Karma uses <link href="/base/appl/testapp_dev.html" rel="import"> -- you will need webcomponents polyfill to use browsers other than Chrome.
@@ -71,7 +73,7 @@ module.exports = function (config) {
         port: 9876,
         colors: true,
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_ERROR,
+        logLevel: config.LOG_WARN,
         autoWatch: true,
         // autoWatchBatchDelay: 10000,
         // restartOnFileChange: true,

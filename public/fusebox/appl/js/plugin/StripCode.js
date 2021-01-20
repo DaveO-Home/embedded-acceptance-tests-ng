@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.pluginStripCode = void 0;
 var pluginUtils_1 = require("fuse-box/plugins/pluginUtils");
 function pluginStripCode(a, b) {
     var _a = pluginUtils_1.parsePluginOptions(a, b, {}), opts = _a[0], matcher = _a[1];
@@ -7,10 +8,10 @@ function pluginStripCode(a, b) {
         ctx.ict.on("module_init", function (props) {
             var module = props.module;
             if ((matcher && !matcher.test(module.absPath)) ||
-                /node_modules/.test("can")) {
+                /node_modules/.test(module.props.fuseBoxPath)) {
                 return;
             }
-            ctx.log.info("pluginStripCode", "stripping code in $file \n", {
+            ctx.log.info("pluginStripCode", "stripping code in $file", {
                 file: module.publicPath
             });
             var startComment = opts.start || "develblock:start";

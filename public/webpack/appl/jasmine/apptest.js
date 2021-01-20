@@ -39,7 +39,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
             Helpers.getResource("ng-component span", 0, 3)
             .catch(rejected => {
                 fail(`The Start Page did not load within limited time: ${rejected}`);
-            }).then(resolved => {
+            }).then(() => {
                 expect(App.loadView).toHaveBeenCalled();
                 expect(Helpers.isLoaded.calls.count()).toEqual(1);
                 expect(App.controllers["Start"]).not.toBeUndefined();
@@ -59,7 +59,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
             Helpers.getResource("ng-component", 0, 1)
             .catch(rejected => {
                 fail(`The Tools Page did not load within limited time: ${rejected}`);
-            }).then(resolved => {
+            }).then(() => {
                 expect(App.controllers["Table"]).not.toBeUndefined();
                 const toolsEle = document.querySelector("ng-component");
                 expect(toolsEle.querySelector("[class~=\"tablesorter\"]").children.length > 3).toBe(true);
@@ -75,9 +75,9 @@ export default function (App, AppModule, platformBrowserDynamic) {
             Helpers.getResource("ng-component span", 0, 1)
             .catch(rejected => {
                 fail(`The Start Page did not load within limited time: ${rejected}`);
-            }).then(resolved => {
+            }).then(() => {
                 expect(App.loadView).toHaveBeenCalled();
-                expect(Helpers.isLoaded.calls.count()).toEqual(3);
+                expect(Helpers.isLoaded.calls.count() > 2).toBe(true);
                 expect(App.controllers["Start"]).not.toBeUndefined();
                 expect(document.querySelector("ng-component span").children.length > 3).toBe(true);
 
@@ -92,7 +92,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
             Helpers.getResource("ng-component", 0, 0)
             .catch(rejected => {
                 fail(`The Pdf Page did not load within limited time: ${rejected}`);
-            }).then(resolved => {
+            }).then(() => {
                 const componentTag = document.querySelector("ng-component");
                 expect(componentTag.querySelector("[name=\"pdfDO\"]")).toBeDefined();
 
@@ -107,7 +107,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
             Helpers.getResource("ng-component", 0, 2)
             .catch(rejected => {
                 fail(`The Welcome Page did not load within limited time: ${rejected}`);
-            }).then(resolved => {
+            }).then(() => {
                 const componentTag = document.querySelector("ng-component");
                 expect(componentTag.querySelector("div > h1").textContent.indexOf("Welcome") === 1).toBe(true);
 

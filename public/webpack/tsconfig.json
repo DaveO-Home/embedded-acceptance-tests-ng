@@ -29,7 +29,7 @@
     ],
     "allowUnreachableCode": true
   },
-  "include": [
-    "appl/**/*.*", "appl/**/*.js"
+  "files": [
+    "appl/main.ts"
   ]
 }

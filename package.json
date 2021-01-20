@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Karma/Jasmine/StealJS Testing",
   "scripts": {
-    "start": "node appExpress.js"
+    "start": "node koa.js"
   },
   "keywords": [
     "karma",
@@ -13,10 +13,10 @@
   "author": "Ace",
   "license": "ISC",
   "dependencies": {
-    "express": "3.21.2",
-    "jade": "1.11.0",
-    "less-middleware": "0.1.15",
-    "three": "^0.89.0"
+    "http": "0.0.1-security",
+    "koa": "^2.13.1",
+    "koa-logger": "^3.2.1",
+    "koa-static": "^5.0.0"
   },
   "devDependencies": {}
 }

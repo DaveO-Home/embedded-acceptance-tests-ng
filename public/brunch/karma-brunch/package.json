@@ -1,0 +1,19 @@
+{
+  "name": "karma-brunch",
+  "version": "1.0.6",
+  "description": "Adds karma support to brunch.",
+  "author": "denar90",
+  "homepage": "https://github.com/denar90/karma-brunch",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:denar90/karma-brunch.git"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/eslint index.js && ./node_modules/.bin/mocha"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

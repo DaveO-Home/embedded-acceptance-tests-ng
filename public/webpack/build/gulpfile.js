@@ -149,9 +149,13 @@ const build = function (cb) {
     });
     return src("../appl/main.ts")
         .pipe(envs)
-        .pipe(webpackStream(require("./webpack.prod.conf.js")))
+        .pipe(webpackStream(require("./webpack.prod.conf.js"), webpack))
         .pipe(envs.reset)
         .pipe(dest("../../dist/webpack"))
+        .on("error", function (err) {
+            log(err);
+            cb();
+        })
         .on("end", function () {
             cb();
         });
@@ -240,7 +244,7 @@ const webpack_rebuild = function (cb) {
     });
     return src("../appl/main.ts")
         .pipe(envs)
-        .pipe(webpackStream(require("./webpack.dev.conf.js")))
+        .pipe(webpackStream(require("./webpack.dev.conf.js"), webpack))
         .pipe(envs.reset)
         .pipe(dest("../../dist_test/webpack"))
         .on("end", function () {
@@ -274,7 +278,7 @@ const test_build = function (cb) {
     });
     return src("../appl/main.ts")
         .pipe(envs)
-        .pipe(webpackStream(require("./webpack.dev.conf.js")))
+        .pipe(webpackStream(require("./webpack.dev.conf.js"), webpack))
         .pipe(envs.reset)
         .pipe(dest("../../dist_test/webpack"))
         .on("end", function () {
@@ -308,7 +312,7 @@ const webpack_watch = function (cb) {
 
     return src("../appl/**/*")
         .pipe(envs)
-        .pipe(webpackStream(require("./webpack.dev.conf.js")))
+        .pipe(webpackStream(require("./webpack.dev.conf.js"), webpack))
         .pipe(dest("../../dist_test/webpack"))
         .on("end", function () {
             cb();
@@ -347,7 +351,7 @@ const webpack_server = function (cb) {
     webpackConfig.devtool = "eval";
     webpackConfig.output.path = path.resolve(config.dev.assetsRoot);
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-    webpackConfig.plugins.push(new webpack.NamedModulesPlugin()); // HMR shows correct file names in console on update.
+    // webpackConfig.plugins.push(new webpack.NamedModulesPlugin()); // HMR shows correct file names in console on update.
 
     WebpackDevServer.addDevServerEntrypoints(webpackConfig, options);
 
@@ -408,10 +412,10 @@ if (process.env.USE_LOGFILE == "true") {
         outfile = "node_output.log",
         errfile = "node_error.log";
 
-    if (fs.exists(outfile)) {
+    if (fs.stat(outfile)) {
         fs.unlink(outfile);
     }
-    if (fs.exists(errfile)) {
+    if (fs.stat(errfile)) {
         fs.unlink(errfile);
     }
 

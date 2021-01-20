@@ -1,5 +1,5 @@
-let startupHtml = "./appl/testapp_karma.html";
-let bundler = "browserify";
+// let startupHtml = "./appl/testapp_karma.html";
+// let bundler = rollup";
 // Karma configuration - Unit testing angular components
 module.exports = function (config) {
 
@@ -9,7 +9,7 @@ module.exports = function (config) {
 
     config.set({
         basePath: "../",
-        frameworks: ["jasmine-jquery", "jasmine", "karma-typescript"],
+        frameworks: ["jasmine", "karma-typescript"],
         files: [
             "tests/**/*.+(js|ts|html)"
         ],

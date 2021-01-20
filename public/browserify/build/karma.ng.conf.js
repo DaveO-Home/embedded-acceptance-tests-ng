@@ -9,7 +9,7 @@ module.exports = function (config) {
 
     config.set({
         basePath: "../",
-        frameworks: ["jasmine-jquery", "jasmine", "karma-typescript"],
+        frameworks: ["jasmine", "karma-typescript"],
         files: [
             "tests/**/*.+(js|ts|html)"
         ],

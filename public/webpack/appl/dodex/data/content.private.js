@@ -1,4 +1,4 @@
-	     
+
 return {
 	cards: {
 		card1: {
@@ -107,4 +107,4 @@ return {
 			}
 		}
 	}
-}
+};

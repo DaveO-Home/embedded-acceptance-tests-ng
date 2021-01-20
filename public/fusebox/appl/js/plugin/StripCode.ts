@@ -11,12 +11,12 @@ export function pluginStripCode(a?: IPluginStripProps | string | RegExp, b?: IPl
     ctx.ict.on("module_init", props => {
     const { module } = props;
       if ((matcher && !matcher.test(module.absPath)) || 
-        /node_modules/.test("can")) {
+        /node_modules/.test(module.props.fuseBoxPath)
+        ) {
         return;
       }
-      
 
-      ctx.log.info("pluginStripCode", "stripping code in $file \n", {
+      ctx.log.info("pluginStripCode", "stripping code in $file", {
         file: module.publicPath,
       });
 

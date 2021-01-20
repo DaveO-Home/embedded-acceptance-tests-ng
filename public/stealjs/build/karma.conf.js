@@ -7,7 +7,7 @@ module.exports = function (config) {
     }
     config.set({
         basePath: "../../",
-        frameworks: ["jasmine-jquery", "jasmine"],
+        frameworks: ["jasmine-jquery"], // "jasmine"
         proxies: {
             "/views/": "/base/" + bundler + "/appl/views/",
             "/templates": "/base/" + bundler + "/appl/templates",
@@ -66,7 +66,7 @@ module.exports = function (config) {
             
             {pattern: bundler + "/appl/router/index.js", watched: false, included: false},
             {pattern: "node_modules/pager/**/*.js", watched: false, included: false},
-            {pattern: "node_modules/@angular/**/*.js", watched: false, included: false},
+            {pattern: "node_modules/@angular/**/bundles/*.js", watched: false, included: false},
             {pattern: "node_modules/rxjs/**/*.js", watched: false, included: false},
             {pattern: bundler + "/appl/components/*.js", watched: false, included: false},
             {pattern: bundler + "/appl/services/*.js", watched: false, included: false},
@@ -89,12 +89,14 @@ module.exports = function (config) {
         bowerPackages: [
         ],
         plugins: [
-            "karma-chrome-launcher",
-            "karma-firefox-launcher",
-            "karma-opera-launcher",
-            "karma-jasmine",
-            "karma-jasmine-jquery",
-            "karma-mocha-reporter"
+            "karma-*",
+            "@metahub/karma-jasmine-jquery",
+            // "karma-chrome-launcher",
+            // "karma-firefox-launcher",
+            // "karma-opera-launcher",
+            // "karma-jasmine",
+            // "karma-jasmine-jquery",
+            // "karma-mocha-reporter"
         ],
         /* Karma uses <link href="/base/appl/testapp_dev.html" rel="import"> -- you will need webcomponents polyfill to use browsers other than Chrome.
          * This test demo will work with Chrome/ChromeHeadless by default - Webcomponents included above, so FirefoxHeadless should work also. 
