@@ -161,6 +161,10 @@ html {
     padding: 9px 0;
 }
 
+.editor {
+    width: 80%; height: 400px; position: fixed; bottom: 0; left: 0;
+}
+
 /* <style> */
 /* #app span,table,div tbody {
     font-size: 13px;  

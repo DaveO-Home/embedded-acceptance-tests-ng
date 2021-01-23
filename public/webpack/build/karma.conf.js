@@ -37,6 +37,7 @@ module.exports = function (config) {
             { pattern: "node_modules/font-awesome/**/*", watched: false, included: false },
             { pattern: "node_modules/tablesorter/dist/css/**/*", watched: false, included: false },
             { pattern: "node_modules/bootstrap/dist/css/bootstrap.min.css", watched: false, included: false },
+            { pattern: "node_modules/jsoneditor/dist/jsoneditor.min.css", watched: false, included: false},
             { pattern: "dist_test/" + bundler + "/main.js", included: false, watched: true, served: true },  //watching bundle to get changes during tdd/test
             { pattern: "dist_test/" + bundler + "/*main*.css", included: false, watched: true, served: true },
             { pattern: "dist_test/" + bundler + "/**/*.*", included: false, watched: false },

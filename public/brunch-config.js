@@ -85,7 +85,8 @@ exports.npm = {
       "dist/css/jquery.tablesorter.pager.min.css",
       "dist/css/theme.blue.min.css"
     ],
-    dodex: ["dist/dodex.min.css"]
+    dodex: ["dist/dodex.min.css"],
+    jsoneditor: ["dist/jsoneditor.min.css"]
   },
   aliases: {
     handlebars: "handlebars/dist/handlebars.min.js",

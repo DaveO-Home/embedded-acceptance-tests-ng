@@ -79,6 +79,7 @@ module.exports = function (config) {
             {pattern: "node_modules/bluebird/js/browser/**/*.js", watched: false, included: false},
             {pattern: "node_modules/events/**/*.js", watched: false, included: false},
             {pattern: "node_modules/handlebars/**/*.js", watched: false, included: false},
+            {pattern: "node_modules/jsoneditor/dist/jsoneditor*.*", watched: false, included: false},
             {pattern: bundler + "/appl/dodex/data/*.*", included: false, watched: false},
             {pattern: "node_modules/dodex/dist/*", watched: false, included: false},
             {pattern: "node_modules/dodex-input/dist/dodex-input.min.js", watched: false, included: false},

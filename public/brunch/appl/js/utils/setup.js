@@ -1,7 +1,10 @@
 
 var handlebars = require("handlebars");
 var Menu = require("./menu");
+var JSONEditor = require("jsoneditor/dist/jsoneditor.min.js");
+
 window.Stache = handlebars;
+window.JSONEditor = JSONEditor;
 
 module.exports = {
     init () {

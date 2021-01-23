@@ -1,6 +1,9 @@
 import * as handlebars from "handlebars";
 import Menu from "menu";
+import JSONEditor from "jsoneditor";
+
 window.Stache = handlebars;
+window.JSONEditor = JSONEditor;
 
 export default {
     init () {

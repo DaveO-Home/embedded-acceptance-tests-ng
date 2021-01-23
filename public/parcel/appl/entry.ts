@@ -8,7 +8,7 @@ import dodex from "dodex";
 import input from "dodex-input";
 import mess from "dodex-mess";
 
-// declare const testit: boolean;
+declare const testit: boolean;
 
 @Component({
 	selector: "test-app",
