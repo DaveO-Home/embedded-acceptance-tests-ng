@@ -1,5 +1,6 @@
 const { src } = require("gulp");
 const bootlint = require("gulp-bootlint");
+const log = require("fancy-log");
 
 const bootLint = function () {
     var fileIssues = [],
@@ -16,13 +17,13 @@ const bootLint = function () {
                     } else {
                         message += file.path + ": " + lint.id + " " + lint.message;
                     }
-                    console.log(message);
+                    log.info(message);
                 },
                 summaryReportFn: function (file, errorCount, warningCount) {
                     if (errorCount > 0 || warningCount > 0) {
-                        console.log("please fix the " + errorCount + " errors and " + warningCount + " warnings in " + file.path);
+                        log.error("please fix the " + errorCount + " errors and " + warningCount + " warnings in " + file.path);
                     } else {
-                        console.log("No problems found in " + file.path);
+                        log.info("No problems found in " + file.path);
                     }
                 }
             };
