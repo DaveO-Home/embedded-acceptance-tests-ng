@@ -27,7 +27,7 @@ const serve = require("rollup-plugin-serve");
 const stripCode = require("gulp-strip-code");
 const terser = require("rollup-plugin-terser").terser;
 const ts = require("gulp-typescript");
-const Server = require("karma").Server;
+const karma = require("karma");
 
 const startComment = "develblock:start",
     endComment = "develblock:end",
@@ -42,7 +42,6 @@ let testDist = "dist_test/rollup";
 let prodDist = "dist/rollup";
 let dist = isProduction ? prodDist : testDist;
 let useNg = "";
-let singleRun = true;
 
 if (browsers) {
     global.whichBrowsers = browsers.split(",");
@@ -68,8 +67,7 @@ const pate2e = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = "";
-    singleRun = true;
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Add in Angular unit tests 
@@ -79,8 +77,7 @@ const pat = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    singleRun = true;
-    runKarma(done);
+    karmaServer(done, true, false);
 };
 /*
  * javascript linter
@@ -224,9 +221,8 @@ const tdd_rollup = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
-    singleRun = false;
     useNg = "";
-    runKarma(done);
+    karmaServer(done, false, true);
 };
 /**
  * Karma testing under Opera. -- needs configuation  
@@ -235,9 +231,8 @@ const tddo = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Opera"];
     }
-    singleRun = false;
     useNg = "";
-    runKarma(done);
+    karmaServer(done, false, true);
 };
 
 const rollup_watch = function (cb) {
@@ -248,6 +243,7 @@ const rollup_watch = function (cb) {
                 warning.code === "CIRCULAR_DEPENDENCY") {
                 return;
             }
+            // eslint-disable-next-line no-console
             console.warn(warning.message);
         },
         plugins: [
@@ -368,6 +364,7 @@ function buildBundle(cb) {
                 warning.code === "CIRCULAR_DEPENDENCY") {
                 return;
             }
+            // eslint-disable-next-line no-console
             console.warn(warning.message);
         },
         treeshake: true,
@@ -392,6 +389,7 @@ function buildBundle(cb) {
         process.exit(1);
     }).then(function (bundle) {
         if(isProduction) {
+            // eslint-disable-next-line no-console
             console.warn("Timings:", bundle.getTimings());
         }
         log(chalk.cyan("Writing bundle..."));
@@ -492,19 +490,33 @@ function copyFonts() {
         .pipe(copy("../../" + dist, { prefix: 4 }));
 }
 
-function runKarma(done) {
-    new Server({
-        configFile: __dirname + "/karma" + useNg + ".conf.js",
-        singleRun: singleRun
-    }, function (result) {
-        var exitCode = !result ? 0 : result;
-        if (typeof done === "function") {
-            done();
-        }
-        if (exitCode > 0) {
-            process.exit(exitCode);
-        }
-    }).start();
+function karmaServer(done, singleRun = false, watch = true) {
+    const parseConfig = karma.config.parseConfig;
+    const Server = karma.Server;
+
+    parseConfig(
+        path.resolve("./karma" + useNg + ".conf.js"),
+        { port: 9876, singleRun: singleRun, watch: watch },
+        { promiseConfig: true, throwErrors: true },
+    ).then(
+        (karmaConfig) => {
+            if(!singleRun) {
+                done();
+            }
+            new Server(karmaConfig, function doneCallback(exitCode) {
+                /* eslint no-console: ["error", { allow: ["log"] }] */
+                console.log("Karma has exited with " + exitCode);
+                if(singleRun) {
+                    done();
+                }
+                if(exitCode > 0) {
+                    process.exit(exitCode);
+                }
+            }).start();
+        },
+        // eslint-disable-next-line no-console
+        (rejectReason) => { console.err(rejectReason); }
+    );
 }
 //per stackoverflow - Converting milliseconds to minutes and seconds with Javascript
 function millisToMinutesAndSeconds(millis) {
@@ -531,11 +543,13 @@ if (process.env.USE_LOGFILE == "true") {
     }
 
     process.stdout.write = function (chunk) {
+        // eslint-disable-next-line no-control-regex
         fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstdout.apply(this, arguments);
     };
 
     process.stderr.write = function (chunk) {
+        // eslint-disable-next-line no-control-regex
         fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstderr.apply(this, arguments);
     };

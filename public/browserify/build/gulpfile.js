@@ -3,21 +3,21 @@
  * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint') -> 'bootlint' -> 'build'
  */
 const { src, dest, series, parallel, task } = require("gulp");
-const path = require("path");
 const env = require("gulp-env");
 const log = require("fancy-log");
 const rmf = require("rimraf");
 const copy = require("gulp-copy");
 const exec = require("child_process").exec;
 const noop = require("gulp-noop");
+const path = require("path");
 const chalk = require("chalk");
+const karma = require("karma");
 // const assign = require('lodash.assign')
 const buffer = require("vinyl-buffer");
 // const envify = require('loose-envify/custom') // require('envify/custom');
 const eslint = require("gulp-eslint");
 const source = require("vinyl-source-stream");
 const uglify = require("gulp-uglify-es").default;
-const Server = require("karma").Server;
 const csslint = require("gulp-csslint");
 const watchify = require("watchify");
 const stripCode = require("gulp-strip-code");
@@ -44,7 +44,6 @@ let dist = isProduction ? prodDist : testDist;
 let isSplitBundle = true;
 let browserifyInited;
 let useNg = "";
-let runSingle = true;
 
 if (browsers) {
     global.whichBrowsers = browsers.split(",");
@@ -85,8 +84,7 @@ const pate2e = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = "";
-    runSingle = true;
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Add in Angular unit tests
@@ -96,8 +94,7 @@ const pat = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    runSingle = true;
-    runKarma(done);
+    karmaServer(done, true, false);
 };
 /*
  * javascript linter
@@ -255,8 +252,7 @@ const e2e_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Run karma/jasmine tests once and exit without rebuilding(requires a previous build)
@@ -265,9 +261,8 @@ const ng_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
     useNg = ".ng";
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Run watch(HMR)
@@ -287,9 +282,7 @@ const tdd_browserify = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
-    new Server({
-        configFile: path.join(__dirname, "/karma.conf.js")
-    }, done).start();
+    karmaServer(done, false, true);
 };
 /**
  * Karma testing under Opera. -- needs configuation
@@ -298,9 +291,7 @@ const tddo = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Opera"];
     }
-    new Server({
-        configFile: path.join(__dirname, "/karma.conf.js")
-    }, done).start();
+    karmaServer(done, false, true);
 };
 
 const copyTestRun = parallel(copy_fonts, copy_images, copy_test);
@@ -464,20 +455,36 @@ function copyFonts () {
         .pipe(copy("../../" + dist + "/appl"));
 }
 
-function runKarma (done) {
-    const karmaPath = "/karma" + useNg + ".conf.js";
-    new Server({
-        configFile: path.join(__dirname, karmaPath),
-        singleRun: runSingle
-    }, function (result) {
-        var exitCode = !result ? 0 : result;
-        if (typeof done === "function") {
-            done();
-        }
-        if (exitCode > 0) {
-            process.exit(exitCode);
-        }
-    }).start();
+function karmaServer(done, singleRun = false, watch = true) {
+    const parseConfig = karma.config.parseConfig;
+    const Server = karma.Server;
+    if (!global.whichBrowsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+
+    parseConfig(
+        path.resolve("./karma" + useNg + ".conf.js"),
+        { port: 9876, singleRun: singleRun, watch: watch },
+        { promiseConfig: true, throwErrors: true },
+    ).then(
+        (karmaConfig) => {
+            if(!singleRun) {
+                done();
+            }
+            new Server(karmaConfig, function doneCallback(exitCode) {
+                /* eslint no-console: ["error", { allow: ["log"] }] */
+                console.log("Karma has exited with " + exitCode);
+                if(singleRun) {
+                    done();
+                }
+                if(exitCode > 0) {
+                    process.exit(exitCode);
+                }
+            }).start();
+        },
+        // eslint-disable-next-line no-console
+        (rejectReason) => { console.err(rejectReason); }
+    );
 }
 
 /*
@@ -499,11 +506,13 @@ if (process.env.USE_LOGFILE === "true") {
     }
 
     process.stdout.write = function (chunk) {
+        // eslint-disable-next-line no-control-regex
         fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstdout.apply(this, arguments);
     };
 
     process.stderr.write = function (chunk) {
+        // eslint-disable-next-line no-control-regex
         fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstderr.apply(this, arguments);
     };

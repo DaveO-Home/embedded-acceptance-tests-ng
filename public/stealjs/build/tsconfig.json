@@ -74,7 +74,8 @@
       "tables": ["stealjs/appl/services/table.service.ts"],
       "dodex": ["node_modules/dodex/dist/dodex.min.js"],
       "input": ["node_modules/dodex-input/dist/dodex-input.min.js"],
-      "mess": ["node_modules/dodex-mess/dist/dodex-mess.min.js"]
+      "mess": ["node_modules/dodex-mess/dist/dodex-mess.min.js"],
+      "jquery": ["node_modules/jquery/dist/jquery.min.js"]
     },
   },
   "include": ["../appl/entry.ts"],

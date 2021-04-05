@@ -18,7 +18,8 @@ const flatten = require("gulp-flatten");
 const chalk = require("chalk");
 const browserSync = require("browser-sync");
 const uglify = require("gulp-uglify-es").default;
-const Server = require("karma").Server;
+const karma = require("karma");
+const path = require("path");
 
 const startComment = "develblock:start",
     endComment = "develblock:end",
@@ -82,7 +83,7 @@ const pate2e = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = "";
-    runKarma(done);
+    karmaServer(done, true, false);
 };
 /**
  * Add in Angular unit tests 
@@ -92,7 +93,7 @@ const pat = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    runKarma(done);
+    karmaServer(done, true, false);
 };
 /*
  * javascript linter
@@ -221,7 +222,7 @@ const e2e_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Run karma/jasmine/angular tests once and exit without rebuilding(requires a previous build)
@@ -231,7 +232,7 @@ const ng_test = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Continuous testing - test driven development.  
@@ -240,20 +241,17 @@ const tdd_parcel = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
-    new Server({
-        configFile: __dirname + "/karma.conf.js",
-    }, done).start();
+    karmaServer(done, false, true);
 };
 /**
  * Karma testing under Opera. -- needs configuation  
  */
+// eslint-disable-next-line no-unused-vars
 const tddo = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Opera"];
     }
-    new Server({
-        configFile: __dirname + "/karma.conf.js",
-    }, done).start();
+    karmaServer(done, false, true);
 };
 /**
  * Using BrowserSync Middleware for HMR  
@@ -323,6 +321,7 @@ function parcelBuild(watch, cb) {
     const bundler = new Bundler(file, options);
     let isBundled = false;
 
+    // eslint-disable-next-line no-unused-vars
     bundler.on("bundled", (bundle) => {
         isBundled = true;
     });
@@ -353,19 +352,33 @@ function copyImages() {
         .pipe(copy("../../" + dist + "/appl"));
 }
 
-function runKarma(done) {
-    new Server({
-        configFile: __dirname + "/karma" + useNg + ".conf.js",
-        singleRun: true
-    }, result => {
-        var exitCode = !result ? 0 : result;
-        if (typeof done === "function") {
-            done();
-        }
-        if (exitCode > 0) {
-            process.exit(exitCode);
-        }
-    }).start();
+function karmaServer(done, singleRun = false, watch = true) {
+    const parseConfig = karma.config.parseConfig;
+    const Server = karma.Server;
+
+    parseConfig(
+        path.resolve("./karma" + useNg + ".conf.js"),
+        { port: 9876, singleRun: singleRun, watch: watch },
+        { promiseConfig: true, throwErrors: true },
+    ).then(
+        (karmaConfig) => {
+            if(!singleRun) {
+                done();
+            }
+            new Server(karmaConfig, function doneCallback(exitCode) {
+                /* eslint no-console: ["error", { allow: ["log"] }] */
+                console.log("Karma has exited with " + exitCode);
+                if(singleRun) {
+                    done();
+                }
+                if(exitCode > 0) {
+                    process.exit(exitCode);
+                }
+            }).start();
+        },
+        // eslint-disable-next-line no-console
+        (rejectReason) => { console.err(rejectReason); }
+    );
 }
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
@@ -379,5 +392,6 @@ if (process.env.USE_LOGFILE == "true") {
         logFile.write(util.format.apply(null, arguments) + "\n");
         logStdout.write(util.format.apply(null, arguments) + "\n");
     };
+    // eslint-disable-next-line no-console
     console.error = console.log;
 }

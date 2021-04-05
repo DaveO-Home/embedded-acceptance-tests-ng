@@ -8,7 +8,7 @@ import "./js/config";
 import App from "./js/app";
 import Default from "./js/utils/default";
 import Setup from "./js/utils/setup";
-import "pager";
+import "tablepager";
 /* develblock:start */
 import "zone.js/dist/zone-error";
 import apptest from "./jasmine/apptest";

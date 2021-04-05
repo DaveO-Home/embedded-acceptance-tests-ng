@@ -11,7 +11,8 @@ const exec = require("child_process").exec;
 const log = require("fancy-log");
 const stealTools = require("steal-tools");
 const del = require("del");
-const Server = require("karma").Server;
+const karma = require("karma");
+const path = require("path");
 
 let lintCount = 0;
 let browsers = process.env.USE_BROWSERS;
@@ -29,7 +30,7 @@ const pate2e = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = "";
-    runKarma(done, true, false);
+    karmaServer(done, true, false);
 };
 /**
  * Add in Angular unit tests 
@@ -39,7 +40,7 @@ const patng = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    runKarma(done, true, false);
+    karmaServer(done, true, false);
 };
 /*
  * javascript linter
@@ -154,7 +155,7 @@ const clean = function (done) {
 const steal_firefox = function (done) {
     // Running both together as Headless has problems, tdd works
     global.whichBrowsers = ["FirefoxHeadless"];
-    runKarma(done, true, false);
+    karmaServer(done, true, false);
 };
 /**
  * Run karma/jasmine tests using ChromeHeadless 
@@ -162,7 +163,7 @@ const steal_firefox = function (done) {
 const steal_chrome = function (done) {
     // Running both together as Headless has problems, tdd works
     global.whichBrowsers = ["ChromeHeadless"];
-    runKarma(done, true, false);
+    karmaServer(done, true, false);
 };
 /**
  * Run karma/jasmine tests once and exit
@@ -181,7 +182,7 @@ const e2e_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    return runKarma(done, true, false);
+    return karmaServer(done, true, false);
 };
 /**
  * Run karma/jasmine/angular tests once and exit without rebuilding(requires a previous build)
@@ -191,7 +192,7 @@ const ng_test = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    return runKarma(done, true, false);
+    return karmaServer(done, true, false);
 };
 /**
  * Continuous testing - test driven development.  
@@ -200,7 +201,7 @@ const steal_tdd = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Firefox", "Chrome"];
     }
-    return runKarma(done, false, true);
+    return karmaServer(done, false, true);
 };
 /*
  * Compile production angular typescript. 
@@ -300,21 +301,36 @@ exports.development = series(vendor, parallel(live_reload, steal_tdd, web_server
 exports.lint = lintRun;
 exports.compile = compile_ts;
 
-function runKarma(done, singleRun, watch) {
-    const serv = new Server({
-        configFile: __dirname + "/karma" + useNg + ".conf.js",
-        singleRun: singleRun
-    }, result => {
-        var exitCode = !result ? 0 : result;
+function karmaServer(done, singleRun = false, watch = true) {
+    const parseConfig = karma.config.parseConfig;
+    const Server = karma.Server;
+    if (!global.whichBrowsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
 
-        if (typeof done === "function") {
-            done();
-        }
-        if (exitCode > 0) {
-            process.exit(exitCode);
-        }
-    });
-    serv.start();
+    parseConfig(
+        path.resolve("./karma" + useNg + ".conf.js"),
+        { port: 9876, singleRun: singleRun, watch: watch },
+        { promiseConfig: true, throwErrors: true },
+    ).then(
+        (karmaConfig) => {
+            if(!singleRun) {
+                done();
+            }
+            new Server(karmaConfig, function doneCallback(exitCode) {
+                /* eslint no-console: ["error", { allow: ["log"] }] */
+                console.log("Karma has exited with " + exitCode);
+                if(singleRun) {
+                    done();
+                }
+                if(exitCode > 0) {
+                    process.exit(exitCode);
+                }
+            }).start();
+        },
+        // eslint-disable-next-line no-console
+        (rejectReason) => { console.err(rejectReason); }
+    );
 }
 
 function toolsBuild(cb) {
@@ -352,7 +368,7 @@ function toolsBuild(cb) {
         },
         maxBundleRequests: 5,
         maxMainRequests: 5
-    }).then(function (result) {
+    }).then(function () {
         del([
             "../appl/components/**/*.js",
             "../appl/services/**/*.js",
@@ -377,6 +393,7 @@ if (process.env.USE_LOGFILE == "true") {
         logFile.write(util.format.apply(null, arguments) + "\n");
         logStdout.write(util.format.apply(null, arguments) + "\n");
     };
+    // eslint-disable-next-line no-console
     console.error = console.log;
 }
 

@@ -7,13 +7,12 @@ import { AppModule } from "entry";
 import "config";
 import Default from "default"; 
 import Setup from "setup";
-import "pager";
-import App from "app";
 //!steal-remove-start
 import "zone.js/dist/zone-error";
 import apptest from "apptest";
 //!steal-remove-end
 import "./css/site.css";
+import App from "app";
 
 let production = true; 
 //!steal-remove-start

@@ -1,4 +1,4 @@
-import "setglobals";
+// import "setglobals";
 import { NgModule, Component } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import "rxjs/add/operator/map";

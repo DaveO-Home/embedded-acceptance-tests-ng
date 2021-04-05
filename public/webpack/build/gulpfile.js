@@ -16,7 +16,7 @@ const eslint = require("gulp-eslint");
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const WebpackDevServer = require("webpack-dev-server");
-const Server = require("karma").Server;
+const karma = require("karma");
 
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT && Number(process.env.PORT);
@@ -24,7 +24,6 @@ const PORT = process.env.PORT && Number(process.env.PORT);
 let webpackConfig = null;
 let browsers = process.env.USE_BROWSERS;
 let useNg = "";
-let runSingle = true;
 let lintCount = 0;
 
 if (browsers) {
@@ -39,8 +38,7 @@ const pate2e = function (done) {
         global.whichBrowser = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = "";
-    runSingle = true;
-    karmaServer(done);
+    karmaServer(done, true, false);
 };
 /**
  * Add in Angular unit tests 
@@ -50,8 +48,7 @@ const pat = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    runSingle = true;
-    karmaServer(done);
+    karmaServer(done, true, false);
 };
 /*
  * javascript linter
@@ -63,7 +60,7 @@ const esLint = function (cb) {
             quiet: 1,
         }))
         .pipe(eslint.format())
-        .pipe(eslint.result(result => {
+        .pipe(eslint.result(() => {
             //Keeping track of # of javascript files linted.
             lintCount++;
         }))
@@ -170,7 +167,7 @@ const eslint_test = function (cb) {
             quiet: 1,
         }))
         .pipe(eslint.format())
-        .pipe(eslint.result(result => {
+        .pipe(eslint.result(() => {
             //Keeping track of # of javascript files linted.
             lintCount++;
         }))
@@ -209,8 +206,7 @@ const e2e_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
-    return karmaServer(done);
+    karmaServer(done, true, false);
 };
 /**
  * Run karma/jasmine/angular tests once and exit without rebuilding(requires a previous build)
@@ -219,9 +215,8 @@ const ng_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
     useNg = ".ng";
-    return karmaServer(done);
+    return karmaServer(done, true, false);
 };
 /*
  * Build Test without Karma settings for npm Express server (npm start)
@@ -289,13 +284,10 @@ const test_build = function (cb) {
  * Continuous testing - test driven development.  
  */
 const webpack_tdd = function (done) {
-    if (!browsers) {
+    if (typeof browsers === "undefined") {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
-
-    new Server({
-        configFile: __dirname + "/karma.conf.js"
-    }, done).start();
+    karmaServer(done, false, true);
 };
 /*
  * Webpack recompile to 'dist_test' on code change
@@ -386,26 +378,42 @@ exports.watch = webpack_watch;
 exports.development = parallel(webpack_server, webpack_tdd);
 exports.lint = lintRun;
 
-function karmaServer(done) {
-    if (!browsers) {
+function karmaServer(done, singleRun = false, watch = true) {
+    const parseConfig = karma.config.parseConfig;
+    const Server = karma.Server;
+    if (!global.whichBrowsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    new Server({
-        configFile: __dirname + "/karma" + useNg + ".conf.js",
-        singleRun: runSingle,
-        watch: false
-    }, function (result) {
-        var exitCode = !result ? 0 : result;
-        done();
-        if (exitCode > 0) {
-            process.exit(exitCode);
-        }
-    }).start();
+
+    parseConfig(
+        path.resolve("./karma" + useNg + ".conf.js"),
+        { port: 9876, singleRun: singleRun, watch: watch },
+        { promiseConfig: true, throwErrors: true },
+    ).then(
+        (karmaConfig) => {
+            if(!singleRun) {
+                done();
+            }
+            new Server(karmaConfig, function doneCallback(exitCode) {
+                /* eslint no-console: ["error", { allow: ["log"] }] */
+                console.log("Karma has exited with " + exitCode);
+                if(singleRun) {
+                    done();
+                }
+                if(exitCode > 0) {
+                    process.exit(exitCode);
+                }
+            }).start();
+        },
+        // eslint-disable-next-line no-console
+        (rejectReason) => { console.err(rejectReason); }
+    );
 }
 
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
     var fs = require("fs");
+    // eslint-disable-next-line no-unused-vars
     var proc = require("process");
     var origstdout = process.stdout.write,
         origstderr = process.stderr.write,
@@ -420,11 +428,13 @@ if (process.env.USE_LOGFILE == "true") {
     }
 
     process.stdout.write = function (chunk) {
+        // eslint-disable-next-line no-control-regex
         fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstdout.apply(this, arguments);
     };
 
     process.stderr.write = function (chunk) {
+        // eslint-disable-next-line no-control-regex
         fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
         origstderr.apply(this, arguments);
     };
@@ -432,34 +442,44 @@ if (process.env.USE_LOGFILE == "true") {
 /*
  * Taking a snapshot example - puppeteer - Not installed!
  */
-function karmaServerSnap(done) {
-    if (!browsers) {
+// eslint-disable-next-line no-unused-vars
+function karmaServerSnap(done, singleRun = true, watch = false) {
+    if (!global.whichBrowsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    new Server({
-        configFile: __dirname + "/karma.conf.js",
-        singleRun: true,
-        watch: false
-    }, function (result) {
-        var exitCode = !result ? 0 : result;
-        done();
-        if (exitCode > 0) {
-            // Install Puppeteer to run these
-            takeSnapShot(["", "start"]);
-            takeSnapShot(["contact", "contact"]);
-            takeSnapShot(["welcome", "ng"]);
-            takeSnapShot(["table/tools", "tools"]);
-            // Not working with PDF-?
-            // takeSnapShot(['pdf/test', 'test'])       
-            process.exit(exitCode);
-        }
-    }).start();
+    const parseConfig = karma.config.parseConfig;
+    const Server = karma.Server;
+
+    parseConfig(
+        path.resolve("./karma.conf.js"),
+        { port: 9876, singleRun: singleRun, watch: watch },
+        { promiseConfig: true, throwErrors: true },
+    ).then(
+        (karmaConfig) => {
+            new Server(karmaConfig, function doneCallback(exitCode) {
+                console.log("Karma has exited with " + exitCode);
+                done();
+                if (exitCode > 0) {
+                    takeSnapShot(["", "start"]);
+                    takeSnapShot(["contact", "contact"]);
+                    takeSnapShot(["welcome", "react"]);
+                    takeSnapShot(["table/tools", "tools"]);
+                    // Not working with PDF-?
+                    // takeSnapShot(['pdf/test', 'test'])       
+                }
+                process.exit(exitCode);
+            }).start();
+        },
+        // eslint-disable-next-line no-console
+        (rejectReason) => { console.err(rejectReason); }
+    );
 }
 
 function snap(url, puppeteer, snapshot) {  // Puppeteer is not installed
     puppeteer.launch().then((browser) => {
         console.log("SnapShot URL", `${url}${snapshot[0]}`);
         let name = snapshot[1];
+        // eslint-disable-next-line no-unused-vars
         let page = browser.newPage().then((page) => {
             page.goto(`${url}${snapshot[0]}`).then(() => {
                 page.screenshot({ path: `snapshots/${name}Acceptance.png` }).then(() => {

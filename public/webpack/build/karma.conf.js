@@ -2,7 +2,6 @@ let bundler = "webpack";
 var startupHtml = "dist_test/" + bundler + "/appl/testapp_dev.html";
 // Karma configuration
 module.exports = function (config) {
-
     if (!global.whichBrowsers) {
         global.whichBrowsers = ["ChromeHeadless, FirefoxHeadless"];
     }

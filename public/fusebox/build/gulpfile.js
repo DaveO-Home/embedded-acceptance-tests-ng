@@ -10,16 +10,16 @@ const csslint = require("gulp-csslint");
 const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
 const log = require("fancy-log");
-const Server = require("karma").Server;
+const karma = require("karma");
 const chalk = require("chalk");
 
 let lintCount = 0;
 let browsers = process.env.USE_BROWSERS;
 let useNg = "";
-let runSingle = true;
 let useBundler = process.env.USE_BUNDLER !== "false";
 let useFtl = true;
 
+// eslint-disable-next-line no-unused-vars
 process.argv.forEach(function (val, index, array) {
     useFtl = val === "--noftl" && useFtl ? false : useFtl;
     if(index > 2) {
@@ -38,9 +38,8 @@ const pate2e = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = "";
-    runSingle = true;
     setTimeout(() => {
-        runKarma(done);
+        karmaServer(done, true, false);
     }, 500);
 };
 /**
@@ -52,8 +51,7 @@ const pat = function (done) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
     useNg = ".ng";
-    runSingle = true;
-    runKarma(done);
+    karmaServer(done, true, false);
 };
 /*
  * javascript linter
@@ -269,8 +267,7 @@ const e2eTest = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Run karma/jasmine tests once and exit without rebuilding(requires a previous build)
@@ -279,9 +276,8 @@ const ngTest = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    runSingle = true;
     useNg = ".ng";
-    return runKarma(done);
+    return karmaServer(done, true, false);
 };
 /**
  * Continuous testing - test driven development.  
@@ -291,10 +287,7 @@ const fuseboxTdd = function (done) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
 
-    new Server({
-        configFile: path.join(__dirname, "/karma.conf.js"),
-    }).start();
-    done();
+    karmaServer(done, false, true);
 };
 /**
  * Continuous testing - test driven development with hmr(see task "development").  
@@ -304,10 +297,7 @@ const fuseboxTddWait = function (done) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
     setTimeout(function() {
-        new Server({
-            configFile: path.join(__dirname, "/karma.conf.js"),
-        }).start();
-        done();
+        karmaServer(done, false, true);
     }, 10000);  // wait for hmr to compile - increase as needed
 };
 
@@ -318,9 +308,7 @@ const tddo = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Opera"];
     }
-    new Server({
-        configFile: path.join(__dirname, "/karma.conf.js"),
-    }, done).start();
+    karmaServer(done, false, true);
 };
 
 const testRun = series(testBuild, pate2e, pat);
@@ -342,20 +330,36 @@ exports.development = series(setNoftl, parallel(fuseboxHmr, fuseboxTddWait));
 exports.lint = lintRun;
 exports.copy = copy;
 
-function runKarma(done) {
-    const karmaPath = "/karma" + useNg + ".conf.js";
-    new Server({
-        configFile: path.join(__dirname, karmaPath),
-        singleRun: runSingle
-    }, function (result) {
-        var exitCode = !result ? 0 : result;
-        if (typeof done === "function") {
-            done();
-        }
-        if (exitCode > 0) {
-            process.exit(exitCode);
-        }
-    }).start();
+function karmaServer(done, singleRun = false, watch = true) {
+    const parseConfig = karma.config.parseConfig;
+    const Server = karma.Server;
+    if (!global.whichBrowsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+
+    parseConfig(
+        path.resolve("./karma" + useNg + ".conf.js"),
+        { port: 9876, singleRun: singleRun, watch: watch },
+        { promiseConfig: true, throwErrors: true },
+    ).then(
+        (karmaConfig) => {
+            if(!singleRun) {
+                done();
+            }
+            new Server(karmaConfig, function doneCallback(exitCode) {
+                /* eslint no-console: ["error", { allow: ["log"] }] */
+                console.log("Karma has exited with " + exitCode);
+                if(singleRun) {
+                    done();
+                }
+                if(exitCode > 0) {
+                    process.exit(exitCode);
+                }
+            }).start();
+        },
+        // eslint-disable-next-line no-console
+        (rejectReason) => { console.err(rejectReason); }
+    );
 }
 
 function fuseboxConfig(mode, props) {
@@ -430,5 +434,6 @@ if (process.env.USE_LOGFILE == "true") {
         logFile.write(util.format.apply(null, arguments) + "\n");
         logStdout.write(util.format.apply(null, arguments) + "\n");
     };
+    // eslint-disable-next-line no-console
     console.error = console.log;
 }

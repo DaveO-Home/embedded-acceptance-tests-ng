@@ -100,7 +100,7 @@ export class ToolsComponent implements OnInit {
         this.tables = tableservice;
         this.tables.getHtml(this).then(function (data) {
             data.obj.htmldata = sanitizer.bypassSecurityTrustHtml(data.response);
-            $(document).ready(function () {
+            $(function () {
                 Helpers.scrollTop();
                 if (App.controllers["Start"]) {
                     App.controllers["Start"].initMenu();
