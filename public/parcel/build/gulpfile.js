@@ -13,7 +13,8 @@ const stripCode = require("gulp-strip-code");
 const del = require("del");
 const noop = require("gulp-noop");
 const log = require("fancy-log");
-const Bundler = require("parcel-bundler");
+// const Bundler = require("parcel-bundler");
+const Parcel = require("@parcel/core").default;
 const flatten = require("gulp-flatten");
 const chalk = require("chalk");
 const browserSync = require("browser-sync");
@@ -39,32 +40,14 @@ let useNg = "";
 if (browsers) {
     global.whichBrowsers = browsers.split(",");
 }
+const serve_parcel = function (cb) {
+    return parcelBuild(false, true, cb); // setting watch = false
+};
 /**
  * Build Development bundle from package.json 
  */
 const build_development = function (cb) {
-    return parcelBuild(false, cb); // setting watch = false
-};
-/* This is an alternative to using the "parcel-plugin-strip" plugin for prod build
-*  See "default" task vs "prod" task
-* Strip development code from parcel build and uglify main.*.js
-*/
-const parcel_prod = function (cb) {
-    isProduction = true;
-    dist = prodDist;
-    log(chalk.cyan("***** Starting Strip Development Code and Uglify *****"));
-    var envs = env.set({
-        NODE_ENV: "production",
-    });
-    return src("../../" + dist + "/appl/main.*.js")
-        .pipe(envs)
-        .pipe(isProduction ? stripCode({ pattern: regexPattern }) : noop())
-        .pipe(isProduction ? uglify() : noop())
-        .pipe(dest("../../" + dist + "/appl"))
-        .on("end", () => {
-            log(chalk.cyan("***** Finished Build *****"));
-            cb();
-        });
+    return parcelBuild(false, false, cb); 
 };
 /**
  * Production Parcel 
@@ -73,7 +56,7 @@ const build = function (cb) {
     process.env.NODE_ENV = "production";
     isProduction = true;
     dist = prodDist;
-    parcelBuild(false, cb);
+    parcelBuild(false, false, cb);
 };
 /**
  * Default: Production Acceptance Tests 
@@ -253,103 +236,109 @@ const tddo = function (done) {
     }
     karmaServer(done, false, true);
 };
-/**
- * Using BrowserSync Middleware for HMR  
- */
-const sync = function () {
-    const server = browserSync.create("devl");
-    dist = testDist;
-    server.init({ server: "../../", index: "index_p.html", port: 3080/*, browser: ['google-chrome']*/ });
-    server.watch("../../" + dist + "/appl/main.*.js").on("change", server.reload);  //change any file in appl/ to reload app - triggered on watchify results
-    return server;
-};
-
-const watcher = function (done) {
-    log(chalk.green("Watcher & BrowserSync Started - Waiting...."));
-    return done();
-};
 
 const watch_parcel = function (cb) {
-    return parcelBuild(true, cb);
+    return parcelBuild(true, false, cb);
 };
 
 const testRun = series(cleant, copy_images, copy_test, build_development);
 const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
-const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build, parcel_prod);
+const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build);
+const copyStatic= series(cleant, parallel(copy_images, copy_test)); 
 prodRun.displayName = "prod";
 
 task(prodRun);
 exports.default = prodRun;
-exports.prd = series(clean, copyprod_images, copyprod, build, parcel_prod);
+exports.prd = series(clean, copyprod_images, copyprod, build);
 exports.test = series(testRun, pate2e, pat);
-exports.tdd = series(/*testRun,*/ tdd_parcel);
+exports.tdd = series(testRun, tdd_parcel);
 exports.acceptance = ng_test;
-exports.watch = series(watch_parcel, sync, watcher);
+exports.watch = series(copyStatic, watch_parcel, copyImagesForWatch);
+exports.serve = series(copyStatic, serve_parcel, copyImagesForWatch);
 exports.rebuild = testRun;
 exports.ngtest = ng_test;
 exports.e2e = e2e_test;
-exports.development = series(watch_parcel, parallel(sync, watcher, tdd_parcel));
 exports.lint = lintRun;
-exports.copy = parallel(copy_images, copy_test);
+exports.copy = copyStatic; 
 
-function parcelBuild(watch, cb) {
+function parcelBuild(watch, serve = false, cb) {
     if (bundleTest && bundleTest === "false") {
         return cb();
     }
-
     const file = isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html";
+    const port = 3080;
     // Bundler options
     const options = {
-        production: isProduction,
-        outDir: "../../" + dist + "/appl",
-        outFile: isProduction ? "testapp.html" : "testapp_dev.html",
-        publicUrl: "./",
-        watch: watch,
-        cache: !isProduction,
+        mode: isProduction? "production": "development",
+        entryRoot: "../appl",
+	publicUrl: serve || watch ? "/" : "./",
+        entries: file,
+        shouldDisableCache: !isProduction,
+        shouldAutoInstall: true,
+        shouldProfile: false,
         cacheDir: ".cache",
-        minify: false,
-        target: "browser",
-        https: false,
-        logLevel: 3, // 3 = log everything, 2 = log warnings & errors, 1 = log errors
-        // hmrPort: 3080,
-        sourceMaps: !isProduction,
-        // hmrHostname: 'localhost',
-        detailedReport: isProduction
+        shouldContentHash: isProduction,
+        logLevel: "info",
+        detailedReport: isProduction,
+        defaultConfig: require.resolve("@parcel/config-default"),
+        additionalReporters: [
+            { packageName: '@parcel/reporter-cli', resolveFrom: __filename },
+            { packageName: '@parcel/reporter-dev-server', resolveFrom: __filename }
+        ],
+        distDir: "../../" + dist,
+        shouldPatchConsole: false,
+        defaultTargetOptions: {
+	    publicUrl: serve || watch ? "/" : "./",
+            shouldOptimize: isProduction,
+            shouldScopeHoist: false,
+            sourceMaps: isProduction,
+            distDir: "../../" + dist,
+            engines: {
+                browsers: ["> 0.2%, not dead, not op_mini all"]
+            }
+          }
     };
 
-    // Initialises a bundler using the entrypoint location and options provided
-    const bundler = new Bundler(file, options);
-    let isBundled = false;
-
-    // eslint-disable-next-line no-unused-vars
-    bundler.on("bundled", (bundle) => {
-        isBundled = true;
-    });
-    bundler.on("buildEnd", () => {
-        if (isBundled) {
-            log(chalk.green("Build Successful"));
-            cb();
+    return ( async () => {
+        const parcel = new Parcel(options);
+	if(serve || watch) {
+            options.serveOptions = {
+                host: "localhost",
+                port: port,
+                https: false
+            };
+            await parcel.watch(err => {
+		if (err) throw err;
+	    });
+	    cb();
+        } else {
+            await parcel.run();
+	    cb();
         }
-        else {
-            log(chalk.red("Build Failed"));
-            cb();
-            process.exit(1);
-        }
-    });
-    // Run the bundler, this returns the main bundle
-    bundler.bundle();
+    })();
 }
 
 function copySrc() {
-    return src(["../appl/view*/**/*", "../appl/temp*/**/*", "../appl/dodex*/**/*" /*, isProduction ? '../appl/testapp.html' : '../appl/testapp_dev.html'*/])
+    return src(["../appl/view*/**/*", "../appl/temp*/**/*", "../appl/dodex*/**/*", "../appl/css*/**/*.css"])
         .pipe(flatten({ includeParents: -2 })
-            .pipe(dest("../../" + dist + "/appl")));
+            .pipe(dest("../../" + dist))); // + "/appl")));
 }
 
 function copyImages() {
-    return src(["../images/*", "../../README.m*", "../appl/css/table.css",
-        "../appl/app_bootstrap.html", "../appl/css/hello.world.css"])
-        .pipe(copy("../../" + dist + "/appl"));
+    copyfiles();
+    return src(["../images*/**/*", "../../README.m*"])
+        .pipe(dest("../../" + dist+"/../"));
+}
+
+function copyImagesForWatch() {
+    return src(["../images*/**/*", "../../README.m*"])
+        .pipe(dest("../../" + dist));
+}
+
+function copyfiles() {
+    return src(["../appl/app_bootstrap.html"])
+	.pipe(flatten({ includeParents: -2 })
+        .pipe(dest("../../" + dist))); 
 }
 
 function karmaServer(done, singleRun = false, watch = true) {

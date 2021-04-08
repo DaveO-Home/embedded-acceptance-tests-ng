@@ -7,7 +7,6 @@ __Latest;__ Upgraded to Angular11 and the latest for all but a few dependencies.
 > 1. `core-js` because of failure with the `stealjs` bundler.
 > 1. `autoprefixer`, `postcss-import` and `postcss-url` because of issues with both `parcel 2` and `rollup` bundlers.
 > 1. `karma/Jasmine` testing issues with `Webpack/Angular11`. All tests with other bundlers passed.
-> 1. `parcel 2` with `typescript` and `angular11` failed.
 
 [Production Build](#production-build)
 
@@ -317,9 +316,9 @@ __Note:__ Fusebox has been upgraed to version 4.
 1\. ***Watch, Recompile and Reload Window*** -
 
 * `cd public/parcel/build`
-* `gulp watch`
+* `gulp watch` or `gulp serve`.
 
-At this point you can start a browser and enter `localhost:3080/dist_test/parcel/appl/testapp_dev.html` (configured to auto open browser tab). Any changes to the source code(\*.js|*.ts and*.css files) should be reflected in the browser auto reload.
+At this point you can start a browser and enter `localhost:3080/testapp_dev.html`. Now using the built-in development from `Parcel 2`. Notice the shortened url. You can also use just `localhost:3080`.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
@@ -328,7 +327,7 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 
   While the Parcel watcher is running, tests are re-run when code sources are changed.
   
-  * Using `export USE_BUNDLER=false` - When using `gulp watch & gulp tdd` together, you can set USE_BUNDLER to false to startup TDD without building first, `gulp watch` does the test build.  Also, by settting `USE_BUNDLER=false` before `gulp`(production build), only testing and linting will execute.
+  * Using `export USE_BUNDLER=false` - When using `gulp tdd`, you can set USE_BUNDLER to false to startup TDD without building first. __Note__; `gulp test` or `gulp rebuild` must be the lastest builds. `gulp watch` and `gulp serve` use the `Parcel` internal configuration for `watch` and `hmr`. Also, by settting `USE_BUNDLER=false` before `gulp`(production build), only testing and linting will execute.
 
 ### V. **Rollup**
 

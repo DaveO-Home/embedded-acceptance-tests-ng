@@ -8,7 +8,7 @@ describe("Example HelloComponent", () => {
 
     let fixture: ComponentFixture<HelloComponent>;
 
-    beforeEach(waitForasync(() => {
+    beforeEach(waitForAsync(() => {
 
         return TestBed
             .configureTestingModule({

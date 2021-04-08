@@ -1,3 +1,21 @@
 {
-    "presets": ["env"]
-}
+    "presets": ["@parcel/babel-preset-env", "@babel/preset-typescript", [
+      "@babel/preset-env", {
+        "targets": {
+             "ie": 11,
+            "browsers": ["> 0.2%, not dead, not op_mini all"]
+        },
+        "modules": false,
+        "debug": false,
+        "useBuiltIns": "usage",
+        "corejs" : "2"
+    }
+    ]],
+    "plugins": ["@parcel/babel-plugin-transform-runtime", [
+          "@babel/plugin-proposal-decorators",
+          {
+            "legacy": true
+          }
+        ], ["@babel/plugin-proposal-class-properties", { "loose" : false }]]
+  }
+  

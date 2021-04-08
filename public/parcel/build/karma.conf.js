@@ -1,5 +1,5 @@
 let bundler = "parcel";
-var startupHtml = "dist_test/" + bundler + "/appl/testapp_dev.html";
+var startupHtml = "dist_test/" + bundler + "/testapp_dev.html";
 // Karma configuration
 module.exports = function (config) {
 
@@ -11,17 +11,15 @@ module.exports = function (config) {
         basePath: "../..",
         frameworks: ["jasmine-jquery"],
         proxies: {
-            "/views": "/base/dist_test/" + bundler + "/appl/views",
-            "/templates": "/base/dist_test/" + bundler + "/appl/templates",
-            "/css": "/base/dist_test/" + bundler + "/appl/css",
-            "/node_modules/font-awesome": "/base/node_modules/font-awesome",
-            "/app_bootstrap.html": "/base/dist_test/" + bundler + "/appl/app_bootstrap.html",
+            "/views": "/base/dist_test/" + bundler + "/views",
+            "/templates": "/base/dist_test/" + bundler + "/templates",
+            "/css": "/base/dist_test/" + bundler + "/css",
+            "/app_bootstrap.html": "/base/dist_test/" + bundler + "/app_bootstrap.html",
             "/README.md": "/base/dist_test/README.md",
-            "/node_modules/tablesorter/dist/css": "/base/node_modules/tablesorter/dist/css",
-            "/node_modules/bootstrap/dist/css/bootstrap.min.css": "/base/node_modules/bootstrap/dist/css/bootstrap.min.css",
-            "../../../dodex/": "/base/dodex/",
-            "/dodex/": "/base/" + bundler + "/appl/dodex/",
-            "/images/": "/base/dist_test/" + bundler + "/images/"
+            "/dodex/": "/base/" + bundler + "/dodex/",
+	    "/base/parcel/": "/base/dist_test/parcel/",
+            "/base/parcel/images/": "/base/dist_test/images/",
+	    "/images/": "/base/dist_test/images/"
         },
         files: [
             //Webcomponents for Firefox - used for link tag with import attribute.
@@ -35,22 +33,18 @@ module.exports = function (config) {
             { pattern: "node_modules/font-awesome/**/*", watched: false, included: false },
             { pattern: "node_modules/tablesorter/dist/css/**/*", watched: false, included: false },
             { pattern: "node_modules/bootstrap/dist/css/bootstrap.min.css", watched: false, included: false },
-            { pattern: "dist_test/" + bundler + "/appl/main.*.js", included: false, watched: true, served: true },  //watching bundle to get changes during tdd/test
+	    //watching bundle to get changes during tdd/test
+            { pattern: "dist_test/" + bundler + "/testapp*.js", included: false, watched: true, served: true },
             { pattern: "dist_test/" + bundler + "/**/*.*", included: false, watched: false },
-            { pattern: bundler + "/appl/dodex/data/*.*", included: false, watched: false },
+            { pattern: "dist_test/images/*.*", included: false, watched: false },
             //Karma/Jasmine/Loader
             bundler + "/build/karma.bootstrap.js"
         ],
         bowerPackages: [
         ],
         plugins: [
-            // "karma-*",
-            "@metahub/karma-jasmine-jquery",
-            "karma-chrome-launcher",
-            "karma-firefox-launcher",
-            "karma-opera-launcher",
-            "karma-jasmine",
-            "karma-mocha-reporter"           
+            "karma-*",
+            "@metahub/karma-jasmine-jquery"
         ],
         /* Karma uses <link href="/base/appl/testapp_dev.html" rel="import"> -- you will need webcomponents polyfill to use browsers other than Chrome.
          * This test demo will work with Chrome/ChromeHeadless by default - Webcomponents included above, so FirefoxHeadless should work also. 
@@ -70,7 +64,7 @@ module.exports = function (config) {
         port: 9876,
         colors: true,
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_ERROR,
+        logLevel: config.LOG_INFO,
         autoWatch: true,
         // autoWatchBatchDelay: 10000,
         // restartOnFileChange: true,
