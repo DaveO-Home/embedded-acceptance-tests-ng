@@ -3,30 +3,19 @@
  * Successful acceptance tests & lints start the production build.
  * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint', 'bootlint') -> 'build'
  */
-const { src, dest, series, parallel, task } = require("gulp");
+const { src, /* dest, */ series, parallel, task } = require("gulp");
 const eslint = require("gulp-eslint");
 const csslint = require("gulp-csslint");
 const exec = require("child_process").exec;
-const env = require("gulp-env");
-const copy = require("gulp-copy");
-const stripCode = require("gulp-strip-code");
 const del = require("del");
-const noop = require("gulp-noop");
 const log = require("fancy-log");
-// const Bundler = require("parcel-bundler");
 const Parcel = require("@parcel/core").default;
-const flatten = require("gulp-flatten");
+// const flatten = require("gulp-flatten");
 const chalk = require("chalk");
-const browserSync = require("browser-sync");
-const uglify = require("gulp-uglify-es").default;
 const karma = require("karma");
 const path = require("path");
+const copy = require("gulp-copy");
 
-const startComment = "develblock:start",
-    endComment = "develblock:end",
-    regexPattern = new RegExp("[\\t ]*(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
-        startComment + " ?[\\*\\/]?[\\s\\S]*?(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
-        endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
 
 let lintCount = 0;
 let isProduction = process.env.NODE_ENV == "production";
@@ -47,7 +36,7 @@ const serve_parcel = function (cb) {
  * Build Development bundle from package.json 
  */
 const build_development = function (cb) {
-    return parcelBuild(false, false, cb); 
+    return parcelBuild(false, false, cb);
 };
 /**
  * Production Parcel 
@@ -244,7 +233,7 @@ const watch_parcel = function (cb) {
 const testRun = series(cleant, copy_images, copy_test, build_development);
 const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
 const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build);
-const copyStatic= series(cleant, parallel(copy_images, copy_test)); 
+const copyStatic = series(cleant, parallel(copy_images, copy_test));
 prodRun.displayName = "prod";
 
 task(prodRun);
@@ -259,7 +248,7 @@ exports.rebuild = testRun;
 exports.ngtest = ng_test;
 exports.e2e = e2e_test;
 exports.lint = lintRun;
-exports.copy = copyStatic; 
+exports.copy = series(copy_images, copy_test);
 
 function parcelBuild(watch, serve = false, cb) {
     if (bundleTest && bundleTest === "false") {
@@ -269,9 +258,8 @@ function parcelBuild(watch, serve = false, cb) {
     const port = 3080;
     // Bundler options
     const options = {
-        mode: isProduction? "production": "development",
+        mode: isProduction ? "production" : "development",
         entryRoot: "../appl",
-	publicUrl: serve || watch ? "/" : "./",
         entries: file,
         shouldDisableCache: !isProduction,
         shouldAutoInstall: true,
@@ -282,63 +270,80 @@ function parcelBuild(watch, serve = false, cb) {
         detailedReport: isProduction,
         defaultConfig: require.resolve("@parcel/config-default"),
         additionalReporters: [
-            { packageName: '@parcel/reporter-cli', resolveFrom: __filename },
-            { packageName: '@parcel/reporter-dev-server', resolveFrom: __filename }
+            { packageName: "@parcel/reporter-cli", resolveFrom: __filename },
+            { packageName: "@parcel/reporter-dev-server", resolveFrom: __filename }
         ],
-        distDir: "../../" + dist,
         shouldPatchConsole: false,
         defaultTargetOptions: {
-	    publicUrl: serve || watch ? "/" : "./",
+            publicUrl: "./",
             shouldOptimize: isProduction,
             shouldScopeHoist: false,
             sourceMaps: isProduction,
-            distDir: "../../" + dist,
+            distDir: "../../" + dist + "/appl",
             engines: {
                 browsers: ["> 0.2%, not dead, not op_mini all"]
             }
-          }
+        }
     };
 
-    return ( async () => {
+    return (async () => {
         const parcel = new Parcel(options);
-	if(serve || watch) {
+        if (serve || watch) {
+            options.hmrOptions = {
+                port: port,
+                host: "localhost"
+            };
             options.serveOptions = {
                 host: "localhost",
                 port: port,
                 https: false
             };
             await parcel.watch(err => {
-		if (err) throw err;
-	    });
-	    cb();
+                if (err) throw err;
+            });
+            cb();
         } else {
             await parcel.run();
-	    cb();
+            cb();
         }
     })();
 }
 
 function copySrc() {
-    return src(["../appl/view*/**/*", "../appl/temp*/**/*", "../appl/dodex*/**/*", "../appl/css*/**/*.css"])
-        .pipe(flatten({ includeParents: -2 })
-            .pipe(dest("../../" + dist))); // + "/appl")));
+    src([
+        "../appl/views/**/*",
+        "../appl/templates/**/*",
+    ])
+    .pipe(copy("../../" + dist, { prefix: 1 }));
+    src([
+        "../appl/css/**/*.css"
+    ])
+    .pipe(copy("../../" + dist, { prefix: 1 }));
+    src([
+        "../appl/dodex/**/*"
+    ])
+    .pipe(copy("../../" + dist, { prefix: 1 }));
+    return src(["../images*/**/*"])
+        .pipe(copy("../../" + dist, { prefix: 1 }));
 }
 
 function copyImages() {
     copyfiles();
-    return src(["../images*/**/*", "../../README.m*"])
-        .pipe(dest("../../" + dist+"/../"));
+    return src(["../../README.md"])
+        .pipe(copy("../../" + dist, { prefix: 2 }));
 }
 
 function copyImagesForWatch() {
-    return src(["../images*/**/*", "../../README.m*"])
-        .pipe(dest("../../" + dist));
+    src(["../../README.md"])
+        .pipe(copy("../../" + dist + "/appl", { prefix: 2 }));
+
+    return src(["../images*/**/*"])
+        .pipe(copy("../../" + dist + "/appl", { prefix: 1 }));
 }
 
 function copyfiles() {
     return src(["../appl/app_bootstrap.html"])
-	.pipe(flatten({ includeParents: -2 })
-        .pipe(dest("../../" + dist))); 
+        .pipe(copy("../../" + dist, { prefix: 1 }));
 }
 
 function karmaServer(done, singleRun = false, watch = true) {
@@ -351,22 +356,22 @@ function karmaServer(done, singleRun = false, watch = true) {
         { promiseConfig: true, throwErrors: true },
     ).then(
         (karmaConfig) => {
-            if(!singleRun) {
+            if (!singleRun) {
                 done();
             }
             new Server(karmaConfig, function doneCallback(exitCode) {
                 /* eslint no-console: ["error", { allow: ["log"] }] */
                 console.log("Karma has exited with " + exitCode);
-                if(singleRun) {
+                if (singleRun) {
                     done();
                 }
-                if(exitCode > 0) {
+                if (exitCode > 0) {
                     process.exit(exitCode);
                 }
             }).start();
         },
         // eslint-disable-next-line no-console
-        (rejectReason) => { console.err(rejectReason); }
+        (rejectReason) => { console.error(rejectReason); }
     );
 }
 //From Stack Overflow - Node (Gulp) process.stdout.write to file

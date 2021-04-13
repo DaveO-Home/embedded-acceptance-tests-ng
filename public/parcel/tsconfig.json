@@ -31,7 +31,7 @@
     "outDir": "./dist",
   },
   "files": [
-    "appl/main.js"
+    "appl/main.ts"
   ],
   "include": [
     "appl/**/*.ts", "appl/**.js"

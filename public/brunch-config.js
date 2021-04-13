@@ -5,6 +5,7 @@ const fontLocation = isProduction ? "../fonts" : process.env.USE_WATCH === "true
 const singleRun = process.env.USE_HMR !== "true" && !process.env.USE_TDD;
 const htmlFile = isProduction ? "brunch/appl/testapp.html" : "brunch/appl/testapp_dev.html";
 
+// eslint-disable-next-line no-unused-vars
 function resolve(dir) {
   return path.join(__dirname, "brunch", dir);
 }

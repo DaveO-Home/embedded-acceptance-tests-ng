@@ -1,0 +1,14 @@
+{
+  "/dist_test/parcel/appl": {
+    "target": "http://localhost:3080",
+    "pathRewrite": {
+      "^/dist_test/parcel/appl": ""
+    }
+  },
+  "/dist_test/parcel": {
+    "target": "http://localhost:3080",
+    "pathRewrite": {
+      "^/dist_test/parcel": ""
+    }
+  }
+}

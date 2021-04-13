@@ -318,7 +318,7 @@ __Note:__ Fusebox has been upgraed to version 4.
 * `cd public/parcel/build`
 * `gulp watch` or `gulp serve`.
 
-At this point you can start a browser and enter `localhost:3080/testapp_dev.html`. Now using the built-in development from `Parcel 2`. Notice the shortened url. You can also use just `localhost:3080`.
+At this point you can start a browser and enter `localhost:3080/dist_test/parcel/appl/testapp_dev.html`. Now using the built-in development from `Parcel 2` and .proxyrc file.
 
 2\. ***Test Driven Development(tdd) Window*** -
 
