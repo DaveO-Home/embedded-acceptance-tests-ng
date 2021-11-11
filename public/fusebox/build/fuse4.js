@@ -64,7 +64,7 @@ const run = function (mode, configure, debug, cb) {
             await src(path.join(__dirname, `../images/*.*`))
                 .dest(`${copyDir}/../..`, "public")
                 .exec();
-            await src(path.join(__dirname, `../appl/app_bootstrap.html`))
+            await src(path.join(__dirname, `../appl/app_*.html`))
                 .dest(`${copyDir}`, "appl")
                 .exec();
             await src(path.join(__dirname, `../../README.md`))

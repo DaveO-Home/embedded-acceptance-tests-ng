@@ -32,8 +32,6 @@ module.exports = function (config) {
             {pattern: "node_modules/bootstrap/dist/css/bootstrap.min.css", watched: false, included: true, served: true},
             {pattern: "node_modules/tablesorter/dist/css/theme.blue.min.css", watched: false, included: true, served: true},
             {pattern: "node_modules/tablesorter/dist/css/jquery.tablesorter.pager.min.css", watched: false, included: true, served: true},
-            {pattern: "node_modules/font-awesome/css/font-awesome.css", watched: false, included: false},
-            {pattern: "node_modules/font-awesome/**/*", watched: false, included: false},
             //Jasmine/Loader tests and starts Karma
             bundler + "/build/karma.bootstrap.js"
         ],

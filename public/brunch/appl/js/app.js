@@ -1,9 +1,10 @@
 /* eslint "comma-style": [0, "last"] */
-
+import { createPopper } from "@popperjs/core";
 var startsWith = require("lodash/startsWith");
 var capitalize = require("lodash/capitalize");
 require("bootstrap");
 require("tablesorter");
+
 /* develblock:start */
 // Specs can be inserted at initialization(before karma is started).
 if (typeof testit !== "undefined" && testit) {
@@ -13,7 +14,7 @@ if (typeof testit !== "undefined" && testit) {
         });
 
         it("is Popper defined", () => {
-            expect(typeof Popper === "function").toBe(true);
+            expect(typeof createPopper === "function").toBe(true);
         });
     });
 }
@@ -47,7 +48,7 @@ module.exports = {
         };
     },
     initPage () {
-        $("[data-toggle=collapse]").click(function (e) {
+        $("[data-toggle=collapse]").on("click", e => {
             // Don't change the hash
             e.preventDefault();
             $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");

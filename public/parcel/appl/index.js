@@ -7,7 +7,7 @@ import { AppModule } from "./entry";
 import "./js/config";
 import Default from "./js/utils/default";
 import Setup from "./js/utils/setup";
-import "pager";
+import "../../node_modules/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js";
 import App from "./js/app";
 /* develblock:start */
 import "zone.js/dist/zone-error";

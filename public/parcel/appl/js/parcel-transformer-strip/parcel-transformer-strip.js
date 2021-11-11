@@ -7,10 +7,10 @@ const regexPattern = new RegExp("[\\t ]*(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" + star
 module.exports = (new Transformer({
   async transform({ asset }) {
     asset.type = "js";
-    if (process.env.NODE_ENV !== "production" || asset.filePath.indexOf("parcel/appl") < 0) {
+    if (process.env.NODE_ENV !== "production" || asset.filePath.indexOf("parcel/appl") < 0 ||
+	asset.filePath.endsWith("main.ts")) {
       return [asset];
     }
-
     let code = await asset.getCode();
     let code2 = code.replace(regexPattern, "");
 

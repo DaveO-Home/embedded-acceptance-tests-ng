@@ -2,6 +2,7 @@
 import _ from "lodash";
 import "bootstrap";
 import "tablesorter";
+import { createPopper } from "@popperjs/core";
 /* develblock:start */
 // Specs can be inserted at initialization(before karma is started).
 if (typeof testit !== "undefined" && testit) {
@@ -11,8 +12,8 @@ if (typeof testit !== "undefined" && testit) {
         });
 
         it("is Popper defined", () => {
-            expect(typeof Popper === "function").toBe(true);
-        });
+            expect(typeof createPopper === "function").toBe(true);
+        }); 
     });
 }
 /* develblock:end */
@@ -34,7 +35,7 @@ export default {
         };
     },
     initPage () {
-        $("[data-toggle=collapse]").click(function (e) {
+        $("[data-toggle=collapse]").on("click", (e) => {
             // Don't change the hash
             e.preventDefault();
             $(this).find("i").toggleClass("fa-chevron-right fa-chevron-down");

@@ -4,6 +4,7 @@ import _startsWith from "lodash/startsWith";
 import _capitalize from "lodash/capitalize";
 import "bootstrap";
 import "tablesorter"; // "tablesorter/dist/js/jquery.tablesorter.combined.min.js";
+import { createPopper } from "@popperjs/core";
 
 /* develblock:start */
 // Specs can be inserted at initialization(before karma is started).
@@ -14,7 +15,7 @@ if (typeof testit !== "undefined" && testit) {
         });
 
         it("is Popper defined", () => {
-            expect(typeof Popper === "object").toBe(true);
+            expect(typeof createPopper === "function").toBe(true);
         });
     });
 }

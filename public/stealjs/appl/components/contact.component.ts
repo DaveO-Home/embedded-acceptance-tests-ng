@@ -6,7 +6,7 @@ import Setup from "setup";
 declare const $: any;
 
 @Component({
-    templateUrl: "views/prod/contact.html"
+    templateUrl: "../views/prod/contact.html"
 })
 export class ContactComponent {
     constructor() {

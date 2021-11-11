@@ -222,7 +222,7 @@ const steal_tdd = function (done) {
  * Compile angular typescript. 
  */
 const compile_ts = function (cb) {
-    var osCommands = "touch ../appl/entry.ts; npx tsc --build";
+    var osCommands = "touch ../appl/entry.ts; npx ngc";
     if (isWindows) {
         osCommands = "copy /b ..\\appl\\entry.ts +,, & npx tsc --build";
     }

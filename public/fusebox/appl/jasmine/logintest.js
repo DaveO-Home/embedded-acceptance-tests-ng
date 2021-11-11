@@ -11,7 +11,7 @@ export default function (Start, timer) {
             Start.initMenu();
             Start["div .login click"]();
             const loginObject = $("div .login");
-            loginObject.click();
+            loginObject.trigger("click");
 
             // Note: if page does not refresh, increase the timer time.
             // Using RxJs instead of Promise.
@@ -39,7 +39,7 @@ export default function (Start, timer) {
 
         it("Login form - verify cancel and removed from DOM", function (done) {
             expect(modal[0]).toExist();
-            closeButton.click();
+            closeButton.trigger("click");
 
             const numbers = timer(50, 50);
             const observable = numbers.subscribe(timer => {

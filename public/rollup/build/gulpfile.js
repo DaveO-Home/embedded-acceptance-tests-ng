@@ -184,11 +184,6 @@ const copyprod_css = function () {
     return copyCss();
 };
 
-const copyprod_fonts = function () {
-    isProduction = true;
-    dist = prodDist;
-    return copyFonts();
-};
 /**
  * Resources and content copied to dist_test directory - for development
  */
@@ -209,11 +204,6 @@ const copy_css = function () {
     return copyCss();
 };
 
-const copy_fonts = function () {
-    isProduction = false;
-    dist = testDist;
-    return copyFonts();
-};
 /**
  * Continuous testing - test driven development.  
  */
@@ -317,9 +307,9 @@ const rollup_watch = function (cb) {
 };
 
 const lintRun = parallel(esLint, esLintts, cssLint, bootLint)
-const testCopy = series(copy_fonts, parallel(copy_src, copy_images, copy_node_css, copy_css));
+const testCopy = series(parallel(copy_src, copy_images, copy_node_css, copy_css));
 const testRun = series(testCopy, build_development, pate2e, pat);
-const prodCopy = series(copyprod_fonts, parallel(copyprod_src, copyprod_images, copyprod_node_css, copyprod_css));
+const prodCopy = series(parallel(copyprod_src, copyprod_images, copyprod_node_css, copyprod_css));
 const prodRun = series(testRun, lintRun , clean, prodCopy, build);
 prodRun.displayName = "prod";
 
@@ -460,7 +450,9 @@ function aliases() {
 }
 
 function copySrc() {
-    return src(["../appl/views/**/*", "../appl/templates/**/*", "../appl/index.html", "../appl/assets/**/*", isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html", "../appl/app_bootstrap.html"])
+    return src(["../appl/views/**/*", "../appl/templates/**/*", "../appl/index.html",
+            "../appl/assets/**/*", isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html",
+            "../appl/app_bootstrap.html", "../appl/app_footer.html"])
         .pipe(copy("../../" + dist + "/appl"));
 }
 
@@ -480,14 +472,9 @@ function copyCss() {
 }
 
 function copyNodeCss() {
-    return src(["../../node_modules/bootstrap/dist/css/bootstrap.min.css", "../../node_modules/font-awesome/css/font-awesome.css",
+    return src(["../../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "../../node_modules/tablesorter/dist/css/jquery.tablesorter.pager.min.css", "../../node_modules/tablesorter/dist/css/theme.blue.min.css"])
         .pipe(copy("../../" + dist + "/appl"));
-}
-
-function copyFonts() {
-    return src(["../../node_modules/font-awesome/fonts/*"])
-        .pipe(copy("../../" + dist, { prefix: 4 }));
 }
 
 function karmaServer(done, singleRun = false, watch = true) {

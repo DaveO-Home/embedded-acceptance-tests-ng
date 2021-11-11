@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "private": true,
   "engines": {
-    "parcel": "^2.0.0-nightly"
+    "parcel": "^2.0.0"
   },
   "peerDependencies": {
   }

@@ -1,14 +1,14 @@
 {
-    "presets": ["@parcel/babel-preset-env", "@babel/preset-typescript", [
+    "presets": ["@babel/preset-typescript", [
       "@babel/preset-env", {
         "targets": {
              "ie": 11,
             "browsers": ["> 0.2%, not dead, not op_mini all"]
         },
-        "modules": false,
+        "modules": "auto",
         "debug": false,
         "useBuiltIns": "usage",
-        "corejs" : "2"
+        "corejs" : "3"
     }
     ]],
     "plugins": ["@parcel/babel-plugin-transform-runtime", [

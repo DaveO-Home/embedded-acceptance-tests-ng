@@ -1,6 +1,4 @@
-// import * as $ from 'jquery'
-// import * as popper from 'popper.js'
+import $ from "jquery";
 
-// window.jQuery = window.$ = $
-// window._bundler = 'browserify'
-// window.Popper = popper
+window.jQuery = window.$ = $;
+window._bundler = "webpack";

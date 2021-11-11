@@ -65,16 +65,16 @@ export default function (Helpers) {
 
             done();
         });
-        /* Seems that the component isn't removed from dom with Angular 11
+        /* 
         */
-        // it("Contact form - validate form submission.", done => {
-        //     submitObject.click();
+        it("Contact form - validate form submission.", done => {
+            submitObject.click();
 
-        //     setTimeout(() => {
-        //         expect($(`${mainContainer} form`)[0]).not.toBeInDOM();
-        //         expect($(`${mainContainer} form`)[0]).not.toExist();
-        //         done();
-        //     }, 100);
-        // });
+            setTimeout(() => {
+                expect($(`${mainContainer} form`)[0]).not.toBeInDOM();
+                expect($(`${mainContainer} form`)[0]).not.toExist();
+                done();
+            }, 100);
+        });
     });
 }

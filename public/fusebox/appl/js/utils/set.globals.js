@@ -1,6 +1,6 @@
+import "@fortawesome/fontawesome-free/js/all.js";
+import "@fortawesome/fontawesome-free/js/fontawesome.js";
 import * as $ from "jquery";
-import * as popper from "popper.js";
 
 window.jQuery = window.$ = $;
 window._bundler = "fusebox";
-window.Popper = popper;

@@ -63,7 +63,8 @@ export default {
                     }
                 }).on("hidden.bs.modal", function () {
                     $(this).remove();
-                }).modal("show").css(css).find("> .modal-dialog").addClass(options.widthClass);
+                })
+                .modal("show").css(css).find("> .modal-dialog").addClass(options.widthClass);
             });
         });
     },

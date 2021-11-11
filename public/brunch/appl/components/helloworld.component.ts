@@ -7,7 +7,7 @@ const Start = require("../js/controller/start");
   styleUrls: ["css/hello.world.css"]
 })
 export class HelloWorldComponent {
-  title = "Acceptance Testing with Angular8";
+  title = "Acceptance Testing with Angular12";
   ngOnInit(): void {
     Setup.init();
     Start.initMenu();

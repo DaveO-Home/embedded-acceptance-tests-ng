@@ -36,7 +36,7 @@ var statusReporter = {
     isInError: false
 };
 window.__karma__.loaded = function () {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 4000;
     jasmine.getEnv().addReporter(statusReporter);
     const config = jasmine.getEnv().configuration()
     config.random = false;
@@ -54,7 +54,7 @@ function get_browser_info() {
             tem = ua.match(/\bOPR\/(\d+)/)
             if (tem != null) { return { name: 'Opera', version: tem[1] }; }
         }
-        M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+        M = M[2] ? [M[1], M[2]] : ["Netscape", navigator.appVersion, '-?'];
         if ((tem = ua.match(/version\/(\d+)/i)) != null) { M.splice(1, 1, tem[1]); }
         return {
             name: M[0],

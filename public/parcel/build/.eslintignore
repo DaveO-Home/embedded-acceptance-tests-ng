@@ -1,0 +1,7 @@
+/build/
+../config/
+../../dist/
+../../dist_test/
+/*.js
+../test/unit/coverage/
+../appl/js/utils/marked.js

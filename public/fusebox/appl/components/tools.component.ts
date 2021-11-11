@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, ViewChild, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-import "rxjs/operator/map";
+// import { map } from "rxjs/operators";
 import ToolsSM from "js/tools.sm";
 import { TableService } from "ts/table.service";
 import Table from "js/table";
@@ -18,15 +18,15 @@ Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
 			<button class="dropdown-toggle smallerfont" 
 			type="button"
 			id="dropdown0"
-			data-toggle="dropdown"
+			data-bs-toggle="dropdown"
 			aria-haspopup="true"
 			aria-expanded="false">
 	  Select Tools Type
 	</button>
 	<div class="dropdown-menu pointer" aria-labelledby="dropdown0">
-	  <a class="dropdown-item smallerfont" (click)="onCompletedClick($event)">Combined</a>
-	  <a class="dropdown-item smallerfont" (click)="onCompletedClick($event)">Category1</a>
-	  <a class="dropdown-item smallerfont" (click)="onCompletedClick($event)">Category2</a>
+	  <a class="dropdown-item smallerfont pointer" (click)="onCompletedClick($event)">Combined</a>
+	  <a class="dropdown-item smallerfont pointer" (click)="onCompletedClick($event)">Category1</a>
+	  <a class="dropdown-item smallerfont pointer" (click)="onCompletedClick($event)">Category2</a>
 	</div>
   </div>
   </section>`;
@@ -79,8 +79,8 @@ export class ToolsSelect {
             ToolsSM.replaceCategory(found.idx);
         }
 
-        $("#dropdown1 a i").each(function () { this.remove(); });
-        $(e.target).fa({ icon: "check" });
+        $("#dropdown1 a svg").each(function () { this.remove(); });
+        // $(e.target).fa({ icon: "check" });
     }
 }
 

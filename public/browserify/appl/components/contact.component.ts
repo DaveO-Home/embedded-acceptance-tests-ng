@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import "rxjs/add/operator/map";
+// import { map } from "rxjs/operators";
 import App from "../js/app";
 import Setup from "../js/utils/setup";
 

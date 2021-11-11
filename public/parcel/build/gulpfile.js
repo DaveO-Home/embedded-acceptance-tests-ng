@@ -121,7 +121,7 @@ const esLintts = function (cb) {
  * css linter
  */
 const cssLint = function (cb) {
-    var stream = src(["../appl/css/site.css", "../appl/css/table.css"])
+    var stream = src(["../appl/css/site.css", "../appl/css/hello.world.css"])
         .pipe(csslint())
         .pipe(csslint.formatter());
 
@@ -342,7 +342,7 @@ function copyImagesForWatch() {
 }
 
 function copyfiles() {
-    return src(["../appl/app_bootstrap.html"])
+    return src(["../appl/app_bootstrap.html", "../appl/app_footer.html"])
         .pipe(copy("../../" + dist, { prefix: 1 }));
 }
 

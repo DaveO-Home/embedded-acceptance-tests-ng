@@ -3,7 +3,6 @@
  * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint') -> 'bootlint' -> 'build'
  */
 const { src, dest, series, parallel, task } = require("gulp");
-const env = require("gulp-env");
 const log = require("fancy-log");
 const rmf = require("rimraf");
 const copy = require("gulp-copy");
@@ -12,9 +11,8 @@ const noop = require("gulp-noop");
 const path = require("path");
 const chalk = require("chalk");
 const karma = require("karma");
-// const assign = require('lodash.assign')
 const buffer = require("vinyl-buffer");
-// const envify = require('loose-envify/custom') // require('envify/custom');
+const envify = require('loose-envify/custom');
 const eslint = require("gulp-eslint");
 const source = require("vinyl-source-stream");
 const uglify = require("gulp-uglify-es").default;
@@ -28,12 +26,11 @@ const browserSync = require("browser-sync").create("devl");
 const tsify = require("tsify");
 
 const startComment = "develblock:start";
-    const endComment = "develblock:end";
-    const regexPattern = new RegExp("[\\t ]*(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
-        startComment + " ?[\\*\\/]?[\\s\\S]*?(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
-        endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
+const endComment = "develblock:end";
+const regexPattern = new RegExp("[\\t ]*(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
+    startComment + " ?[\\*\\/]?[\\s\\S]*?(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
+    endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
 
-// let vendors = []
 let browsers = process.env.USE_BROWSERS;
 let testDist = "dist_test/browserify";
 let prodDist = "dist/browserify";
@@ -160,11 +157,6 @@ const cssLint = function (cb) {
             cb();
         });
 };
-
-// const set_development = function () {
-//     const dev = process.env.NODE_ENV = 'development'
-//     return dev
-// }
 /*
  * Bootstrap html linter
  */
@@ -212,12 +204,6 @@ const copyprod = function () {
 const copyprod_images = function () {
     return copyImages();
 };
-
-const copyprod_fonts = function () {
-    isProduction = true;
-    dist = prodDist;
-    return copyFonts();
-};
 /**
  * Resources and content copied to dist_test directory - for development
  */
@@ -228,12 +214,6 @@ const copy_test = function () {
 
 const copy_images = function () {
     return copyImages();
-};
-
-const copy_fonts = function () {
-    isProduction = false;
-    dist = testDist;
-    return copyFonts();
 };
 /*
  * Setup development with reload of app on code change
@@ -294,8 +274,8 @@ const tddo = function (done) {
     karmaServer(done, false, true);
 };
 
-const copyTestRun = parallel(copy_fonts, copy_images, copy_test);
-const copyProdRun = parallel(copyprod_fonts, copyprod_images, copyprod);
+const copyTestRun = parallel(copy_images, copy_test);
+const copyProdRun = parallel(copyprod_images, copyprod);
 const testRun = series(cleant, copyTestRun, parallel(build_dev_bundle, build_dev_vendor));
 const prodRun = series(clean, copyProdRun, parallel(build_prod_bundle, build_prod_vendor));
 const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
@@ -315,8 +295,9 @@ exports.development = parallel(b_watchify, series(testRun, b_hmr), watch, tdd_br
 exports.ngtest = ng_test;
 exports.e2e = e2e_test;
 exports.lint = lintRun;
+exports.copy = copyTestRun;
 
-function browserifyBuild (cb) {
+function browserifyBuild(cb) {
     browserifyInited = browserify({
         debug: !isProduction,
         bundleExternal: true
@@ -324,21 +305,16 @@ function browserifyBuild (cb) {
 
     var mods = getNPMPackageIds();
     for (var id in mods) {
-        if (mods[id] !== "font-awesome") {
+        if (mods[id] !== "@fortawesome/fontawesome-free") {
             browserifyInited.require(require("resolve").sync(mods[id]), { expose: mods[id] });
         }
     }
-    var envs = env.set({
-        NODE_ENV: isProduction ? "production" : "development"
-    });
 
     var stream = browserifyInited
-        // .transform(
-        //     // { global: true },
-        //     envify({ NODE_ENV: isProduction ? 'production' : 'development' })
-        // )
+        .transform(
+            envify({ NODE_ENV: isProduction ? 'production' : 'development' })
+        )
         .bundle()
-        .pipe(envs)
         .pipe(source("vendor.js"))
         .pipe(buffer())
         .pipe(isProduction ? stripCode({ pattern: regexPattern }) : noop())
@@ -353,20 +329,20 @@ function browserifyBuild (cb) {
         });
 }
 
-function getNPMPackageIds () {
+function getNPMPackageIds() {
     var ids = JSON.parse("{" +
-        "\"aw\": \"font-awesome\"," +
+        "\"aw\": \"@fortawesome/fontawesome-free\"," +
         "\"bo\": \"bootstrap\"," +
         "\"jq\": \"jquery\"," +
         "\"lo\": \"lodash\"," +
         "\"hb\": \"handlebars\"," +
         "\"mo\": \"moment\"," +
-        "\"po\": \"popper.js\"," +
+        "\"@po\": \"@popperjs/core\"," +
         "\"tb\": \"tablesorter\"}");
     return ids;
 }
 
-function applicationBuild (cb) {
+function applicationBuild(cb) {
     browserifyInited = browserify({
         entries: ["../appl/main.ts"],
         transform: ["browserify-css"],
@@ -380,8 +356,9 @@ function applicationBuild (cb) {
     let modules = [];
     var mods = getNPMPackageIds();
     for (var id in modules) {
-        if (mods[id] !== "font-awesome") {
-            modules.push(mods[id]);
+        if (mods[id] !== "@fortawesome/fontawesome-free") {
+            modules
+            loose - envify.push(mods[id]);
         }
     }
 
@@ -396,19 +373,14 @@ function applicationBuild (cb) {
 /*
  * Build application bundle for production or development
  */
-function browserifyApp (cb) {
-    var envs = env.set({
-        NODE_ENV: isProduction ? "production" : "development"
-    });
+function browserifyApp(cb) {
     var stream = browserifyInited
-        // .transform(
-        //     { global: true },
-        //     envify({ NODE_ENV: isProduction ? 'production' : 'development' })
-        //   )
+        .transform(
+            envify({ NODE_ENV: isProduction ? 'production' : 'development' })
+        )
         .add(["../appl/index.ts"])
         .plugin(tsify, { noImplicitAny: false })
         .bundle()
-        .pipe(envs)
         .pipe(source("index.js"))
         .pipe(removeCode({ production: isProduction }))
         .pipe(buffer())
@@ -426,7 +398,7 @@ function browserifyApp (cb) {
         });
 }
 
-function enableWatchify () {
+function enableWatchify() {
     if (isWatchify) {
         browserifyInited.plugin(watchify);
         browserifyInited.on("update", applicationBuild);
@@ -434,24 +406,23 @@ function enableWatchify () {
     }
 }
 
-function copySrc () {
+function copySrc() {
+    if (!isProduction) {
+        src(["../../node_modules/bootstrap/dist/css/bootstrap.min.css.map"])
+            .pipe(dest("../../" + dist + "/appl"));
+    }
     return src(["../appl/views/**/*", "../appl/templates/**/*", "../appl/index.html", "../appl/dodex/**/*",
-            isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html"])
+        isProduction ? "../appl/testapp.html" : "../appl/testapp_dev.html"])
         .pipe(copy("../../" + dist + "/appl"));
 }
 
-function copyIndex () {
+function copyIndex() {
     return src(["../index.html"])
         .pipe(copy("../../" + dist + "/browserify"));
 }
 
-function copyImages () {
-    return src(["../images/*", "../../README.md", "../appl/assets/*", "../appl/app_bootstrap.html", "../appl/css/table.css", "../appl/css/hello.world.css"])
-        .pipe(copy("../../" + dist + "/appl"));
-}
-
-function copyFonts () {
-    return src(["../../node_modules/font-awesome/fonts/*"])
+function copyImages() {
+    return src(["../images/*", "../../README.md", "../appl/assets/*", "../appl/app_*.html", "../appl/css/table.css", "../appl/css/hello.world.css"])
         .pipe(copy("../../" + dist + "/appl"));
 }
 
@@ -468,16 +439,16 @@ function karmaServer(done, singleRun = false, watch = true) {
         { promiseConfig: true, throwErrors: true },
     ).then(
         (karmaConfig) => {
-            if(!singleRun) {
+            if (!singleRun) {
                 done();
             }
             new Server(karmaConfig, function doneCallback(exitCode) {
                 /* eslint no-console: ["error", { allow: ["log"] }] */
                 console.log("Karma has exited with " + exitCode);
-                if(singleRun) {
+                if (singleRun) {
                     done();
                 }
-                if(exitCode > 0) {
+                if (exitCode > 0) {
                     process.exit(exitCode);
                 }
             }).start();
@@ -494,9 +465,9 @@ function karmaServer(done, singleRun = false, watch = true) {
 if (process.env.USE_LOGFILE === "true") {
     var fs = require("fs");
     var origstdout = process.stdout.write;
-        var origstderr = process.stderr.write;
-        var outfile = "node_output.log";
-        var errfile = "node_error.log";
+    var origstderr = process.stderr.write;
+    var outfile = "node_output.log";
+    var errfile = "node_error.log";
 
     if (fs.stat(outfile)) {
         fs.unlink(outfile);

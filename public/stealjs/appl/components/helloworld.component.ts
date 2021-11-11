@@ -3,8 +3,8 @@ import Setup from "setup";
 import Start from "start";
 
 @Component({
-  templateUrl: "views/hello.world.html",
-  styleUrls: ["css/hello.world.css"]
+  templateUrl: "../views/hello.world.html",
+  styleUrls: ["../css/hello.world.css"]
 })
 export class HelloWorldComponent {
   title = "Acceptance Testing with Angular8";

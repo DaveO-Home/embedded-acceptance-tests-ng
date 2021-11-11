@@ -1,3 +1,4 @@
+.parcel-cache
 public/parcel/appl/router/index.js
 *.map
 public/stealjs/appl/entry.js

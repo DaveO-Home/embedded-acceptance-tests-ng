@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { LocationStrategy, HashLocationStrategy } from "@angular/common";
 import { RouterModule, Routes, Router } from "@angular/router";
-import "rxjs/operator/map";
+// import { map } from "rxjs/operators";
 import { StartComponent } from "../components/start.component";
 import { ContactComponent } from "../components/contact.component";
 import { PdfComponent } from "../components/pdf.component";

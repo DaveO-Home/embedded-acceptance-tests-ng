@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-import "rxjs/add/operator/map";
+// import { map } from "rxjs/operators";
 import { StartService } from "../services/start.service";
 
 @Component({

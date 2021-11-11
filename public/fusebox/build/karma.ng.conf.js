@@ -11,8 +11,8 @@ module.exports = function (config) {
         files: [
             "tests/**/*.+(js|ts|html)"
         ],
-        bowerPackages: [
-        ],preprocessors: {
+        bowerPackages: [],
+        preprocessors: {
             "tests/*.ts": ["karma-typescript"]
         },
         karmaTypescriptConfig: {

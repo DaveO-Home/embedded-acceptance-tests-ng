@@ -3,7 +3,7 @@
 import App from "../app";
 import Base from "../utils/base.control";
 import Menu from "../utils/menu";
-import Marked from "marked";
+import { marked } from "marked";
 let me;
 
 export default App.controllers.Start ||
@@ -26,7 +26,7 @@ export default App.controllers.Start ||
         },
         location: "#/",
         index (options) {
-            const indexUrl = "views/prod/index.html";
+            const indexUrl = "./views/prod/index.html";
             const markdownUrl = "../README.md";
             this.view({
                 url: indexUrl,
@@ -43,14 +43,14 @@ export default App.controllers.Start ||
             return this.html;
         },
         "div .login click": function (e) {
-            const loginUrl = "views/prod/login.html";
+            const loginUrl = "./views/prod/login.html";
             me.modal({
                 url: loginUrl,
                 title: "Account Log In",
                 submit: "Login",
                 submitCss: "submit-login",
-                widthClass: "modal-lg",
-                width: "30%",
+                widthClass: "modal-md",
+                width: "50%",
                 foot: me.footer,
                 close: "Close",
                 contactFooter: me.contactFooter
@@ -65,7 +65,7 @@ export default App.controllers.Start ||
         },
         contact (ev) {
             this.view({
-                url: "views/prod/contact.html",
+                url: "./views/prod/contact.html",
                 selector: window.rmain_container || "#main_container",
                 fade: true,
                 contactListener: me.contactListener
@@ -117,17 +117,17 @@ export default App.controllers.Start ||
                     }, secs);
                 }
             };
-            form.find("input[type=submit]", el).click(formFunction);
+            form.find("input[type=submit]", el).on("click", formFunction);
         },
         footer: "<button class=\"btn btn-sm btn-primary submit-modal mr-auto raised submit-login\">{{submit}}</button>" +
-                     "<button class=\"btn btn-sm close-modal raised\" data-dismiss=\"modal\" aria-hidden=\"true\">{{close}}</button>",
+                     "<button class=\"btn btn-sm close-modal raised\" data-bs-dismiss=\"modal\" aria-hidden=\"true\">{{close}}</button>",
         contactFooter: "<div class=\"modal-footer\">" +
                             "<div class=\"mr-auto contact\" >" +
                                 "<a href=\"#/contact\" ><small class=\"grey\">Contact</small></a>" +
                             "</div>" +
                             "</div>",
         alert: "<div class=\"alert alert-info alert-dismissible fade show\" role=\"alert\">" +
-                    "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times</span></button>" +
+                    "<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times</span></button>" +
                     "<strong>Thank You!</strong> Your request is being processed." +
                     "</div>",
         showAlert (me) {
@@ -136,7 +136,7 @@ export default App.controllers.Start ||
         finish (options) {
             me = this;
             const mdFunction = data => {
-                me.html = `${App.html} ${Marked(data)}`;
+                me.html = `${App.html} ${marked.parse(data)}`;
             };
             $.get(options.urlMd, mdFunction, "text")
             .fail(err => {

@@ -69,8 +69,8 @@ export class ToolsSelect {
         const controller = App.controllers["Table"];
 
         const dropdownValue = e.target.text.trim();
-        const store = ToolsSM.getStore();
-        const found = ToolsSM.findEntry(dropdownValue, store.getState().tools.items);
+        // const store = ToolsSM.getStore();
+        const found = ToolsSM.findEntry(dropdownValue); // , store.getState().tools.items);
         
         controller.dropdownEvent(e); // Load table with selected data
         if (found.idx === -1) {
@@ -87,7 +87,7 @@ export class ToolsSelect {
 @Component({
     encapsulation: ViewEncapsulation.None,
     template: "<dropdown></dropdown><span id=\"data\" [innerHTML]=\"htmldata\"></span>",
-    styleUrls: ["css/table.css"],
+    styleUrls: ["../css/table.css"],
 })
 export class ToolsComponent implements OnInit {
     public tables: TableService;

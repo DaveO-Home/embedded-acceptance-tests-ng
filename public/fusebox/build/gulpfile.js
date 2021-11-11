@@ -219,7 +219,7 @@ const setNoftl = function (cb) {
 };
 
 /*
- * Build the application to run node express so font-awesome is resolved
+ * Build the application to run node express 
  */
 const fuseboxRebuild = function (cb) {
     process.argv[2] = "";

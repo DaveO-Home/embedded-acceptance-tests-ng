@@ -23,15 +23,14 @@ export default function (dodex, input, mess, content, Start) {
         mouseEvent = new MouseEvent("mousedown");
 
     describe("Dodex Operation Validation", function () {
-        console.warn("");
+        beforeAll(function (done) {
         console.warn("\n*****************************************\n" + 
-            "These tests are not working\n" +
-            "With Angular11/Webpack5 it appears click/mouse events are having issues\n" +
+            "Some dodex tests are not working\n" +
+            "With Angular11-12/Webpack5 it appears click/mouse events are having issues\n" +
             "And there are unexpected DOM manipulations??\n" + 
             "The tests of any consequence are commented out\n" + 
             "Can't figure it out!\n" +
-            "*****************************************");
-        beforeAll(function (done) {
+            "*****************************************\n");
             if (!$(mainContainer)[0]) {
                 $("body").append("<div id=\"main_container\"><div class=\"loading-page\"></div></div>");
             }
@@ -97,7 +96,7 @@ export default function (dodex, input, mess, content, Start) {
             // Needed to generate proper event.target
             front1.onmousedown = dodexElement.onmousedown; // Generic dodex handler for all cards.
             front1.dispatchEvent(mouseEvent);
-            
+
             // expect(card1.style.zIndex === "0").toBeTruthy();
             // expect(card1.style.transform).toContain("rotateX(-190deg)");
             expect(card2.style.zIndex).toMatch("");

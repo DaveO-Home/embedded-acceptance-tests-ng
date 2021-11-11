@@ -1,0 +1,47 @@
+{
+   "parcelAngularOptions": {
+    // What compiler should we use when watching or serving
+    "watch": "jit",
+
+    // What compiler should we use when building (parcel build)
+    "build": "aot"
+  },
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "typeRoots": [
+      "./types",
+      "../node_modules/@types"
+    ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "pretty": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowJs": true,
+    // "target": "es5",
+    "types": [
+      "jqueryfn",
+      "jasmine",
+      "jquery",
+      "node"
+    ],
+    "allowUnreachableCode": true,
+    "outDir": "./dist",
+  },
+  "files": [
+    "appl/main.ts"
+  ],
+  "include": [
+    "appl/**/*.ts", "appl/**.js"
+  ],
+  "exclude": [ "./dist" ]
+}

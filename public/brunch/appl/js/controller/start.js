@@ -1,9 +1,8 @@
 /* eslint no-unused-vars: ['error', { 'args': 'none' }] */
-
+import { marked } from "marked";
 var App = require("../app");
 var Base = require("../utils/base.control");
 var Menu = require("../utils/menu");
-var Marked = require("marked");
 
 var me;
 
@@ -54,8 +53,8 @@ module.exports = App.controllers.Start ||
                 title: "Account Log In",
                 submit: "Login",
                 submitCss: "submit-login",
-                widthClass: "modal-lg",
-                width: "30%",
+                widthClass: "modal-md",
+                width: "50%",
                 foot: me.footer,
                 close: "Close",
                 contactFooter: me.contactFooter
@@ -88,7 +87,7 @@ module.exports = App.controllers.Start ||
                 var validateForm = isValid => {
                     var inputs = Array.prototype.slice.call(document.querySelectorAll("form input"));
                     inputs.push(document.querySelector("form textarea"));
-                    for (var i = 0; i < inputs.length; i++) {
+                    for(let i in inputs) {
                         isValid = !inputs[i].checkValidity() ? false : isValid;
                         inputs[i].setCustomValidity("");
                         if (inputs[i].validity.valueMissing && !isValid) {
@@ -122,17 +121,17 @@ module.exports = App.controllers.Start ||
                     }, secs);
                 }
             };
-            form.find("input[type=submit]", el).click(formFunction);
+            form.find("input[type=submit]", el).on("click", formFunction);
         },
         footer: "<button class=\"btn btn-sm btn-primary submit-modal mr-auto raised submit-login\">{{submit}}</button>" +
-                     "<button class=\"btn btn-sm close-modal raised\" data-dismiss=\"modal\" aria-hidden=\"true\">{{close}}</button>",
+                     "<button class=\"btn btn-sm close-modal raised\" data-bs-dismiss=\"modal\" aria-hidden=\"true\">{{close}}</button>",
         contactFooter: "<div class=\"modal-footer\">" +
                             "<div class=\"mr-auto contact\" >" +
                                 "<a href=\"#/contact\" ><small class=\"grey\">Contact</small></a>" +
                             "</div>" +
                             "</div>",
         alert: "<div class=\"alert alert-info alert-dismissible fade show\" role=\"alert\">" +
-                    "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times</span></button>" +
+                    "<button type=\"button\" class=\"close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times</span></button>" +
                     "<strong>Thank You!</strong> Your request is being processed." +
                     "</div>",
         showAlert (me) {
@@ -141,7 +140,7 @@ module.exports = App.controllers.Start ||
         finish (options) {
             me = this;
             var mdFunction = data => {
-                me.html = `${App.html} ${Marked(data)}`;
+                me.html = `${App.html} ${marked.parse(data)}`;
             };
             $.get(options.urlMd, mdFunction, "text")
             .fail(err => {

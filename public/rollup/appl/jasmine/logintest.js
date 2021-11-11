@@ -11,7 +11,7 @@ export default function (Start) {
             Start.initMenu();
             Start["div .login click"]();
             const loginObject = $("div .login");
-            loginObject.click();
+            loginObject.trigger("click");
 
             // Not bothering with a promise.
             setTimeout(() => {
@@ -34,7 +34,7 @@ export default function (Start) {
 
         it("Login form - verify cancel and removed from DOM", function (done) {
             expect(modal[0]).toExist();
-            closeButton.click();
+            closeButton.trigger("click");
 
             setTimeout(function () {
                 $("div .login").remove();

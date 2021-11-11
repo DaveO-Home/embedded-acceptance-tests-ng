@@ -26,7 +26,6 @@
         "types": [
             "jquery",
             "jasmine",
-            "jquery",
             "node"
         ],
         "paths": {

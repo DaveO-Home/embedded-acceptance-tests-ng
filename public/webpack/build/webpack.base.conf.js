@@ -1,4 +1,4 @@
-const AngularCompilerPlugin = require("@ngtools/webpack").AngularCompilerPlugin;
+const AngularCompilerPlugin = require("@ngtools/webpack").AngularWebpackPlugin;
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
@@ -6,19 +6,19 @@ const webpack = require("webpack");
 
 module.exports = (argv) => {
     return {
-        context: path.resolve(__dirname, ""),
+        context: path.resolve(__dirname, "../"),
         mode: argv.mode,
         entry: {
-            polyfill: "../appl/polyfills.ts",
-            main: "../appl/main.ts"
+            polyfill: "./appl/polyfills.ts",
+            main: "./appl/main.ts"
         },
         output: {
             path: path.join(__dirname, argv.dist),
             chunkFilename: "main-[name]-[chunkhash].js",
         },
-        experiments: {
-            asset: true
-        },
+        // experiments: {
+        //     asset: true
+        // },
         node: false,
         target: "web",
         resolve: {
@@ -82,9 +82,10 @@ module.exports = (argv) => {
                     test: /\.(css|sass|scss)$/,
                     use: [
                         MiniCssExtractPlugin.loader,
-                        { loader: "css-loader" },
-                        { loader: "resolve-url-loader" },
-                        { loader: "sass-loader" }
+                        { loader: "css-loader", options: {sourceMap: true} },
+                        { loader: "postcss-loader", options: {sourceMap: true} },
+                        { loader: "resolve-url-loader", options: {sourceMap: true} },
+                        { loader: "sass-loader", options: {sourceMap: true} }
                     ],
                     type: "javascript/auto"
                 },
@@ -93,7 +94,8 @@ module.exports = (argv) => {
                     use: [{
                         loader: "file-loader",
                         options: {
-                            name: "images/[name].[ext]"
+                            name: "images/[name].[ext]",
+                            sourceMap: true
                         }
                     }],
                     type: "javascript/auto"
@@ -106,10 +108,12 @@ module.exports = (argv) => {
                           options: {
                             limit: 10000,
                             publicPath: "./",
-                            name: "[name]-[hash:4].[ext]"
+                            name: "[name]-[hash:4].[ext]",
+                            sourceMap: true
                           },
                         },
                       ],
+                    // type: 'asset/resource',
                     type: "javascript/auto"
                 },
                 {
@@ -119,19 +123,18 @@ module.exports = (argv) => {
                             loader: "file-loader",
                             options: {
                                 publicPath: "./",
-                                name: "[name]-[fullhash:4].[ext]"
+                                name: "[name]-[fullhash:4].[ext]",
+                                sourceMap: true
                             }
                         }
                     ],
-                    type: "javascript/auto"
+                    // type: "javascript/auto"
+                    type: 'asset/resource',
                 },
             ],
         },
         plugins: [
             new webpack.ProvidePlugin({
-                $: "jquery",
-                jQuery: "jquery",
-                Popper: ["popper.js", "default"],
                 process: "process/browser",
             }),
             new AngularCompilerPlugin({
@@ -142,7 +145,8 @@ module.exports = (argv) => {
             }),
             new MiniCssExtractPlugin({
                 filename: argv.mode === "development"? "[name].css": "[name].[contenthash:7].css",
-                chunkFilename: argv.mode === "development"? "[name].[id].css": "[name].[id].[contenthash:7].css"
+                chunkFilename: argv.mode === "development"? "[name].[id].css": "[name].[id].[contenthash:7].css",
+                ignoreOrder: true
             }),
             new CopyWebpackPlugin({ patterns: [
                 {
@@ -158,33 +162,34 @@ module.exports = (argv) => {
                 { from: resolve("/appl/css/hello.world.css"), to: argv.dist + "/appl/css" },
                 { from: resolve("/appl/css/table.css"), to: argv.dist + "/appl/css" },
                 { from: resolve("/appl/app_bootstrap.html"), to: argv.dist + "/appl" },
+                { from: resolve("/appl/app_footer.html"), to: argv.dist + "/appl" },
                 {
                     from: resolve("/appl/views/**/*"),
                     globOptions: {
                         dot: false,
                     },
-                    to: argv.dist + "/appl"
+                    to: argv.dist + "/appl/.."
                 },
                 {
                     from: resolve("./appl/dodex/**/*"),
                     globOptions: {
                         dot: false,
                     },
-                    to: argv.dist + "/appl"
+                    to: argv.dist + "/appl/.."
                 },
                 {
                     from: resolve("/images/**/*"),
                     globOptions: {
                         dot: false,
                     },
-                    to: argv.dist + "/images"
+                    to: argv.dist + "/images/.."
                 },
                 {
-                    from: "../appl/templates/**/*",
+                    from: "./appl/templates/**/*",
                     globOptions: {
                         dot: false,
                     },
-                    to: argv.dist + "/appl"
+                    to: argv.dist + "/appl/.."
                 },
             ]}, { debug: "error" })
         ],

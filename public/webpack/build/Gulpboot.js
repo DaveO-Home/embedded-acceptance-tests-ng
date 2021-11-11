@@ -28,7 +28,7 @@ const bootLint = function () {
             }
         };
 
-    var stream = src(["../appl/app_bootstrap.html"])
+    var stream = src(["../appl/app_*.html"])
         .pipe(bootlint(options));
 
     stream.on("error", function () {

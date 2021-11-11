@@ -1,11 +1,10 @@
 // import './js/utils/set.globals.js'
 import { NgModule, Component } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import "rxjs-compat/add/operator/map";
 import { AppRoutingModule } from "./router";
-import dodex from "dodex";
-import input from "dodex-input";
-import mess from "dodex-mess";
+const dodex = require("dodex");
+const input = require("dodex-input");
+const mess = require("dodex-mess");
 const Start = require("./js/controller/start");
 
 declare const testit: boolean;
@@ -57,7 +56,7 @@ export class TestApp {
 			(document.querySelector(".top--dodex") === null)) {
 			setTimeout(function () {
 				// Content for cards A-Z and static card
-				dodex.setContentFile("./dodex/data/content.js");
+				doDex.setContentFile("./dodex/data/content.js");
 				dodex.init({
 					width: 375,
 					height: 200,
@@ -68,17 +67,42 @@ export class TestApp {
 					replace: true,   	// append to or replace default content - default false(append only)
 					mess: mess
 				}).then(function () {
-						// Add in app/personal cards
-						for (let i = 0; i < 3; i++) {
-							dodex.addCard(getAdditionalContent());
-						}
-						/* Auto display of widget */
-						// dodex.openDodex();
-					});
+					// Add in app/personal cards
+					for (let i = 0; i < 3; i++) {
+						dodex.addCard(getAdditionalContent());
+					}
+					/* Auto display of widget */
+					// dodex.openDodex();
+				});
 			}, 1000); // Waiting for app_bootstrap.html to load
 		}
 	}
+}
 
+@Component({
+	selector: "test-content",
+	template: "<router-outlet></router-outlet>"
+})
+
+export class TestContent { }
+
+@Component({
+	selector: "test-footer",
+	templateUrl: "app_footer.html"
+})
+
+export class TestFooter { }
+
+@Component({
+	selector: "test-login",
+	template: `<div id="nav-login" class="align-self-start float-md-right" (click)="loginModal($event)">
+				<small>
+					<a href="#" class="login">Log In</a>
+				</small>
+			</div>`
+})
+
+export class TestLogin {
 	loginModal(event) {
 		Start["div .login click"]();
 	}
@@ -90,9 +114,12 @@ export class TestApp {
 		AppRoutingModule,
 	],
 	declarations: [
+		TestLogin,
 		TestApp,
+		TestContent,
+		TestFooter
 	],
-	bootstrap: [TestApp],
+	bootstrap: [TestLogin, TestApp, TestContent, TestFooter],
 })
 
 export class AppModule {

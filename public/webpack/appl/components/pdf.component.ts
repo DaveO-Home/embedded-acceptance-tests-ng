@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-import "rxjs/add/operator/map";
 
 declare const $: JQueryStatic;
 

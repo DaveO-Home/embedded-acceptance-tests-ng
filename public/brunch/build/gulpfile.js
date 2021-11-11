@@ -4,16 +4,12 @@
  */
 const { src, series, parallel, task } = require("gulp");
 const csslint = require("gulp-csslint");
-// const env = require("gulp-env");
 const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
-// const spawn = require('child_process').spawn;
 const log = require("fancy-log");
-// const Server = require("karma").Server;
 const chalk = require("chalk");
 
 let lintCount = 0;
-// let dist = "dist_test/brunch"
 let browsers = process.env.USE_BROWSERS;
 if (browsers) {
     global.whichBrowser = browsers.split(",");

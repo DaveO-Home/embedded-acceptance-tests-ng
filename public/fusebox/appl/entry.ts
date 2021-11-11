@@ -1,7 +1,6 @@
 import "js/set.globals";
 import { NgModule, Component } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import "rxjs/add/operator/map";
 import { AppRoutingModule } from "ts/router";
 import Start from "js/start";
 import dodex from "dodex";
@@ -52,7 +51,32 @@ export class TestApp {
 		}
 /* develblock:end */
 	}
+}
 
+@Component({
+	selector: "test-content",
+	template: "<router-outlet></router-outlet>"
+})
+
+export class TestContent { }
+
+@Component({
+	selector: "test-footer",
+	templateUrl: "app_footer.html"
+})
+
+export class TestFooter { }
+
+@Component({
+	selector: "test-login",
+	template: `<div id="nav-login" class="align-self-start float-md-right" (click)="loginModal($event)">
+				<small>
+					<a href="#" class="login">Log In</a>
+				</small>
+			</div>`
+})
+
+export class TestLogin {
 	loginModal(event) {
 		Start["div .login click"]();
 	}
@@ -64,9 +88,12 @@ export class TestApp {
 		AppRoutingModule,
 	],
 	declarations: [
+		TestLogin,
 		TestApp,
+		TestContent,
+		TestFooter
 	],
-	bootstrap: [TestApp],
+	bootstrap: [TestLogin, TestApp, TestContent, TestFooter],
 })
 export class AppModule {
 }

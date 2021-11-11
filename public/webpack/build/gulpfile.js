@@ -16,10 +16,11 @@ const eslint = require("gulp-eslint");
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const WebpackDevServer = require("webpack-dev-server");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const karma = require("karma");
 
 const HOST = process.env.HOST || "localhost";
-const PORT = process.env.PORT && Number(process.env.PORT);
+const PORT = process.env.PORT || 3080; // && Number(process.env.PORT);
 
 let webpackConfig = null;
 let browsers = process.env.USE_BROWSERS;
@@ -103,7 +104,7 @@ const esLintts = function (cb) {
  * css linter
  */
 const cssLint = function (cb) {
-    var stream = src(["../appl/css/site.css", "../appl/css/hello.world.css", "../appl/css/table.css"])
+    var stream = src(["../appl/css/site.css", "../appl/css/hello.world.css", "../appl/css/app.css" /**/])
         .pipe(csslint())
         .pipe(csslint.formatter());
 
@@ -326,37 +327,25 @@ const webpack_server = function (cb) {
         USE_HMR: "true"
     });
 
-    const options = {
-        contentBase: "../../",
-        hot: true,
-        host: "localhost",
-        publicPath: config.dev.assetsPublicPath,
-        stats: { colors: true },
-        watchOptions: {
-            ignored: /node_modules/,
-            poll: config.dev.poll
-        },
-        quiet: false
-    };
-
     webpackConfig = require("./webpack.dev.conf.js");
     webpackConfig.devtool = "eval";
     webpackConfig.output.path = path.resolve(config.dev.assetsRoot);
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-    // webpackConfig.plugins.push(new webpack.NamedModulesPlugin()); // HMR shows correct file names in console on update.
+    webpackConfig.plugins.push(new HtmlWebpackPlugin({
+        filename: "testapp_dev.html",
+        template: "appl/testapp_dev.html",
+        // alwaysWriteToDisk: true,
+        inject: true
+    }));
 
-    WebpackDevServer.addDevServerEntrypoints(webpackConfig, options);
-
+    webpackConfig.entry = getEntry();
     const compiler = webpack(webpackConfig);
-    const server = new WebpackDevServer(compiler, options);
-
-    server.listen(PORT || config.dev.port, HOST /*|| webpackConfig.devServer.host*/, function (err) {
-        log("[webpack-server]", `http://${/*webpackConfig.devServer.host*/ HOST}:${PORT || config.dev.port}/webpack/appl/testapp_dev.html`);
-        if (err) {
-            log(err);
-        }
+    const devServerOptions = { ...webpackConfig.devServer, open: false};
+    const server = new WebpackDevServer(devServerOptions, compiler);
+    server.startCallback(() => {
+        log(chalk.blue(`\nSuccessfully started server on http://localhost:${PORT}`));
         cb();
-    });
+      });
 };
 
 const testRun = series(eslint_test, test_build);
@@ -503,4 +492,15 @@ function takeSnapShot(snapshot) {
     let url = "http://localhost:3080/dist_test/webpack/appl/testapp_dev.html#/";
 
     snap(url, puppeteer, snapshot);
+}
+
+function getEntry() {
+    return [
+        // Runtime code for hot module replacement
+        "webpack/hot/dev-server.js",
+        // Dev server client for web socket transport, hot and live reload logic
+        "webpack-dev-server/client/index.js?hot=true&live-reload=true",
+        // Your entry
+        "/appl/main",
+    ];
 }

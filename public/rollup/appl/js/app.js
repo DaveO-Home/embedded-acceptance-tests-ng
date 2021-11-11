@@ -3,6 +3,7 @@
 import capitalize from "lodash-es/capitalize";
 import "bootstrap";
 import "tablesorter";
+import { createPopper } from "@popperjs/core";
 
 /* develblock:start */
 // Specs can be inserted at initialization(before karma is started).
@@ -13,7 +14,7 @@ if (typeof testit !== "undefined" && testit) {
         });
 
         it("is Popper defined", () => {
-            expect(typeof Popper === "function").toBe(true);
+            expect(typeof createPopper === "function").toBe(true);
         });
     });
 }

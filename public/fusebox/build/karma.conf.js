@@ -14,7 +14,6 @@ module.exports = function (config) {
             "/views": "/base/dist_test/" + bundler + "/appl/views",
             "/templates": "/base/dist_test/" + bundler + "/appl/templates",
             "/css": "/base/dist_test/" + bundler + "/appl/css",
-            "/node_modules/font-awesome": "/base/node_modules/font-awesome",
             "/app_bootstrap.html": "/base/dist_test/" + bundler + "/appl/app_bootstrap.html",
             "/README.md": "/base/dist_test/README.md",
             "/node_modules/tablesorter/dist/css": "/base/node_modules/tablesorter/dist/css",
@@ -22,7 +21,8 @@ module.exports = function (config) {
             "../../../dodex/": "/base/dodex/",
             "/dodex/": "/base/" + bundler + "/appl/dodex/",
             "/images/": "/base/dist_test/" + bundler + "/images/",
-            "/styles/": "/base/dist_test/" + bundler + "/styles/"
+            "/styles/": "/base/dist_test/" + bundler + "/styles/",
+            "/app_footer.html": "/base/dist_test/" + bundler + "/appl/app_footer.html"
         },
         files: [
             //Webcomponents for Firefox - used for link tag with import attribute.
@@ -33,7 +33,6 @@ module.exports = function (config) {
             startupHtml,
             { pattern: "package.json", watched: false, included: false },
             { pattern: "dist_test/README.md", included: false },
-            { pattern: "node_modules/font-awesome/**/*", watched: false, included: false },
             { pattern: "node_modules/tablesorter/dist/css/**/*", watched: false, included: false },
             { pattern: "node_modules/bootstrap/dist/css/bootstrap.min.css", watched: false, included: false },
             { pattern: "node_modules/jsoneditor/dist/jsoneditor.min.css", watched: false, included: false},

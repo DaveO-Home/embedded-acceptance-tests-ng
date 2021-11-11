@@ -4,8 +4,8 @@
 			tab: "A",
 			front: {
 				content: `<h1>Application Access</h1>
-				<div class="mr-2" onclick="document.querySelector('.nav-login').click();">
-					Log in:<a href="#" class="login-a"><i class="fa fa-sign-in"></i></a>
+				<div class="mr-2" onclick="document.querySelector('#nav-login').click();">
+					Log in:<a href="#" class="login-a"><i class="fa fa-sign-in-alt"></i></a>
             	</div>`
 			},
 			back: {
@@ -61,7 +61,7 @@
 		"card16": {
 			tab: "P",
 			front: {
-				content: "<h1>Test Pdf</h1><a ng-reflect-router-link=\"/pdf/test\" href=\"#pdf/test\"><i class=\"fa fa-fw fa-file-pdf-o pr-4\"></i>PDF View</a>"
+				content: "<h1>Test Pdf</h1><a ng-reflect-router-link=\"/pdf/test\" href=\"#pdf/test\"><i class=\"far fa-fw fa-file-pdf pr-4\"></i>PDF View</a>"
 			},
 			back: {
 				content: "<h1>Lorem Ipsum</h1><a href=\"https://www.yahoo.com\" target=\"_\">Yahoo16</a>"
@@ -93,7 +93,7 @@
 		"card23": {
 			tab: "W",
 			front: {
-				content: "<h1>Angular Welcome</h1><a ng-reflect-router-link=\"/welcome\" href=\"#/welcome\"><i class=\"fa fa-fw fa-file-pdf-o pr-4\"></i>Welcome</a>"
+				content: "<h1>Angular Welcome</h1><a ng-reflect-router-link=\"/welcome\" href=\"#/welcome\"><i class=\"far fa-fw fa-file-pdf pr-4\"></i>Welcome</a>"
 			},
 			back: {
 				content: ""
@@ -106,23 +106,19 @@
 			},
 			back: { // Bootstrap 
 				content: `<h1 style="font-size: 14px;">
-					<svg height="18" width="17" style="font-family: 'Open Sans', sans-serif;">
-					<text x="3" y="18" fill="#059">O</text><text x="0" y="15" fill="#059">D</text></svg> doDex</h1>
-					<footer class="footer" style="width:350px">
-					<div class="container">
-						<div class="row">
-							<div class="footer-col col-sm-10">
-								<ul class="list-inline" style="width:345px;">
-									<li class="list-inline-item"><a class="btn-social btn-outline" href="https://www.facebook.com/" target="_"><i class="fa fa-fw fa-facebook"></i></a></li>
-									<li class="list-inline-item"><a class="btn-social btn-outline" href="https://news.google.com/" target="_"><i class="fa fa-fw fa-google"></i></a></li>
-									<li class="list-inline-item"><a class="btn-social btn-outline" href="https://twitter.com/Twitter" target="_"><i class="fa fa-fw fa-twitter"></i></a></li>
-									<li class="list-inline-item"><a class="btn-social btn-outline" href="https://www.linkedin.com/" target="_"><i class="fa fa-fw fa-linkedin"></i></a></li>
-									<li class="list-inline-item"><a class="btn-social btn-outline" href="https://dribbble.com/" target="_"><i class="fa fa-fw fa-dribbble"></i></a></li>
-									<li class="float-right mr-2">doDex &copy; 2019</li>
-								</ul>
-							</div>
-						</div>
-					</div></footer>`
+				<svg height="18" width="17" style="font-family: 'Open Sans', sans-serif;">
+				<text x="3" y="18" fill="#059">O</text><text x="0" y="15" fill="#059">D</text></svg> doDex</h1>
+				<footer class="dodex-footer  mt-auto py-3" style="width:95%">
+						<div class="footer-col col-sm-12">
+							<ul class="list-inline" class="w-100">
+								<li class="list-inline-item"><a class="btn-social btn-outline" href="https://www.facebook.com/" target="_"><i class="fab fa-fw fa-facebook"></i></a></li>
+								<li class="list-inline-item"><a class="btn-social btn-outline" href="https://news.google.com/" target="_"><i class="fab fa-fw fa-google"></i></a></li>
+								<li class="list-inline-item"><a class="btn-social btn-outline" href="https://twitter.com/Twitter" target="_"><i class="fab fa-fw fa-twitter"></i></a></li>
+								<li class="list-inline-item"><a class="btn-social btn-outline" href="https://www.linkedin.com/" target="_"><i class="fab fa-fw fa-linkedin"></i></a></li>
+								<li class="list-inline-item"><a class="btn-social btn-outline" href="https://dribbble.com/" target="_"><i class="fab fa-fw fa-dribbble"></i></a></li>
+								<li class="float-end">doDex &copy; 2021</li>
+							</ul>
+						</div></footer>`
 			}
 		}
 	}

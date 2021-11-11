@@ -15,6 +15,7 @@ module.exports = function (config) {
             "/templates": "/base/dist_test/" + bundler + "/appl/templates",
             "/css": "/base/dist_test/" + bundler + "/appl/css",
             "/app_bootstrap.html": "/base/dist_test/" + bundler + "/appl/app_bootstrap.html",
+            "/app_footer.html": "/base/dist_test/" + bundler + "/appl/app_footer.html",
             "/README.md": "/base/dist_test/parcel/README.md",
             "/dodex/": "/base/" + bundler + "/appl/dodex/",
             "/base/parcel/": "/base/dist_test/parcel/",
@@ -30,7 +31,6 @@ module.exports = function (config) {
             startupHtml,
             { pattern: "package.json", watched: false, included: false },
             { pattern: "dist_test/parcel/README.md", included: false },
-            { pattern: "node_modules/font-awesome/**/*", watched: false, included: false },
             { pattern: "node_modules/tablesorter/dist/css/**/*", watched: false, included: false },
             { pattern: "node_modules/bootstrap/dist/css/bootstrap.min.css", watched: false, included: false },
             //watching bundle to get changes during tdd/test

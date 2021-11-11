@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import "rxjs-compat/add/operator/map";
+// import { map } from "rxjs/operators";
 const App = require("../js/app");
 const Setup = require("../js/utils/setup");
 

@@ -22,6 +22,7 @@ module.exports = {
         "/views/": "/base/" + bundler + "/appl/views/",
         "/templates": "/base/" + bundler + "/appl/templates",
         "/app_bootstrap.html": "/base/" + bundler + "/appl/app_bootstrap.html",
+        "/app_footer.html": "/base/" + bundler + "/appl/app_footer.html",
         "/README.md": "/base/README.md",
         "brunch/appl/": "/base/" + bundler + "/appl/",
         "/css/": "/base/" + bundler + "/appl/css/",

@@ -15,7 +15,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
     describe("Application Unit test suite - AppTest", () => {
         beforeAll(() => {
             // Add angular tag to karma page
-            $("body").prepend("<test-app>Loading</test-app>");
+            $("body").prepend(layout());
             platformBrowserDynamic().bootstrapModule(AppModule)
                 .catch(err => console.error(err));
 
@@ -29,7 +29,7 @@ export default function (App, AppModule, platformBrowserDynamic) {
 
         afterAll(() => {
             $(document.querySelector("ng-component")).remove();
-            $(document.querySelector("test-app")).remove();
+            $(document.querySelector("#layout")).remove();
         });
 
         it("Is Default Page Loaded(Start)", (done) => {
@@ -175,4 +175,45 @@ function getAdditionalContent() {
             }
         }
     };
+}
+
+function layout() {
+    const layout = `<span id="layout"><nav id="top-nav" class="navbar navbar-expand-sm navbar-light fixed-top rounded nav-bar-bg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Test</a>
+      <ul class="navbar-nav me-auto mb-md-0">
+        <div class="nav-item">
+          <div class="dodex--open">
+            <img src="../images/dodex_g.ico">
+          </div>
+        </div>
+      </ul>
+      <test-login></test-login>
+    </div>
+  </nav>
+  <main class="container-fluid pb-1 flex-grow-1 d-flex flex-column flex-sm-row overflow-auto">
+    <div class="row flex-grow-sm-1 flex-grow-0 w-100">
+      <div class="col-sm-2 flex-grow-sm-1 flex-shrink-1 flex-grow-0 pb-sm-0 pb-3">
+        <div class="bg-light border rounded-3 p-1 h-100">
+          <h6 class="d-none d-sm-block text-muted">Views</h6>
+          <ul class="nav nav-pills flex-sm-column flex-row mb-auto justify-content-between text-truncate">
+            <test-app></test-app>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm overflow-auto h-100">
+        <div class="page-bg border rounded-3 p-3">
+          <div id="container"></div>
+          <div id="main_container">
+            <div class="loading-page"></div>
+            <span>
+              <test-content></test-content>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <test-footer></test-footer></span>`
+  return layout;
 }

@@ -1,113 +1,26 @@
-<!-- The app main page - imported in entry.ts with the test-app component -->
-<span>
-    <nav id="top-nav" class="navbar-expand-md navbar-light fixed-top rounded nav-bar-bg" hidden="hidden">
-        <div class="nav-login" (click)="loginModal($event)">
-            <small>
-                <a href="#" class="login">Log in</a>
-            </small>
-        </div>
-        <div class="navbar navbar-toggler" aria-controls="navbarTools" aria-expanded="false" aria-label="Toggle navigation">
-            <div class="container-fluid">
-                <button class="navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTools">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarTools">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a [routerLink]="['']">
-                                Home
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="" id="tools01" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">Tools</a>
-                            <div class="dropdown-menu" aria-labelledby="tools01">
-                                <a [routerLink]="['/pdf/test']" class="dropdown-item">
-                                    PDF View
-                                </a>
-                                <a [routerLink]="['/table/tools']" class="dropdown-item">
-                                    Tabular View
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <a class="pl-2 navbar-brand mr-auto" href="#">Test</a>
-        <div class="pl-2 navbar-brand mr-auto">
-            <div class="dodex--open">
-                <img src="../images/dodex_g.ico">
-            </div>           
-        </div> 
-    </nav>
-
-    <div class="container-fluid">
-        <div id="side-nav" class="row" hidden="hidden">
-            <nav class="col-md-2 bg-light rounded sidebar" id="top-menu">
-                <hr />
-                <a>
-                    <strong>
-                        <i class="fa fa-eye"></i> Views</strong>
-                </a>
-                <hr />
-                <div class="nav flex-column nav-side-menu">
-                    <ul class="nav navbar-collapse">
-                        <li class="nav-header nav-item">
-                            <a class="nav-link collapsed py-0 show" href="#submenu1sub1" data-toggle="collapse"
-                                data-target="#submenu1" aria-expanded="true">Test Menu
-                                <i class="fa fa-chevron-down"></i>
-                            </a>
-                            <div class="collapse small show" id="submenu1" aria-expanded="true">
-                                <ul class="flex-column nav pl-4">
-                                    <li class="nav-item">
-                                        <a [routerLink]="['/']">
-                                            <i class="fa fa-fw fa-home"></i> Home
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a [routerLink]="['/pdf/test']">
-                                            <i class="fa fa-fw fa-file-pdf-o"></i> PDF View
-                                        </a>
-                                    </li>
-                                    <li class="nav-header nav-item">Statistics</li>
-                                    <li class="nav-item">
-                                        <a [routerLink]="['/table/tools']">
-                                            <i class="fa fa-fw fa-table"></i> Tabular View
-                                        </a>
-                                    </li>
-                                    <li class="nav-header nav-item">Angular</li>
-                                    <li class="nav-item">
-                                        <a [routerLink]="['/welcome']">
-                                            <i class="fa fa-fw fa-hand-paper-o"></i> Angular Welcome
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <hr />
-            </nav>
-            <main class="col-md-9 ml-md-auto col-md-10 pt-3">
-                <router-outlet></router-outlet>
-            </main>
-        </div>
-        <!--/row-->
-    </div>
-    <!--/container-->
-    <div id="jsoneditor" class="editor" style="z-index: -1"></div>
-    <hr>
-    <footer class="footer">
-        <div class="container">
-            <span class="ml-5 small text-muted">Karma, Jasmine, Browserify and Angular Acceptance Test and Build Demo</span>
-            <span class="contact pull-right">
-                    <a [routerLink]="['/contact']">
-                        <small class="grey">Contact</small>
-                    </a>
-            </span>
-        </div>
-    </footer>
-</span>
+<div id="root">
+    <ul class="flex-column nav pl-4">
+        <li class="nav-item">
+            <a [routerLink]="['/']">
+                <i class="fa fa-fw fa-home"></i> Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a [routerLink]="['/pdf/test']">
+                <i class="far fa-fw fa-file-pdf"></i> PDF View
+            </a>
+        </li>
+        <li class="nav-header nav-item">Statistics</li>
+        <li class="nav-item">
+            <a [routerLink]="['/table/tools']">
+                <i class="fa fa-fw fa-table"></i> Tabular View
+            </a>
+        </li>
+        <li class="nav-header nav-item">Angular</li>
+        <li class="nav-item">
+            <a [routerLink]="['/welcome']">
+                <i class="far fa-fw fa-hand-paper"></i> Angular Welcome
+            </a>
+        </li>
+    </ul>
+</div>

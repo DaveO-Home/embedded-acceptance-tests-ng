@@ -34,11 +34,8 @@ module.exports = {
         var render = Helpers.renderer(this, options);
 
         if (options.template) {
-            switch (options.template.split(".")[0]) {
-                case "tools":
-                    App.renderTools(options, render);
-                    break;
-                default:
+            if(options.template.split(".")[0] === "tools") {
+                App.renderTools(options, render);
             }
         } else {
             App.loadView(options, frag => {
@@ -60,8 +57,7 @@ module.exports = {
                 var el = $(document.body).append(template(options)).find("> .modal").last();
                 var css = {};
                 if (options.width) {
-                    css["width"] = typeof css.width === "number"
-                        ? `${options.width}%` : options.width;
+                    css["width"] = typeof css.width === "number" ? `${options.width}%` : options.width;
                     var width = css.width.substring(0, css.width.length - 1);
                     css["margin-left"] = `${(100 - width) / 2}%`;
                 }
