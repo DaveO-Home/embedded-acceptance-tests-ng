@@ -160,7 +160,7 @@
     "loose-envify": "^1.4.0",
     "marked": "^4.0.0",
     "mini-css-extract-plugin": "^2.4.4",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "parcel": "^2.0.1",
     "parcel-transformer-strip": "file:parcel/appl/js/parcel-transformer-strip",
     "postcss-import": "^14.0.2",
