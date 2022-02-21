@@ -158,7 +158,7 @@
     "karma-typescript-angular2-transform": "^5.5.2",
     "karma-typescript-preprocessor": "^0.4.0",
     "loose-envify": "^1.4.0",
-    "marked": "^4.0.0",
+    "marked": "^4.0.10",
     "mini-css-extract-plugin": "^2.4.4",
     "node-sass": "^7.0.0",
     "parcel": "^2.0.1",
