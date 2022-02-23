@@ -1,25 +1,18 @@
 const Koa = require("koa");
 const serve = require("koa-static");
 const path = require("path");
-const http = require("http");
-const logger = require("koa-logger");
-const app = new Koa();
+const { accessLogger, logger } = require("./server/js/logger");
+const utils = require("./server/js/utils.js");
+const { app, server } = require("./server/js/app");
 
-app.use(async (ctx, next) => {
-    const start = Date.now();
-    await next();
-    const ms = Date.now() - start;
-    ctx.set("X-Response-Time", `${ms}ms`);
-});
+global.accessLogger = accessLogger;
+global.logger = logger;
 
 app.use(serve(path.join(__dirname, "./allure-report")));
 app.use(serve(path.join(__dirname, "public")));
-app.use(logger());
-
-const server = http.createServer(app.callback());
 
 const port = process.env.PORT || 3080;
 
-app.listen(port, function listening() {
-    console.info(`Listening on ${port}`);
+server.listen(port, function listening() {
+    utils.log("info", `Listening on ${server.address().port}`, __filename);
 });

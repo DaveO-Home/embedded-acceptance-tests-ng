@@ -43,11 +43,14 @@ hidden { display: none; }
 }
 
 .body-bg {
-    background-color: rgb(131, 131, 150);
+    background-color: rgb(248, 248, 252);
 }
 
 .grey {
     color:grey;
+}
+.bg-footer {
+    background-color: #e4e7eb;
 }
 
 .modal-wide .modal-body {
@@ -79,7 +82,7 @@ body {
     overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
 body {
-    padding-top: 70px;
+    padding-top: 57px;
 }
 
 .nav-bar-bg {
@@ -124,4 +127,13 @@ body {
 
 .pointer {
     cursor: pointer;
+}
+
+.pmain {
+    padding-left: calc(var(--bs-gutter-x) * 0);
+    padding-right: calc(var(--bs-gutter-x) * 0);
+}
+
+.pmain2 {
+    padding-right: calc(var(--bs-gutter-x) * 0);
 }

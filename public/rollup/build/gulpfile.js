@@ -467,6 +467,8 @@ function copyImages() {
 }
 
 function copyCss() {
+    src(["../../node_modules/jsoneditor/dist/img/jsoneditor-icons.svg"])
+        .pipe(copy("../../" + dist + "/appl", { prefix: 5 }));
     return src(["../appl/css/site.css", "../appl/css/hello.world.css", "../appl/css/table.css"])
         .pipe(copy("../../" + dist + "/appl"));
 }

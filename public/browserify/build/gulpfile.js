@@ -422,6 +422,8 @@ function copyIndex() {
 }
 
 function copyImages() {
+    src(["../../node_modules/jsoneditor/dist/img/jsoneditor-icons.svg"])
+        .pipe(copy("../../" + dist, { prefix: 1 }));
     return src(["../images/*", "../../README.md", "../appl/assets/*", "../appl/app_*.html", "../appl/css/table.css", "../appl/css/hello.world.css"])
         .pipe(copy("../../" + dist + "/appl"));
 }

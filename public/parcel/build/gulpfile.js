@@ -279,10 +279,7 @@ function parcelBuild(watch, serve = false, cb) {
             shouldOptimize: isProduction,
             shouldScopeHoist: false,
             sourceMaps: isProduction,
-            distDir: "../../" + dist + "/appl",
-            engines: {
-                browsers: ["> 0.2%, not dead, not op_mini all"]
-            }
+            distDir: "../../" + dist + "/appl"
         }
     };
 
@@ -303,7 +300,14 @@ function parcelBuild(watch, serve = false, cb) {
             });
             cb();
         } else {
-            await parcel.run();
+            try {
+                await parcel.run(err => {
+                    console.error(err, err.diagnostics[0] ? err.diagnostics[0].codeFrame : "");
+                });
+            } catch (e) {
+                console.error(e);
+                process.exit(1);
+            }
             cb();
         }
     })();
@@ -314,15 +318,15 @@ function copySrc() {
         "../appl/views/**/*",
         "../appl/templates/**/*",
     ])
-    .pipe(copy("../../" + dist, { prefix: 1 }));
+        .pipe(copy("../../" + dist, { prefix: 1 }));
     src([
         "../appl/css/**/*.css"
     ])
-    .pipe(copy("../../" + dist, { prefix: 1 }));
+        .pipe(copy("../../" + dist, { prefix: 1 }));
     src([
         "../appl/dodex/**/*"
     ])
-    .pipe(copy("../../" + dist, { prefix: 1 }));
+        .pipe(copy("../../" + dist, { prefix: 1 }));
     return src(["../images*/**/*"])
         .pipe(copy("../../" + dist, { prefix: 1 }));
 }

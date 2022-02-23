@@ -20,7 +20,9 @@ module.exports = function (config) {
             "/dodex/": "/base/" + bundler + "/appl/dodex/",
             "/base/parcel/": "/base/dist_test/parcel/",
             "/base/parcel/images/": "/base/dist_test/parcel/images/",
-            "/images/": "/base/dist_test/parcel/images/"
+            "/images/": "/base/dist_test/parcel/images/",
+            // Used to pickup dodex_g.(hash).ico - generates proxy warning
+            "/": "/base/dist_test/" + bundler + "/appl/",
         },
         files: [
             //Webcomponents for Firefox - used for link tag with import attribute.

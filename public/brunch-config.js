@@ -4,7 +4,10 @@ const deployDir = isProduction ? "dist/brunch" : "dist_test/brunch";
 // const fontLocation = isProduction ? "../fonts" : process.env.USE_WATCH === "true" || process.env.USE_HMR === "true" ? "fonts" : "../fonts";
 const singleRun = process.env.USE_HMR !== "true" && !process.env.USE_TDD;
 const htmlFile = isProduction ? "brunch/appl/testapp.html" : "brunch/appl/testapp_dev.html";
-
+const htmlFiles = [htmlFile, "brunch/appl/app_bootstrap.html", "brunch/appl/app_footer.html"];
+if(!isProduction) {
+    htmlFiles.push("brunch/appl/testapp_dev.htm");
+}
 // eslint-disable-next-line no-unused-vars
 function resolve(dir) {
   return path.join(__dirname, "brunch", dir);
@@ -59,15 +62,14 @@ const pluginsObject = {
     "appl/templates": ["brunch/appl/templates"],
     "appl/dodex": ["brunch/appl/dodex"],
     "./": ["README.md"],
-    "appl": [htmlFile, "brunch/appl/app_bootstrap.html", "brunch/appl/app_footer.html"],
+    "appl": htmlFiles,
     "images": ["brunch/images"],
     "appl/css": ["brunch/appl/css/table.css", "brunch/appl/css/hello.world.css"],
+    "img": ["node_modules/jsoneditor/dist/img/jsoneditor-icons.svg"],
     verbose: false,
     onlyChanged: true
   }
 };
-
-// pluginsObject.copycat[fontLocation] = ["node_modules/font-awesome/fonts"];
 
 exports.plugins = pluginsObject;
 
@@ -80,7 +82,6 @@ exports.npm = {
   },
   styles: {
     bootstrap: ["dist/css/bootstrap.css"],
-    // "font-awesome": ["css/font-awesome.css"],
     tablesorter: [
       "dist/css/jquery.tablesorter.pager.min.css",
       "dist/css/theme.blue.min.css"
@@ -101,8 +102,8 @@ exports.server = {
   stripSlashes: true
 };
 
-pluginsObject.karma = require("./brunch/build/karma.conf");
-pluginsObject.karma.singleRun = singleRun;
+pluginsObject.karmat = require("./brunch/build/karma.conf");
+pluginsObject.karmat.singleRun = singleRun;
 
 exports.overrides = {
   production: {
@@ -113,7 +114,7 @@ exports.overrides = {
       ignored: ["brunch/jasmine"]
     },
     plugins: {
-      off: ["karma"]
+      off: ["karmat"]
     }
   }
 };

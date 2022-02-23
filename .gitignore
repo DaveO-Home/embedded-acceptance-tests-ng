@@ -1,3 +1,5 @@
+log
+*sqlite3*
 .parcel-cache
 public/parcel/appl/router/index.js
 *.map

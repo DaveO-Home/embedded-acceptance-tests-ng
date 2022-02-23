@@ -1,8 +1,8 @@
 {
   "name": "stripcode-brunch",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
-  "peerDependencies": {
-    "brunch": "^2.10.12"
+  "dependencies": {
+    "brunch": "^4.0.0"
   }
 }

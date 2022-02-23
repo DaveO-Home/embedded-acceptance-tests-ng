@@ -35,11 +35,13 @@ export default function (dodex, input, mess, content, Start) {
                 $("body").append("<div id=\"main_container\"><div class=\"loading-page\"></div></div>");
             }
             dodex.setContentFile("../dodex/data/content.js");
+            const server = window.location.hostname + (window.location.port.length > 0 ? ":" + window.location.port : "");
             dodex.init({
                 input: input,
                 private: "full",
                 replace: true,
-                mess: mess
+                mess: mess,
+                server: server
             }).then(function () {
                 dodexToggle = getElement(".dodex--open");
                 dodexToggle.onmousedown = event => {

@@ -25,9 +25,10 @@ const pat = function (done) {
     }
 
     var osCommands = "cd ../..; export NODE_ENV=development; export USE_KARMA=true; export USE_HMR=false; ";
-
+    osCommands = osCommands + "export NODE_NO_WARNINGS=1; ";
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_KARMA=true & set USE_HMR=false & ";
+        osCommands = osCommands + "set NODE_NO_WARNINGS=1 & ";
     }
     log(chalk.cyan("E2E Testing - please wait......"));
 
@@ -129,9 +130,10 @@ const bootLint = function (cb) {
  */
 const build = function (cb) {
     var osCommands = "cd ..; export NODE_ENV=production; export USE_KARMA=false; export USE_HMR=false; ";
-
+    osCommands = osCommands + "export NODE_NO_WARNINGS=1; ";
     if (isWindows) {
         osCommands = "cd ..\\ & set NODE_ENV=production & set USE_KARMA=false & set USE_HMR=false & ";
+        osCommands = osCommands + "set NODE_NO_WARNINGS=1 & ";
     }
     log(chalk.cyan("Building Production - please wait......"));
 
@@ -160,9 +162,10 @@ const build = function (cb) {
  */
 const brunch_watch = function (cb) {
     var osCommands = "cd ../..; export NODE_ENV=development; export USE_KARMA=false; export USE_HMR=true; ";
-
+    osCommands = osCommands + "export NODE_NO_WARNINGS=1; ";
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_KARMA=false & set USE_HMR=true & ";
+        osCommands = osCommands + "set NODE_NO_WARNINGS=1 & ";
     }
     let cmd = exec(osCommands + "npm run bw");
     cmd.stdout.on("data", (data) => {
@@ -184,9 +187,10 @@ const brunch_watch = function (cb) {
  */
 const brunch_rebuild = function (cb) {
     var osCommands = "cd ../..; export NODE_ENV=development; unset USE_TDD; export USE_KARMA=false; export USE_HMR=false; ";
-
+    osCommands = osCommands + "export NODE_NO_WARNINGS=1; ";
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_TDD & set USE_KARMA=false & set USE_HMR=false & ";
+        osCommands = osCommands + "set NODE_NO_WARNINGS=1 & ";
     }
     log(chalk.cyan("Re-building Development - please wait......"));
     exec(osCommands + "brunch build", function (err, stdout, stderr) {
@@ -209,8 +213,10 @@ const brunch_tdd = function (done) {
     }
 
     var osCommands = "cd ../..; export NODE_ENV=development; export USE_TDD=true; export USE_KARMA=true; export USE_HMR=false; ";
+    osCommands = osCommands + "export NODE_NO_WARNINGS=1; ";
     if (isWindows) {
         osCommands = "cd ..\\..\\ & set NODE_ENV=development & set USE_TDD=true; set USE_KARMA=true & set USE_HMR=false & ";
+        osCommands = osCommands + "set NODE_NO_WARNINGS=1 & ";
     }
 
     log(chalk.cyan("Test Driven Development - please wait......"));
@@ -246,26 +252,16 @@ exports.lint = parallel(esLint, esLintts, cssLint, bootLint);
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
     var fs = require("fs");
-    // var proc = require("process");
-    var origstdout = process.stdout.write,
-        origstderr = process.stderr.write,
-        outfile = "node_output.log",
-        errfile = "node_error.log";
+    var util = require("util");
+    var logFile = fs.createWriteStream("log.txt", { flags: "w" });
+    // Or "w" to truncate the file every time the process starts.
+    var logStdout = process.stdout;
 
-    if (fs.exists(outfile)) {
-        fs.unlink(outfile);
-    }
-    if (fs.exists(errfile)) {
-        fs.unlink(errfile);
-    }
-
-    process.stdout.write = function (chunk) {
-        fs.appendFile(outfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
-        origstdout.apply(this, arguments);
+    // eslint-disable-next-line no-console
+    console.log = function () {
+        logFile.write(util.format.apply(null, arguments) + "\n");
+        logStdout.write(util.format.apply(null, arguments) + "\n");
     };
-
-    process.stderr.write = function (chunk) {
-        fs.appendFile(errfile, chunk.replace(/\x1b\[[0-9;]*m/g, ""));
-        origstderr.apply(this, arguments);
-    };
+    // eslint-disable-next-line no-console
+    console.error = console.log;
 }
