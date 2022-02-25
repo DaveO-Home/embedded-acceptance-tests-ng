@@ -92,7 +92,6 @@ export default function (dodex, input, mess, content, Start) {
             expect(card1.style.transform).toContain("rotateX(-190deg)");
             expect(card2.style.zIndex).toMatch("");
             expect(card2.style.transform).toMatch("");
-
             done();
         });
 

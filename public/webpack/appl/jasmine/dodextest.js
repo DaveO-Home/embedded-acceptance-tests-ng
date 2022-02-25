@@ -1,10 +1,7 @@
-/*
-    For Angular 11/Webpack 5 - these test do not work - anyone figuring out how to do these tests properly gets a cigar!
-*/
 
 const { timer } = require("rxjs");
 
-export default function (dodex, input, mess, content, Start) {
+export default function (/*dodex, input, mess,*/ content, Start, TestApp) {
     /* 
      * Test Dodex operation.
      */
@@ -24,55 +21,40 @@ export default function (dodex, input, mess, content, Start) {
 
     describe("Dodex Operation Validation", function () {
         beforeAll(function (done) {
-        console.warn("\n*****************************************\n" + 
-            "Some dodex tests are not working\n" +
-            "With Angular11-12/Webpack5 it appears click/mouse events are having issues\n" +
-            "And there are unexpected DOM manipulations??\n" + 
-            "The tests of any consequence are commented out\n" + 
-            "Can't figure it out!\n" +
-            "*****************************************\n");
             if (!$(mainContainer)[0]) {
                 $("body").append("<div id=\"main_container\"><div class=\"loading-page\"></div></div>");
             }
-            dodex.setContentFile("../dodex/data/content.js");
-            const server = window.location.hostname + (window.location.port.length > 0 ? ":" + window.location.port : "");
-            dodex.init({
-                input: input,
-                private: "full",
-                replace: true,
-                mess: mess,
-                server: server
-            }).then(function () {
-                dodexToggle = getElement(".dodex--open");
-                dodexToggle.onmousedown = event => {
-                    dodex.openDodex(event);
-                };
-                dodexToggle.onmousedown(); // Make visible
 
-                const numbers = timer(50, 10);
-                const observable = numbers.subscribe(timer => {
-                    dodexTopElement = getElement(".top--dodex");
+            TestApp();
+            dodexToggle = getElement(".dodex--open");
+            dodexToggle.onmousedown = event => {
+                doDex.openDodex(event);
+            };
+            $(dodexToggle).trigger("mousedown"); //.onmousedown(); // Make visible
 
-                    if ((typeof dodexTopElement !== "undefined" && dodexTopElement.length !== 0) &&
-                        dodexTopElement.classList.contains("plus-thousand")) {
-                        dodexElement = getElement(".dodex");
-                        card1 = getElement(".card1");
-                        front1 = getElement(".front1");
-                        back1 = getElement(".back1");
-                        card2 = getElement(".card2");
-                        front2 = getElement(".front2");
-                        back2 = getElement(".back2");
-                        // const dials = getAllElements(".dial");
-                        // dialRight = dials[0];
-                        // dialLeft = dials[1];
-                        observable.unsubscribe();
-                        done();
-                    }
-                    else if (timer === 50) {
-                        observable.unsubscribe();
-                        done();
-                    }
-                });
+            const numbers = timer(50, 10);
+            const observable = numbers.subscribe(timer => {
+                dodexTopElement = getElement(".top--dodex");
+
+                if ((typeof dodexTopElement !== "undefined" && dodexTopElement.length !== 0) &&
+                    dodexTopElement.classList.contains("plus-thousand")) {
+                    dodexElement = getElement(".dodex");
+                    card1 = getElement(".card1");
+                    front1 = getElement(".front1");
+                    back1 = getElement(".back1");
+                    card2 = getElement(".card2");
+                    front2 = getElement(".front2");
+                    back2 = getElement(".back2");
+                    // const dials = getAllElements(".dial");
+                    // dialRight = dials[0];
+                    // dialLeft = dials[1];
+                    observable.unsubscribe();
+                    done();
+                }
+                else if (timer === 50) {
+                    observable.unsubscribe();
+                    done();
+                }
             });
         });
 
@@ -99,8 +81,8 @@ export default function (dodex, input, mess, content, Start) {
             front1.onmousedown = dodexElement.onmousedown; // Generic dodex handler for all cards.
             front1.dispatchEvent(mouseEvent);
 
-            // expect(card1.style.zIndex === "0").toBeTruthy();
-            // expect(card1.style.transform).toContain("rotateX(-190deg)");
+            expect(card1.style.zIndex === "0").toBeTruthy();
+            expect(card1.style.transform).toContain("rotateX(-190deg)");
             expect(card2.style.zIndex).toMatch("");
             expect(card2.style.transform).toMatch("");
 
@@ -113,10 +95,10 @@ export default function (dodex, input, mess, content, Start) {
 
             front2.onmousedown = dodexElement.onmousedown;
             front2.dispatchEvent(mouseEvent);
-            // expect(card1.style.zIndex === "0").toBeTruthy();
-            // expect(card2.style.zIndex).toMatch("1");
-            // expect(card1.style.transform).toContain("rotateX(-190deg)");
-            // expect(card2.style.transform).toMatch(/rotateX\(-190deg\)/);
+            expect(card1.style.zIndex === "0").toBeTruthy();
+            expect(card2.style.zIndex).toMatch("1");
+            expect(card1.style.transform).toContain("rotateX(-190deg)");
+            expect(card2.style.transform).toMatch(/rotateX\(-190deg\)/);
 
             done();
         });
@@ -125,8 +107,8 @@ export default function (dodex, input, mess, content, Start) {
             back2.onmousedown = dodexElement.onmousedown;
             back2.dispatchEvent(mouseEvent);
 
-            // expect(card1.style.zIndex === "0").toBeTruthy();
-            // expect(card1.style.transform).toContain("rotateX(-190deg)");
+            expect(card1.style.zIndex === "0").toBeTruthy();
+            expect(card1.style.transform).toContain("rotateX(-190deg)");
             expect(card2.style.zIndex).toMatch("");
             expect(card2.style.transform).toMatch("");
 
@@ -142,7 +124,7 @@ export default function (dodex, input, mess, content, Start) {
         it("Dodex - Flip multiple cards on tab mousedown", function (done) {
             // Make sure all cards are in original position
             var x, card;
-            for (x = 1;x < 14;x++) {
+            for (x = 1; x < 14; x++) {
                 card = getElement(".card" + x);
                 expect(card.style.zIndex).toBe("");
             }
@@ -151,9 +133,9 @@ export default function (dodex, input, mess, content, Start) {
             frontM.onmousedown = dodexElement.onmousedown;
             frontM.dispatchEvent(mouseEvent);
             // When tab M is clicked, it and all previous cards should be flipped.
-            for (x = 1;x < 14;x++) {
+            for (x = 1; x < 14; x++) {
                 card = getElement(".card" + x);
-                // expect(card.style.transform).toMatch(/rotateX\(-190deg\)/);
+                expect(card.style.transform).toMatch(/rotateX\(-190deg\)/);
             }
 
             // Card N should be top card.
@@ -163,7 +145,7 @@ export default function (dodex, input, mess, content, Start) {
             // front works here because the pseudo tab element does not have a back.
             front1.dispatchEvent(mouseEvent);
             // All cards should be back in original position;
-            for (x = 13;x > 0;x--) {
+            for (x = 13; x > 0; x--) {
                 card = getElement(".card" + x);
                 expect(card.style.transform).toBe("");
             }
@@ -179,23 +161,23 @@ export default function (dodex, input, mess, content, Start) {
         // });
 
         it("Dodex - Add additional app/personal cards", function (done) {
-            let card28 = getElement(".card28");
-            let card29 = getElement(".card29");
+            let card31 = getElement(".card31");
+            let card32 = getElement(".card32");
 
-            // expect(card28).toBeNull();
-            // expect(card29).toBeNull();
+            expect(card31).toBeNull();
+            expect(card32).toBeNull();
 
-            for (var i = 0;i < 2;i++) {
-                dodex.addCard(content); // content comes from app index.js
+            for (var i = 0; i < 2; i++) {
+                doDex.addCard(content); // content comes from app index.js
             }
-            card28 = getElement(".card28");
-            card29 = getElement(".card29");
+            card31 = getElement(".card31");
+            card32 = getElement(".card32");
 
-            expect(card28).toHaveClass("card");
-            expect(card29).toHaveClass("card");
+            expect(card31).toHaveClass("card");
+            expect(card32).toHaveClass("card");
 
             var tab = window.getComputedStyle(
-                card28.querySelector(".front28"), ":after"
+                card31.querySelector(".front31"), ":after"
             ).getPropertyValue("content");
 
             expect(tab).toBe("\"F01\"");

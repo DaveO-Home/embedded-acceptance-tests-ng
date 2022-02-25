@@ -2,7 +2,7 @@ import "babel-polyfill";
 import "./polyfills";
 import { enableProdMode, destroyPlatform } from "@angular/core";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-import { AppModule } from "./entry";
+import { AppModule, TestApp } from "./entry";
 import ENV from "./js/utils/dev.env";
 import "./js/config";
 import App from "./js/app";
@@ -51,7 +51,7 @@ if (!production) {
     }).then(resolved => {
         if (typeof testit !== "undefined" && testit) {
             // Run acceptance tests. - To run only unit tests, comment the apptest call.
-            apptest(App, AppModule, platformBrowserDynamic, destroyPlatform);
+            apptest(App, AppModule, platformBrowserDynamic, destroyPlatform, TestApp);
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 4000;
             __karma__.start();
         }

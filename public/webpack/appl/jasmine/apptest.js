@@ -7,11 +7,8 @@ import inputTest from "./inputtest";
 import Start from "start";
 import Helpers from "helpers";
 import { timer } from "rxjs";
-import dodex from "dodex";
-import input from "dodex-input";
-import mess from "dodex-mess";
 
-export default function (App, AppModule, platformBrowserDynamic, destroyPlatform) {
+export default function (App, AppModule, platformBrowserDynamic, destroyPlatform, TestApp) {
     describe("Application Unit test suite - AppTest", () => {
         beforeAll(() => {
             // Add angular tag to karma page
@@ -128,9 +125,9 @@ export default function (App, AppModule, platformBrowserDynamic, destroyPlatform
         // Verify modal form
         loginTest(Start, timer);
         //Test dodex
-        dodexTest(dodex, input, mess, getAdditionalContent(), Start);
+        dodexTest(getAdditionalContent(), Start, TestApp);
         //Test dodex input
-        inputTest(dodex, input, mess, getAdditionalContent(), Start);
+        inputTest(doDex);
 
         if (testOnly) {
             it("Testing only", () => {
@@ -143,7 +140,7 @@ export default function (App, AppModule, platformBrowserDynamic, destroyPlatform
 function getAdditionalContent() {
     return {
         cards: {
-            card28: {
+            card31: {
                 tab: "F01999", //Only first 3 characters will show on the tab.
                 front: {
                     content: `<h1 style="font-size: 10px;">Friends</h1>
@@ -164,7 +161,7 @@ function getAdditionalContent() {
 					`
                 }
             },
-            card29: {
+            card32: {
                 tab: "F02",
                 front: {
                     content: "<h1 style=\"font-size: 14px;\">My New Card Front</h1>"

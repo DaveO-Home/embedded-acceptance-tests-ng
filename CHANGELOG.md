@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.2.1](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/tree/v2.2.1) (2022-02-25)
+
+[Full Changelog](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/compare/v2.2.0...v2.2.1)
+
+* Added custom @metahubt/karma-jasmine-jquery plugin to fix deprecation warnings.
+* Fixed Webpack testing issues with dodex. All tests are now working.
+
 ## [v2.2.0](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/tree/v2.1.0) (2022-02-23)
 
 [Full Changelog](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/compare/v2.1.0...v2.2.0)
