@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewEncapsulation, ViewChild } from "@angular/core";
 import ToolsSM from "../js/utils/tools.sm";
 import { TableService } from "../services/table.service";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -13,7 +13,7 @@ const dropdown =
 Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
 </h4>
 <section>
-<div id="dropdown1" class="dropdown pull-left">
+<div id="dropdown1" class="app-dropdown pull-left">
 			<button class="dropdown-toggle smallerfont" 
 			type="button"
 			id="dropdown0"
@@ -31,10 +31,10 @@ Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
   </section>`;
 
 @Component({
-    selector: "dropdown",
+    selector: "app-dropdown",
     template: dropdown
 })
-export class ToolsSelect {
+export class ToolsSelectComponent {
     state: {
         items: []
     };
@@ -84,14 +84,14 @@ export class ToolsSelect {
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    template: "<dropdown></dropdown><span id=\"data\" [innerHTML]=\"htmldata\"></span>",
+    template: "<app-dropdown></app-dropdown><span id=\"data\" [innerHTML]=\"htmldata\"></span>",
     styleUrls: ["css/table.css"],
 })
-export class ToolsComponent implements OnInit {
+export class ToolsComponent {
     tables;
     public htmldata = "Loading tools....";
 
-    @ViewChild(ToolsSelect, {static: false}) dropdown: ToolsSelect;
+    @ViewChild(ToolsSelectComponent, {static: false}) dropdown: ToolsSelectComponent;
 
     constructor(tableservice: TableService, sanitizer: DomSanitizer) {
         ToolsSM.toolsStateManagement();
@@ -111,9 +111,5 @@ export class ToolsComponent implements OnInit {
                 }, 0);
             });
         });
-    }
-
-    ngOnInit(): void {
-        //
     }
 }

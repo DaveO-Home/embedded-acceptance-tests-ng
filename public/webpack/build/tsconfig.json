@@ -2,13 +2,14 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "outDir": "tsc/",
     "lib": [
       "dom",
       "es6"
     ],
     "typeRoots": [
       "./types",
-      "../node_modules/@types"
+      "../../node_modules/@types"
     ],
     "module": "es2015",
     "moduleResolution": "node",
@@ -20,10 +21,9 @@
     "strictPropertyInitialization": false,
     "suppressImplicitAnyIndexErrors": true,
     "allowJs": true,
-    "target": "es5",
+    "target": "es6",
     "types": [
       "jqueryfn",
-      "jasmine",
       "jquery",
       "node"
     ],
@@ -31,5 +31,9 @@
   },
   "files": [
     "../appl/main.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
 }

@@ -7,7 +7,6 @@ import "js/config";
 import App from "js/app";
 import Default from "js/default";
 import Setup from "js/setup";
-// import "pager";
 import "tablesorter/dist/js/extras/jquery.tablesorter.pager.min";
 
 /* develblock:start */

@@ -1,6 +1,4 @@
 
-"use strict";
-
 function StripCanjsLoader(content, startComment, endComment) {
     
     //var regexPattern2 = new RegExp("[\\t ]*\\/\\* ?" + startComment + " ?\\*\\/[\\s\\S]*?\\/\\* ?" + endComment + " ?\\*\\/[\\t ]*\\n?", "g");

@@ -1,0 +1,191 @@
+{
+  "$schema": "../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "devacc": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "../",
+      "sourceRoot": "./",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "deleteOutputPath": true,
+            // "deployUrl": "../",
+            "verbose": false,
+            "customWebpackConfig": {
+              "path": "build/webpack.dev.conf.js"
+            },
+            "allowedCommonJsDependencies": [
+              "handlebars"
+            ],
+            "outputPath": "../dist_test/webpack",
+            "index": "appl/testapp_dev.html",
+            "main": "appl/main.ts",
+            "polyfills": "appl/polyfills.ts",
+            "tsConfig": "tsconfig.json",
+            "assets": [],
+            "styles": [],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "25mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "./appl/js/utils/environments/environment.prod.ts",
+                  "with": "./appl/js/utils/environments/environment.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "tests/base.spec.ts",
+            "polyfills": "tests/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "build/karma.ng.conf.js",
+            "assets": [],
+            "styles": [],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            // "configuration": {},
+            "lintFilePatterns": [
+              "./appl/**/*.ts",
+              "./appl/**/*.js"
+            ]
+          }
+        }
+      }
+    },
+    "prodacc": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "../",
+      "sourceRoot": "./",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "deleteOutputPath": true,
+            "verbose": false,
+            "customWebpackConfig": {
+              "path": "build/webpack.prod.conf.js"
+            },
+            "allowedCommonJsDependencies": [
+              "handlebars"
+            ],
+            "outputPath": "../dist/webpack",
+            "index": "appl/testapp.html",
+            "main": "appl/main.ts",
+            "polyfills": "appl/polyfills.ts",
+            "tsConfig": "tsconfig.json",
+            "assets": [],
+            "styles": [],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "25mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "./appl/js/utils/environments/environment.ts",
+                  "with": "./appl/js/utils/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "tests/base.spec.ts",
+            "polyfills": "tests/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "build/karma.ng.conf.js",
+            "assets": [
+              "appl/assets/favicon.ico",
+              "images"
+            ],
+            "styles": [],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            // "configuration": {},
+            "lintFilePatterns": [
+              "./appl/**/*.ts",
+              "./appl/**/*.js"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "devacc",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
+}

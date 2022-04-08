@@ -2,10 +2,8 @@ import Helpers from "../js/utils/helpers";
 import App from "../js/app";
 import Table from "../js/controller/table";
 
-declare let Promise: any;
-
 export class TableService {
-  getHtml(obj): Promise<{ response: any; obj: any }> {
+  getHtml(obj): Promise<{ response; obj }> {
     const controllerName = "Table";
     const actionName = "tools";
     const failMsg = `Load problem with: '${controllerName}/${actionName}'.`;

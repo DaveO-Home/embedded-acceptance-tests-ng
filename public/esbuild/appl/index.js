@@ -1,4 +1,3 @@
-import "babel-polyfill";
 import "./polyfills";
 import "./js/utils/set.globals";
 import { enableProdMode } from "@angular/core";

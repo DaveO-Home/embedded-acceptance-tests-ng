@@ -8,7 +8,7 @@ import Start from "start";
 import Helpers from "helpers";
 import { timer } from "rxjs";
 
-export default function (App, AppModule, platformBrowserDynamic, destroyPlatform, TestApp) {
+export default function (App, AppModule, platformBrowserDynamic, destroyPlatform) {
     describe("Application Unit test suite - AppTest", () => {
         beforeAll(() => {
             // Add angular tag to karma page
@@ -125,7 +125,7 @@ export default function (App, AppModule, platformBrowserDynamic, destroyPlatform
         // Verify modal form
         loginTest(Start, timer);
         //Test dodex
-        dodexTest(getAdditionalContent(), Start, TestApp);
+        dodexTest(getAdditionalContent(), Start);
         //Test dodex input
         inputTest(doDex);
 
@@ -185,7 +185,7 @@ function layout() {
           </div>
         </div>
       </ul>
-      <test-login></test-login>
+      <app-test-login></app-test-login>
     </div>
   </nav>
   <main class="container-fluid pb-1 flex-grow-1 d-flex flex-column flex-sm-row overflow-auto">
@@ -194,7 +194,7 @@ function layout() {
         <div class="bg-light border rounded-3 p-1 h-100">
           <h6 class="d-none d-sm-block text-muted">Views</h6>
           <ul class="nav nav-pills flex-sm-column flex-row mb-auto justify-content-between text-truncate">
-            <test-app></test-app>
+            <app-test></app-test>
           </ul>
         </div>
       </div>
@@ -204,13 +204,13 @@ function layout() {
           <div id="main_container">
             <div class="loading-page"></div>
             <span>
-              <test-content></test-content>
+              <app-test-content></app-test-content>
             </span>
           </div>
         </div>
       </div>
     </div>
   </main>
-  <test-footer></test-footer></span>`
+  <app-test-footer></app-test-footer></span>`
   return layout;
 }

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
+        "target": "es2017",
+        "module": "es2015",
         "moduleResolution": "node",
         "isolatedModules": false,
         "jsx": "react",
@@ -30,7 +30,7 @@
         ],
         "paths": {
             "js/*": ["./js/controller/*", "./js/utils/*", "./js/*", "./jasmine/*"],
-            "ts/*": ["./components/*", "./services/*", "./*"]
+            "ts/*": ["./components/*", "./services/*", "./*", "../tests/*"]
           }
     }
 }

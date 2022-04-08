@@ -1,7 +1,6 @@
 import "./js/utils/set.globals";
 import { NgModule, Component } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-// import { map } from "rxjs/operators";
 import { AppRoutingModule } from "./router";
 import Start from "./js/controller/start.js";
 import dodex from "dodex";
@@ -11,11 +10,11 @@ import mess from "dodex-mess";
 declare const testit: boolean;
 
 @Component({
-	selector: "test-app",
+	selector: "app-test",
 	templateUrl: "./app_bootstrap.html"
 })
 
-export class TestApp {
+export class TestAppComponent {
 	constructor() {
 		if ((typeof testit === "undefined" || !testit) &&
 			(document.querySelector(".top--dodex") === null)) {
@@ -47,21 +46,21 @@ export class TestApp {
 }
 
 @Component({
-	selector: "test-content",
+	selector: "app-test-content",
 	template: "<router-outlet></router-outlet>"
 })
 
-export class TestContent { }
+export class TestContentComponent { }
 
 @Component({
-	selector: "test-footer",
+	selector: "app-test-footer",
 	templateUrl: "app_footer.html"
 })
 
-export class TestFooter { }
+export class TestFooterComponent { }
 
 @Component({
-	selector: "test-login",
+	selector: "app-test-login",
 	template: `<div id="nav-login" class="align-self-start float-md-right" (click)="loginModal($event)">
 				<small>
 					<a href="#" class="login">Log In</a>
@@ -69,9 +68,9 @@ export class TestFooter { }
 			</div>`
 })
 
-export class TestLogin {
+export class TestLoginComponent {
 	loginModal(event) {
-		Start["div .login click"]();
+		Start["div .login click"](event);
 	}
 }
 
@@ -81,12 +80,12 @@ export class TestLogin {
 		AppRoutingModule,
 	],
 	declarations: [
-		TestLogin,
-		TestApp,
-		TestContent,
-		TestFooter
+		TestLoginComponent,
+		TestAppComponent,
+		TestContentComponent,
+		TestFooterComponent
 	],
-	bootstrap: [TestLogin, TestApp, TestContent, TestFooter],
+	bootstrap: [TestLoginComponent, TestAppComponent, TestContentComponent, TestFooterComponent],
 })
 export class AppModule {
 }

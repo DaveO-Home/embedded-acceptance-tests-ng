@@ -15,8 +15,4 @@ export class StartComponent {
       data.obj.htmldata = sanitizer.bypassSecurityTrustHtml(data.response);
     });
   }
-  
-  ngOnInit(): void { 
-    //
-  }
 }

@@ -1,6 +1,5 @@
-import { Component, ViewEncapsulation, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewEncapsulation } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-// import { map } from "rxjs/operators";
 import ToolsSM from "../js/utils/tools.sm";
 import { TableService } from "../services/table.service";
 import Table from "../js/controller/table";
@@ -14,7 +13,7 @@ const dropdown =
 Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
 </h4>
 <section>
-<div id="dropdown1" class="dropdown pull-left">
+<div id="dropdown1" class="app-dropdown pull-left">
 			<button class="dropdown-toggle smallerfont" 
 			type="button"
 			id="dropdown0"
@@ -32,10 +31,10 @@ Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
   </section>`;
 
 @Component({
-    selector: "dropdown",
+    selector: "app-dropdown",
     template: dropdown
 })
-export class ToolsSelect {
+export class ToolsSelectComponent {
     public state: {
         items: []
     };
@@ -70,8 +69,7 @@ export class ToolsSelect {
         const controller = App.controllers["Table"];
 
         const dropdownValue = e.target.text.trim();
-        const store = ToolsSM.getStore();
-        const found = ToolsSM.findEntry(dropdownValue); //, store.getState().tools.items);
+        const found = ToolsSM.findEntry(dropdownValue);
 
         controller.dropdownEvent(e); // Load table with selected data
         if (found.idx === -1) {
@@ -86,13 +84,11 @@ export class ToolsSelect {
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    template: "<dropdown></dropdown><span id=\"data\" [innerHTML]=\"htmldata\"></span>",
+    template: "<app-dropdown></app-dropdown><span id=\"data\" [innerHTML]=\"htmldata\"></span>",
     styleUrls: ["./css/table.css"],
 })
-export class ToolsComponent implements OnInit {
+export class ToolsComponent {
     public tables;
-
-    // @ViewChild(ToolsSelect, { static: false }) dropdown: ToolsSelect;
 
     constructor(tableservice: TableService, sanitizer: DomSanitizer) {
         ToolsSM.toolsStateManagement();
@@ -112,9 +108,5 @@ export class ToolsComponent implements OnInit {
                 }, 0);
             });
         });
-    }
-
-    ngOnInit(): void {
-        //
     }
 }

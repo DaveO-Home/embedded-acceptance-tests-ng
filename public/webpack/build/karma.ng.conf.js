@@ -1,65 +1,59 @@
-// let startupHtml = "./appl/testapp_karma.html";
-// let bundler = "webpack";
-// Karma configuration - Unit testing angular components
+// Karma configuration file, see link for more information
+// https://karma-runner.github.io/1.0/config/configuration-file.html
+
 module.exports = function (config) {
-
-    if (!global.whichBrowsers) {
-        global.whichBrowsers = ["ChromeHeadless, FirefoxHeadless"];
-    }
-
-    config.set({
-        basePath: "../",
-        frameworks: ["jasmine", "karma-typescript"],
-        files: [
-            "tests/**/*.+(js|ts|html)"
+  global.whichBrowsers = process.env.USE_BROWSERS;
+  if (!global.whichBrowsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+  }  else {
+    global.whichBrowsers = global.whichBrowsers.split(",");
+  }
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    files: [
+            //Jasmine unit tests
+            "../tests/unit_test*.js",
         ],
-        bowerPackages: [
-        ],preprocessors: {
-            "tests/*.ts": ["karma-typescript"]
-        },
-        karmaTypescriptConfig: {
-            bundlerOptions: {
-                entrypoints: /\.spec\.ts$/,
-                transforms: [
-                    require("karma-typescript-angular2-transform")
-                ]
-            },
-            compilerOptions: {
-                lib: ["es2015", "dom"],
-                allowJs: true
-            },
-            include: {
-                mode: "replace",
-                values: ["tests/**/*.ts"]
-            }
-        },
-        browsers: global.whichBrowsers,
-        customLaunchers: {
-            FirefoxHeadless: {
-                base: "Firefox",
-                flags: ["--headless", " --safe-mode"]
-            }
-        },
-        browserNoActivityTimeout: 0,
-        exclude: [
-        ],
-        reporters: ["mocha"],
-        port: 9876,
-        colors: true,
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
-        autoWatch: true,
-        singleRun: false,
-        loggers: [{
-            type: "console"
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require("karma-firefox-launcher"),
+      // require('karma-jasmine-html-reporter'),
+      // require('karma-coverage'),
+      "karma-mocha-reporter",
+      require('@angular-devkit/build-angular/plugins/karma')
+    ],
+    client: {
+      jasmine: {
+        random: false
+      },
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    },
+    jasmineHtmlReporter: {
+      suppressAll: true // removes the duplicated traces
+    },
+    coverageReporter: {
+      dir: require('path').join(__dirname, './coverage/webpack'),
+      subdir: '.',
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' }
+      ]
+    },
+    reporters: [/* 'progress', 'kjhtml'*/, 'mocha'],
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_WARN,
+    autoWatch: false,
+    browsers: global.whichBrowsers,
+    customLaunchers: {
+        FirefoxHeadless: {
+            base: "Firefox",
+            flags: ["--headless", " --safe-mode"]
         }
-        ],
-        client: {
-            captureConsole: true,
-            clearContext: false,
-            runInParent: true,
-            useIframe: true,
-        },
-        concurrency: 5
-    });
+    },
+    singleRun: true,
+    restartOnFileChange: true
+  });
 };

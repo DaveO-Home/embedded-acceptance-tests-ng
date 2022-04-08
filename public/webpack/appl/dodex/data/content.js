@@ -94,7 +94,7 @@
 		"card23": {
 			tab: "W",
 			front: {
-				content: "<h1>Angular Welcome</h1><a ng-reflect-router-link=\"/welcome\" href=\"#/welcome\"><i class=\"far fa-fw fa-file-pdf pr-4\"></i>Welcome</a>"
+				content: "<h1>Angular Welcome</h1><a ng-reflect-router-link=\"/welcome\" href=\"#/welcome\"><i class=\"far fa-fw fa-file-hand-paper pr-4\"></i>Welcome</a>"
 			},
 			back: {
 				content: ""

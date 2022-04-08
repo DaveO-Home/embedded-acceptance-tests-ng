@@ -76,6 +76,30 @@ const esLint = function (cb) {
     });
 };
 /*
+ * typescript linter
+ */
+const esLintts = function (cb) {
+    var stream = src(["../appl/**/*.ts"])
+        .pipe(eslint({
+            configFile: "../../.eslintts.js",
+            quiet: 1,
+        }))
+        .pipe(eslint.format())
+        .pipe(eslint.result(() => {
+            //Keeping track of # of javascript files linted.
+            lintCount++;
+        }))
+        .pipe(eslint.failAfterError());
+
+    stream.on("error", function () {
+        process.exit(1);
+    });
+    return stream.on("end", function () {
+        log(chalk.blue.bold("# typescript files linted: " + lintCount));
+        cb();
+    });
+};
+/*
  * css linter
  */
 const cssLint = function (cb) {
@@ -108,6 +132,34 @@ const ngc = function (cb) {
         log(stdout);
         log(stderr);
         cb(err);
+    });
+};
+/**
+ * Run Angular Devkit karma/jasmine unit tests - uses angular.json
+ */
+ const ngTest = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "esbuild";
+    const spawn = require('child_process').spawn;
+    const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
+};
+/**
+ * Run Angular linting - uses angular.json
+ */
+ const ngLint = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "esbuild";
+    const spawn = require('child_process').spawn;
+    const run = spawn("npm run anglint", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
     });
 };
 /**
@@ -223,23 +275,26 @@ const runTestCopy = parallel(copy_test, copy_images);
 const runTest = series(ngc, cleant, runTestCopy, build_development);
 const runTestNoBuild = series(cleant, runTestCopy);
 const runProdCopy = parallel(copyprod, copyprod_images);
-const runProd = series(runTest, pat, esLint, parallel(cssLint /* , bootLint*/), clean, runProdCopy, build);
+const runLint = parallel(esLint, esLintts, ngLint, cssLint /*, bootlint */);
+const runProd = series(runTest, pat, ngTest, runLint, clean, runProdCopy, build);
 runProd.displayName = "prod";
 
 exports.build = series(clean, runProdCopy, build);
 task(runProd);
 task("default", runProd);
 exports.prd = series(ngc, clean, runProdCopy, build);
-exports.test = series(runTest, pat);
+exports.test = series(runTest, pat, ngTest);
 exports.tdd = series(runTest, tdd_esbuild);
 exports.hmr = series(runTestCopy, parallel(sync, watch));
 exports.acceptance = e_test;
 exports.rebuild = series(ngc, parallel(runTestNoBuild, build_development));
 exports.build = series(ngc, parallel(runTestCopy, build_development));
-exports.lint = parallel(esLint, cssLint /* , bootLint*/);
+exports.lint = runLint
 exports.copy = runTestCopy;
 exports.tddo = tddo;
 exports.devlserver = devlServer;
+exports.ngtest = ngTest;
+exports.nglint = ngLint;
 
 // this is basically worthless - use the hmr task -- fix me
 function devlServer() {

@@ -47,11 +47,12 @@ const pate2e = function (done) {
  */
 const pat = function (done) {
     log(chalk.cyan("Starting Angular unit tests"));
-    if (!browsers) {
-        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
-    }
-    useNg = ".ng";
-    karmaServer(done, true, false);
+    process.env.BUNDLER = "fusebox";
+    const spawn = require('child_process').spawn;
+    const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
 };
 /*
  * javascript linter
@@ -270,14 +271,32 @@ const e2eTest = function (done) {
     return karmaServer(done, true, false);
 };
 /**
- * Run karma/jasmine tests once and exit without rebuilding(requires a previous build)
+ * Run Angular Devkit karma/jasmine unit tests - uses angular.json
  */
 const ngTest = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng";
-    return karmaServer(done, true, false);
+    process.env.BUNDLER = "fusebox";
+    const spawn = require('child_process').spawn;
+    const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
+};
+/**
+ * Run Angular linting - uses angular.json
+ */
+ const ngLint = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "fusebox";
+    const spawn = require('child_process').spawn;
+    const run = spawn("npm run anglint", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
 };
 /**
  * Continuous testing - test driven development.  
@@ -311,7 +330,8 @@ const tddo = function (done) {
     karmaServer(done, false, true);
 };
 
-const testRun = series(testBuild, pate2e, pat);
+const testRun = series(testBuild, pate2e, ngTest);
+const testNgRun = series(pat);
 const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
 
 exports.default = series(testRun, lintRun, build);
@@ -319,12 +339,14 @@ exports.prod = series(testRun, lintRun, build);
 exports.preview = preview;
 exports.prd = series(build);
 exports.test = testRun;
+// exports.testng = testNgRun;
 exports.tdd = fuseboxTdd;
 exports.tddo = tddo;
 exports.hmr = fuseboxHmr;
 exports.rebuild = fuseboxRebuild;
 exports.acceptance = e2eTest;
 exports.ngtest = ngTest;
+exports.nglint = ngLint;
 exports.e2e = e2eTest;
 exports.development = series(setNoftl, parallel(fuseboxHmr, fuseboxTddWait));
 exports.lint = lintRun;

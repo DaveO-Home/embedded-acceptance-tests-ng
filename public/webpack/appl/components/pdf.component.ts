@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 
 declare const $: JQueryStatic;
@@ -6,7 +6,7 @@ declare const $: JQueryStatic;
 @Component({
   template: "<iframe id=\"data\" name=\"pdfDO\" [src]=\"url\" class=\"col-lg-12\" style=\"height: 750px\"></iframe>",
 })
-export class PdfComponent {
+export class PdfComponent implements OnInit {
   public url;
   constructor(sanitizer: DomSanitizer) {
     this.url = sanitizer.bypassSecurityTrustResourceUrl("views/prod/Test.pdf");

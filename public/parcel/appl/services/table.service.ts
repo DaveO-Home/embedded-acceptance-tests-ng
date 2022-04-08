@@ -2,8 +2,6 @@ import Helpers from "../js/utils/helpers";
 import App from "../js/app";
 import Table from "../js/controller/table";
 
-declare let Promise: any;
-
 export class TableService {
   getHtml(obj): Promise<{ response; obj }> {
     const controllerName = "Table";

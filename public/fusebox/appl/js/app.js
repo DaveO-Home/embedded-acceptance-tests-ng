@@ -1,9 +1,8 @@
 /* eslint "comma-style": [0, "last"] */
-// import * as _ from "lodash";
 import _startsWith from "lodash/startsWith";
 import _capitalize from "lodash/capitalize";
 import "bootstrap";
-import "tablesorter"; // "tablesorter/dist/js/jquery.tablesorter.combined.min.js";
+import "tablesorter";
 import { createPopper } from "@popperjs/core";
 
 /* develblock:start */

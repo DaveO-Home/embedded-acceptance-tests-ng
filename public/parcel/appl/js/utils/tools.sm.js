@@ -34,6 +34,7 @@ function toolsApp (state, action) {
  let newState = null;
  let found = -1;
 
+ /* eslint no-case-declarations: 0 */
  switch (action.type) {
   case "ADD_TOOLS":
    newState = Object.assign({}, state);

@@ -1,4 +1,4 @@
-# Embedded Angular12 Acceptance Testing with Karma and Jasmine
+# Embedded Angular13 Acceptance Testing with Karma and Jasmine
 
 The basic idea is to build a production application ensuring consistent and stable code using JavaScript, CSS and bootstrap linting and automated unit and e2e testing. This will be in part, assisted by the development tools, detailed in the [Development Overview](#development) and bundle sections.
 
@@ -11,8 +11,8 @@ The basic idea is to build a production application ensuring consistent and stab
 
 ## Bundle Tools
 
-> 1. [Browserify](#i-browserify)
-> 1. [Brunch](#ii-brunch)
+> 1. [Browserify(ang12)](#i-browserify)
+> 1. [Brunch(ang12)](#ii-brunch)
 > 1. [esbuild](#iii-esbuild) - you may have to execute `npx ngcc` in the public directory first
 > 1. [Fusebox](#iv-fusebox)
 > 1. [Parcel](#v-parcel)
@@ -40,11 +40,11 @@ The basic idea is to build a production application ensuring consistent and stab
   1. Any Browser with a karma launcher
   1. Code bundling tools
   1. See `public/package.json` for details
-  1. Node, npm - node v10 or greater works best
+  1. Node, npm - node v12 or greater works best
 
 ## Installation
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 **Desktop:**
 
@@ -61,8 +61,6 @@ The basic idea is to build a production application ensuring consistent and stab
 **Server:**
 
   `cd` to top level directory `<install>/embedded-acceptance-tests-ng`
-
-  You have to use a `Node` version `< v15` to install. Once installed, the latest `Node/Npm` versions can be used.
 
 ```bash
   npm install
@@ -93,9 +91,9 @@ To generate a build "cd to `public/<bundler>/build` and type `gulp`, e.g.
   gulp
 ```
 
-or `gulp prod`
+or `gulp prod`.
 
-You can also use the convenience script `bm` in the `public` directory, e.g. __`./bm fusebox prod`__. 
+You can also use the convenience script `bm` in the `public` directory, e.g. __`./bm webpack prod`__. 
 
 If the tests succeed then the build should complete.
 
@@ -109,11 +107,11 @@ You can repeat the procedure with any of the supported bundlers. Output from the
 
 You can run `gulp prd` from the `<bundler>/build` directory as a stand-alone build.
 
-__Note:__ You can run the `bm` bash script from the public directory for any of the bundlers; e.g. __`./bm esbuild prod`__.
+__Note:__ You can run the `bm` bash script from the public directory for any of the bundlers; e.g. __`./bm esbuild prd`__. For `webpack`, you can execute `npx ng build prodacc` or `npx ng build devacc` from the `webpack` directory to build the application. 
 
 ## Test Build
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 The test build simply runs the tests in headless mode. The default browsers are ChromeHeadless and FirefoxHeadless.  To change the default you can set an environment variable; e.g.
 
@@ -136,6 +134,13 @@ or
   export USE_BROWSERS=FirefoxHeadless,ChromeHeadless,Opera
   ./bm webpack test
 ```
+or
+```bash
+  cd .../public/webpack
+  export USE_BROWSERS=FirefoxHeadless,ChromeHeadless,Opera
+  npx ng test devacc
+```
+
 
 A test result might look like;
 
@@ -220,7 +225,7 @@ SUMMARY:
 
 ## Development
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 __Note__; When modifying project assets(.handlebars, .html, etc.) you can execute `gulp copy` from the `public/<bundler>/build` directory to preview changes. Some of the bundlers may not have this implemented.
 
@@ -241,34 +246,34 @@ __Running Tests__-
 
 ### I. **Browserify**
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Development Server Window*** -
 
-* `cd public/browserify/build`
+* `cd public/ang12/browserify/build`
 * `gulp server`
 
    Browsersync will start a browser tab(default Chrome) with `localhost:3080/dist_test/browserify/appl/testapp_dev.html`.  Any changes to the source code(\*.js|*.ts) files should be reflected in the browser auto reload.
 
 2\. ***Hot Module Reload(HMR) Window*** -
 
-* `cd public/browserify/build`
+* `cd public/ang12/browserify/build`
 * `gulp hmr`
 
    The `watchify` plugin will remain active to rebuild the bundle on code change.
 
 3\. ***Test Driven Development(tdd) Window*** -
 
-* `cd public/browserify/build`
+* `cd public/ang12/browserify/build`
 * `gulp tdd`
 
 ### II. **Brunch**
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Watch, Recompile and Reload Window*** -
 
-* `cd public/brunch/build`
+* `cd public/ang12/brunch/build`
 * `gulp watch` or `./cook watch` (output formatted better)
 
 At this point you can start a browser and enter `localhost:3080/appl/testapp_dev.html`. Any changes to the source code(\*.js|*.ts) files and other assets such as*.html) should be reflected in the browser auto reload.
@@ -277,7 +282,7 @@ __Note__; The test url is `localhost:3080/appl` since Brunch by default uses 'co
 
 2\. ***Test Driven Development(tdd) Window*** -
 
-* `cd public/brunch/build`
+* `cd public/ang12/brunch/build`
 * `gulp tdd` or `./cook tdd`
 
   While the Brunch watcher is running, tests are re-run when code sources are changed.
@@ -291,7 +296,7 @@ __Note__; The test url is `localhost:3080/appl` since Brunch by default uses 'co
 
 ### III. **ESbuild**
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Hot Module Reload(HMR/Dev Server) Window*** -
 
@@ -302,14 +307,14 @@ __Note__; The test url is `localhost:3080/appl` since Brunch by default uses 'co
 
 2\. ***Test Driven Development(tdd) Window*** -
 
-* `cd public/browserify/build`
+* `cd public/esbuild/build`
 * `gulp tdd`
 
 __Note;__ The esbuild tasks use the `ngc` compiler to pre-process the application.
 
 ### IV. **Fusebox**
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 __Note:__ Fusebox has been upgraed to version 4.
 
@@ -337,7 +342,7 @@ __Note:__ Fusebox has been upgraed to version 4.
 
 ### V. **Parcel**
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Watch, Recompile and Reload Window*** -
 
@@ -357,7 +362,7 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 
 ### VI. **Rollup**
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Development Server Window*** -
 
@@ -374,7 +379,7 @@ At this point you can start a browser and enter `localhost:3080/dist_test/parcel
 
 ### ~~VII. **Stealjs**~~
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Development Server Window*** -
 
@@ -404,7 +409,7 @@ Or you can just try running `gulp development`.
 
 ### VIII. **Webpack**
 
-[Top](#embedded-angular12-acceptance-testing-with-karma-and-jasmine)
+[Top](#embedded-angular13-acceptance-testing-with-karma-and-jasmine)
 
 1\. ***Development HMR Server Window*** -
 

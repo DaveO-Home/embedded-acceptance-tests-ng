@@ -2,10 +2,8 @@ import Start from "js/start";
 import Setup from "js/setup";
 import Helpers from "js/helpers";
 
-declare let Promise: any;
-
 export class StartService {
-  getHtml(obj): Promise<{response; obj}> {   
+  getHtml(obj): Promise<{response; obj}> {
     Setup.init();
     Start.initMenu();
     Start.index();

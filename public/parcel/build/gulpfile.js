@@ -10,7 +10,6 @@ const exec = require("child_process").exec;
 const del = require("del");
 const log = require("fancy-log");
 const Parcel = require("@parcel/core").default;
-// const flatten = require("gulp-flatten");
 const chalk = require("chalk");
 const karma = require("karma");
 const path = require("path");
@@ -64,8 +63,7 @@ const pat = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng";
-    karmaServer(done, true, false);
+    ngTest(done);
 };
 /*
  * javascript linter
@@ -135,10 +133,39 @@ const cssLint = function (cb) {
  * Bootstrap html linter 
  */
 const bootLint = function (cb) {
-    exec("npx gulp --gulpfile Gulpboot.js", function (err, stdout, stderr) {
-        log(stdout);
-        log(stderr);
-        cb(err);
+    process.env.BUNDLER = "parcel";
+    const spawn = require('child_process').spawn;
+    const run = spawn("npx gulp --gulpfile Gulpboot.js", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        cb(code);
+    });
+};
+/**
+ * Run Angular Devkit karma/jasmine unit tests - uses angular.json
+ */
+ const ngTest = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "parcel";
+    const spawn = require('child_process').spawn;
+    const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
+};
+/**
+ * Run Angular linting - uses angular.json
+ */
+ const ngLint = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "parcel";
+    const spawn = require('child_process').spawn;
+    const run = spawn("npm run anglint", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
     });
 };
 /**
@@ -197,14 +224,13 @@ const e2e_test = function (done) {
     return karmaServer(done, true, false);
 };
 /**
- * Run karma/jasmine/angular tests once and exit without rebuilding(requires a previous build)
+ * Run karma/jasmine/angular tests once and exit using angular devkit
  */
 const ng_test = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng";
-    return karmaServer(done, true, false);
+    return ngTest(done);
 };
 /**
  * Continuous testing - test driven development.  
@@ -231,7 +257,7 @@ const watch_parcel = function (cb) {
 };
 
 const testRun = series(cleant, copy_images, copy_test, build_development);
-const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
+const lintRun = parallel(esLint, esLintts, ngLint, cssLint, bootLint);
 const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build);
 const copyStatic = series(cleant, parallel(copy_images, copy_test));
 prodRun.displayName = "prod";
@@ -241,7 +267,7 @@ exports.default = prodRun;
 exports.prd = series(clean, copyprod_images, copyprod, build);
 exports.test = series(testRun, pate2e, pat);
 exports.tdd = series(testRun, tdd_parcel);
-exports.acceptance = ng_test;
+exports.acceptance = series(lintRun, e2e_test, ng_test);
 exports.watch = series(copyStatic, watch_parcel, copyImagesForWatch);
 exports.serve = series(copyStatic, serve_parcel, copyImagesForWatch);
 exports.rebuild = testRun;
@@ -249,6 +275,7 @@ exports.ngtest = ng_test;
 exports.e2e = e2e_test;
 exports.lint = lintRun;
 exports.copy = series(copy_images, copy_test);
+exports.nglint = ngLint;
 
 function parcelBuild(watch, serve = false, cb) {
     if (bundleTest && bundleTest === "false") {

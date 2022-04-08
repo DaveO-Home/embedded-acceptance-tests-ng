@@ -1,7 +1,7 @@
 
 const { merge } = require("webpack-merge");
 const webpack = require("webpack");
-const baseWebpackConfig = require("./webpack.base.conf");
+const { baseWebpackConfig } = require("./webpack.base.conf");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const { prod } = require("./config");

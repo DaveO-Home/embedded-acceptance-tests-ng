@@ -2,7 +2,7 @@
 import { Context } from "fuse-box/core/context";
 import { parsePluginOptions } from "fuse-box/plugins/pluginUtils";
 
-export type IPluginStripProps = { [key: string]: any };
+export type IPluginStripProps = { [key: string]: object };
 export function pluginStripCode(a?: IPluginStripProps | string | RegExp, b?: IPluginStripProps) {
   const [opts, matcher] = parsePluginOptions<IPluginStripProps>(a, b, {});
 

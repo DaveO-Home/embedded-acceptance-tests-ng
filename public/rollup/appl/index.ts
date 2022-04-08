@@ -16,8 +16,7 @@ import "tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js";
 import "zone.js/dist/zone-error";
 import apptest from "./jasmine/apptest";
 
-declare let testit: any;
-declare let Promise: any;
+declare let testit: boolean;
 /* develblock:end */
 
 let production = true;
@@ -38,11 +37,11 @@ Setup.init();
 /* develblock:start */
 //Code between the ..start and ..end tags will be removed by the BlockStrip plugin during the production build.
 //testit is true if running under Karma - see testapp_dev.html
-new Promise((resolve, reject) => {
+new Promise((resolve) => {
     setTimeout(function () {
         resolve(0);
     },  500);
-}).then(resolved => {
+}).then(() => {
     if (typeof testit !== "undefined" && testit) {
         //Run acceptance tests. - To run only unit tests, comment the apptest call.
         apptest(App, AppModule, platformBrowserDynamic);

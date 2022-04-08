@@ -1,0 +1,10 @@
+window.__webpack_public_path__ = "../";
+export let testit = window.testit;
+export let __karma__ = window.__karma__;
+export let Promise = window.Promise;
+export let jasmine = window.jasmine;
+export const fs = function(){};
+export const path = function(){};
+export const __webpack_public_path__ = window.__webpack_public_path__
+export let fail = window.fail;
+export let $ = window.$;

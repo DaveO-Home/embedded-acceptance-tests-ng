@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import Setup from "../js/utils/setup";
 import Start from "../js/controller/start";
 import "../css/hello.world.css";
@@ -7,8 +7,8 @@ import "../css/hello.world.css";
   templateUrl: "../views/hello.world.html",
   //styleUrls: ['../css/hello.world.css']
 })
-export class HelloWorldComponent {
-  title = "Acceptance Testing with Angular8";
+export class HelloWorldComponent implements OnInit {
+  title = "Acceptance Testing with Angular13";
   ngOnInit() {
     Setup.init();
     Start.initMenu();

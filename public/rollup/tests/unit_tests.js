@@ -1,7 +1,5 @@
 "use strict"
-
-describe("Suite for Unit Tests", function () {
-
+describe("Unit Tests - Suite 1", function () {
     //Application Tests use Promises
     it("Verify that browser supports Promises", function () {
         var isNativePromise = false,
@@ -14,7 +12,7 @@ describe("Suite for Unit Tests", function () {
             }
         }
         if (isNativePromise === isPolyfillPromise) {
-            console.log("Promise support required, add polyfill to karma configuration.")
+            console.warn("Promise support required, add polyfill to karma configuration.")
         }
         expect(isNativePromise !== isPolyfillPromise).toBeTruthy();
     });
@@ -33,25 +31,11 @@ describe("Suite for Unit Tests", function () {
     it(no + spec, function () {
 
         if (!supportsES6) {
-            console.log("Make sure a transpiler is used in the test(karma preprocess)/build process");
+            console.warn("Make sure a transpiler is used in the test(karma preprocess)/build process");
             expect(supportsES6).toBe(false);
         } else {
             expect(supportsES6).toBe(true);
         }
-    });
-
-    it("blockStrip to remove test block of code", function () {
-        var contents = "var prodVar='saved'; \
-            //!steal-remove-start \
-            console.log('Logging String'); \
-            //!steal-remove-end";
-        var startComment = "steal-remove-start";
-        var endComment = "steal-remove-end";
-        var regexPattern = new RegExp("[\\t ]*(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
-                startComment + " ?[\\*\\/]?[\\s\\S]*?(\\/\\* ?|\\/\\/[\\s]*\\![\\s]*)" +
-                endComment + " ?(\\*\\/)?[\\t ]*\\n?", "g");
-        contents = contents.replace(regexPattern, "");
-        expect(contents).toBe("var prodVar='saved';")
     });
 
 });

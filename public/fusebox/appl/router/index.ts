@@ -1,11 +1,10 @@
 import { NgModule } from "@angular/core";
 import { LocationStrategy, HashLocationStrategy } from "@angular/common";
 import { RouterModule, Routes, Router } from "@angular/router";
-// import { map } from "rxjs/operators";
 import { StartComponent } from "../components/start.component";
 import { ContactComponent } from "../components/contact.component";
 import { PdfComponent } from "../components/pdf.component";
-import { ToolsComponent, ToolsSelect } from "../components/tools.component";
+import { ToolsComponent, ToolsSelectComponent } from "../components/tools.component";
 import { HelloWorldComponent } from "ts/helloworld.component";
 import { StartService } from "ts/start.service";
 import { TableService } from "ts/table.service";
@@ -47,7 +46,7 @@ const appRoutes: Routes = [
     ContactComponent,
     PdfComponent,
     ToolsComponent,
-    ToolsSelect,
+    ToolsSelectComponent,
     HelloWorldComponent,
   ],
   imports: [
@@ -58,7 +57,6 @@ const appRoutes: Routes = [
         anchorScrolling: "enabled",
         scrollPositionRestoration: "enabled",
         useHash: false
-        // preloadingStrategy: SelectivePreloadingStrategyService,
       }
     )
   ],

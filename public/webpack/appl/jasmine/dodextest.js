@@ -1,7 +1,7 @@
 
 const { timer } = require("rxjs");
 
-export default function (/*dodex, input, mess,*/ content, Start, TestApp) {
+export default function (content, Start) {
     /* 
      * Test Dodex operation.
      */
@@ -25,7 +25,6 @@ export default function (/*dodex, input, mess,*/ content, Start, TestApp) {
                 $("body").append("<div id=\"main_container\"><div class=\"loading-page\"></div></div>");
             }
 
-            TestApp();
             dodexToggle = getElement(".dodex--open");
             dodexToggle.onmousedown = event => {
                 doDex.openDodex(event);

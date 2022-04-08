@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-// import { map } from "rxjs/operators";
 import { StartService } from "ts/start.service";
 
 @Component({
@@ -15,9 +14,5 @@ export class StartComponent {
     this.starts.getHtml(this).then(function (data) {
       data.obj.htmldata = sanitizer.bypassSecurityTrustHtml(data.response);
     });
-  }
-  
-  ngOnInit() {
-    //
   }
 }

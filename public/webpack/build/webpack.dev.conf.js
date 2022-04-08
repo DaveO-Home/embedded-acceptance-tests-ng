@@ -1,7 +1,7 @@
 const path = require("path");
 const { merge } = require("webpack-merge");
 const webpack = require("webpack");
-const baseWebpackConfig = require("./webpack.base.conf");
+const { baseWebpackConfig } = require("./webpack.base.conf");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const watch = process.env.USE_WATCH;
 const { dev } = require("./config");
@@ -14,7 +14,7 @@ const devWebpackConfig = merge(baseWebpackConfig({
     watch: watch === "true"
 }), {
         devtool: dev.devtool,
-        stats: "normal",
+        stats: { colors: true }, //"normal",
         cache: false,
          output: {
             filename: "[name].js",

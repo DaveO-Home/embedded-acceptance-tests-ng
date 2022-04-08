@@ -1,5 +1,4 @@
 /* eslint "comma-style": [0, "last"] */
-// import startsWith from 'lodash-es/startsWith'
 import capitalize from "lodash-es/capitalize";
 import "bootstrap";
 import "tablesorter";

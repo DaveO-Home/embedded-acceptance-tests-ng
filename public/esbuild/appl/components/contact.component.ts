@@ -1,14 +1,14 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 // import { map } from "rxjs/operators";
 import App from "../js/app";
 import Setup from "../js/utils/setup";
 
-declare const $: any;
+declare const $: JQueryStatic;
 
 @Component({
     templateUrl: "../views/prod/contact.html"
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
     constructor() {
         Setup.init();
     }

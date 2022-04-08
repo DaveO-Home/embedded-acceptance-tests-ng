@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "types": [
+      "jasmine",
+      "jquery",
+      "node"
+    ]
+  },
+  "paths": {
+            "ts/*": ["./*"]
+          },
+  "files": [
+        "tests/base.spec.ts"
+      ],
+      "include": [
+        "tests/**/*.d.ts", "tests/*.ts"
+      ],
+      "exclude": [ "./appl" ]
+}
+
+

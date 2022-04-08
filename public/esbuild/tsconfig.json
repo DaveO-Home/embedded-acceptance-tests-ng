@@ -1,9 +1,6 @@
 {
    "parcelAngularOptions": {
-    // What compiler should we use when watching or serving
     "watch": "jit",
-
-    // What compiler should we use when building (parcel build)
     "build": "aot"
   },
   "compilerOptions": {

@@ -1,49 +1,35 @@
 {
-  "files": [
-    "./appl/main.ts"
-  ],
   "compilerOptions": {
-    "outDir": "../dist_test/rollup/appl",
-    "sourceMap": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "tsc/",
+    "lib": [
+      "dom",
+      "es6"
+    ],
     "typeRoots": [
-      "types",
+      "./types",
       "../node_modules/@types"
     ],
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "target": "es5",
-    "module": "es6",
+    "module": "es2015",
     "moduleResolution": "node",
-    "isolatedModules": false,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "noUnusedLocals": true,
-    "declaration": false,
     "noImplicitAny": false,
-    "noImplicitUseStrict": false,
+    "pretty": true,
     "removeComments": false,
-    "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": false,
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "suppressImplicitAnyIndexErrors": true,
     "allowJs": true,
-    "maxNodeModuleJsDepth": 5,
-    "allowSyntheticDefaultImports": true,
-    "checkJs": false,
+    "target": "es5",
     "types": [
       "jqueryfn",
       "jquery",
-      "jasmine",
       "node"
     ],
-    "showConfig": true
+    "allowUnreachableCode": true
   },
-  "exclude": [
-    "../node_modules"
-  ],
-  "include": [
-    "./appl/**/*.ts"
-  ],
-  "compileOnSave": true,
-  "buildOnSave": false
+  "files": [
+    "appl/main.ts"
+  ]
 }

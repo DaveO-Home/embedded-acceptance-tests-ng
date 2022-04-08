@@ -1,6 +1,5 @@
 import { Component, ViewEncapsulation, ViewChild, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
-// import { map } from "rxjs/operators";
 import ToolsSM from "js/tools.sm";
 import { TableService } from "ts/table.service";
 import Table from "js/table";
@@ -14,7 +13,7 @@ const dropdown =
 Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
 </h4>
 <section>
-<div id="dropdown1" class="dropdown pull-left">
+<div id="dropdown1" class="app-dropdown pull-left">
 			<button class="dropdown-toggle smallerfont" 
 			type="button"
 			id="dropdown0"
@@ -32,10 +31,10 @@ Tools Count - <span class='tools-state'>{{getMessage()}} (using Redux)</span>
   </section>`;
 
 @Component({
-    selector: "dropdown",
+    selector: "app-dropdown",
     template: dropdown
 })
-export class ToolsSelect {
+export class ToolsSelectComponent {
     public state: {
         items: []
     };
@@ -86,22 +85,22 @@ export class ToolsSelect {
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    template: "<dropdown></dropdown><span id=\"data\" [innerHTML]=\"htmldata\"></span>",
+    template: "<app-dropdown></app-dropdown><span id=\"data\" [innerHTML]=\"htmldata\"></span>",
     styleUrls: ["css/table.css"],
 })
 
-export class ToolsComponent {
+export class ToolsComponent implements OnInit  {
     public tables;
     public htmldata = "Loading tools....";
 
-    @ViewChild(ToolsSelect, { static: false }) dropdown: ToolsSelect;
+    @ViewChild(ToolsSelectComponent, { static: false }) dropdown: ToolsSelectComponent;
 
     constructor(tableservice: TableService, sanitizer: DomSanitizer) {
         ToolsSM.toolsStateManagement();
         this.tables = tableservice;
         this.tables.getHtml(this).then(function (data) {
             data.obj.htmldata = sanitizer.bypassSecurityTrustHtml(data.response);
-            $(document).ready(function () {
+            $(function () {
                 Helpers.scrollTop();
                 if (App.controllers["Start"]) {
                     App.controllers["Start"].initMenu();
@@ -117,6 +116,7 @@ export class ToolsComponent {
     }
 
     ngOnInit(): void {
-        //
+        $("#top-nav").removeAttr("hidden");
+        $("#side-nav").removeAttr("hidden"); 
     }
 }

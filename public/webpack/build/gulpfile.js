@@ -10,7 +10,7 @@ const rmf = require("rimraf");
 const exec = require("child_process").exec;
 const path = require("path");
 const chalk = require("chalk");
-const config = require("./config");
+const config = require("./config/index.js");
 const csslint = require("gulp-csslint");
 const eslint = require("gulp-eslint");
 const webpack = require("webpack");
@@ -18,6 +18,7 @@ const webpackStream = require("webpack-stream");
 const WebpackDevServer = require("webpack-dev-server");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const karma = require("karma");
+const { ngtest } = require("../../fusebox/build/gulpfile.js");
 
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || 3080; // && Number(process.env.PORT);
@@ -48,8 +49,9 @@ const pat = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng";
-    karmaServer(done, true, false);
+    log(chalk.cyan("Starting Angular unit tests with", global.whichBrowsers));
+    process.env.BUNDLER = "webpack";
+    ngtest(done);
 };
 /*
  * javascript linter
@@ -124,6 +126,34 @@ const bootLint = function (cb) {
         log(stdout);
         log(stderr);
         cb(err);
+    });
+};
+/**
+ * Run Angular Devkit karma/jasmine unit tests - uses angular.json
+ */
+ const ngTest = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "esbuild";
+    const spawn = require('child_process').spawn;
+    const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
+};
+/**
+ * Run Angular linting - uses angular.json
+ */
+ const ngLint = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "esbuild";
+    const spawn = require('child_process').spawn;
+    const run = spawn("npm run anglint", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
     });
 };
 /*
@@ -349,13 +379,13 @@ const webpack_server = function (cb) {
 };
 
 const testRun = series(eslint_test, test_build);
-const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
+const lintRun = parallel(esLint, esLintts, ngLint, cssLint, bootLint);
 const prodRun = series(testRun, pate2e, pat, lintRun, build);
 prodRun.displayName = "prod";
 
 task(prodRun);
 exports.default = prodRun;
-exports.prd = build;
+exports.prd = series(lintRun, build);
 exports.test = series(testRun, pate2e, pat);
 exports.tdd = series(testRun, webpack_tdd);
 exports.rebuild = webpack_rebuild;
@@ -366,6 +396,8 @@ exports.hmr = webpack_server;
 exports.watch = webpack_watch;
 exports.development = parallel(webpack_server, webpack_tdd);
 exports.lint = lintRun;
+exports.ngtest = ngTest;
+exports.nglint = ngLint;
 
 function karmaServer(done, singleRun = false, watch = true) {
     const parseConfig = karma.config.parseConfig;

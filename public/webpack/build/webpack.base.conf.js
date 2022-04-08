@@ -1,10 +1,11 @@
+
 const AngularCompilerPlugin = require("@ngtools/webpack").AngularWebpackPlugin;
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const webpack = require("webpack");
 
-module.exports = (argv) => {
+module.exports.baseWebpackConfig = (argv) => {    
     return {
         context: path.resolve(__dirname, "../"),
         mode: argv.mode,
@@ -69,9 +70,28 @@ module.exports = (argv) => {
                     type: "javascript/auto"
                 },
                 {
-                    test: /\.js$/,
-                    exclude: [/node_modules/, resolve("dodex/data")],        
-                    use: ["babel-loader"],
+                    test: /\.m?js$/,
+                    exclude: [/node_modules/, resolve("dodex/data")], 
+                    resolve: {fullySpecified: false},      
+                    use: {
+                        loader: "babel-loader",
+                        options: {
+                            // plugins: [linkerPlugin],
+                            presets: [
+                              ['@babel/preset-env', {
+                                targets: {
+                                  // Criteria for selecting browsers. See https://github.com/browserslist/browserslist
+                                  browsers: ['> 0.5%', ' last 2 versions', ' Firefox ESR', ' not dead', ' IE 11']
+                                }
+                              }]
+                            ]
+                          }
+                        // options: {
+                        //     plugins: [linker],
+                        //     compact: false,
+                        //     cacheDirectory: true,
+                        // }
+                    },
                     type: "javascript/auto"
                 },
                 {

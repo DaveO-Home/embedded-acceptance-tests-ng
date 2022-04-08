@@ -1,4 +1,4 @@
-"use strict";
+
 exports.__esModule = true;
 exports.pluginStripCode = void 0;
 var pluginUtils_1 = require("fuse-box/plugins/pluginUtils");

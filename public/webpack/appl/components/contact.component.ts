@@ -1,13 +1,13 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import App from "../js/app";
 import Setup from "../js/utils/setup";
 
-declare let $: any;
+declare const $: JQueryStatic;
 
 @Component({
     templateUrl: "../views/prod/contact.html"
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
     constructor() {
         Setup.init();
     }
@@ -16,7 +16,7 @@ export class ContactComponent {
         const controllerName = "Start";
         const actionName = "init";
         const failMsg = `Load problem with: '${controllerName}/${actionName}'.`;
-        $(document).ready(function () {
+        $(function () {
             const el = $($("[name=contact]")[0]);
             App.loadController(controllerName, {}, controller => {
                 if (controller &&

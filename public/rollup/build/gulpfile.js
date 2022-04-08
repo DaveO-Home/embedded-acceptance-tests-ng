@@ -41,7 +41,6 @@ let browsers = process.env.USE_BROWSERS;
 let testDist = "dist_test/rollup";
 let prodDist = "dist/rollup";
 let dist = isProduction ? prodDist : testDist;
-let useNg = "";
 
 if (browsers) {
     global.whichBrowsers = browsers.split(",");
@@ -66,7 +65,6 @@ const pate2e = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = "";
     return karmaServer(done, true, false);
 };
 /**
@@ -76,8 +74,7 @@ const pat = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    useNg = ".ng";
-    karmaServer(done, true, false);
+    ngTest(done);
 };
 /*
  * javascript linter
@@ -155,6 +152,34 @@ const bootLint = function (cb) {
     });
 };
 /**
+ * Run Angular Devkit karma/jasmine unit tests - uses angular.json
+ */
+ const ngTest = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "rollup";
+    const spawn = require('child_process').spawn;
+    const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
+};
+/**
+ * Run Angular linting - uses angular.json
+ */
+ const ngLint = function (done) {
+    if (!browsers) {
+        global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
+    }
+    process.env.BUNDLER = "rollup";
+    const spawn = require('child_process').spawn;
+    const run = spawn("npm run anglint", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        done(code);
+    });
+};
+/**
  * Remove previous build
  */
 const clean = function (done) {
@@ -211,7 +236,6 @@ const tdd_rollup = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Chrome", "Firefox"];
     }
-    useNg = "";
     karmaServer(done, false, true);
 };
 /**
@@ -221,7 +245,6 @@ const tddo = function (done) {
     if (!browsers) {
         global.whichBrowsers = ["Opera"];
     }
-    useNg = "";
     karmaServer(done, false, true);
 };
 
@@ -306,7 +329,7 @@ const rollup_watch = function (cb) {
     });
 };
 
-const lintRun = parallel(esLint, esLintts, cssLint, bootLint)
+const lintRun = parallel(esLint, esLintts, ngLint, cssLint, bootLint)
 const testCopy = series(parallel(copy_src, copy_images, copy_node_css, copy_css));
 const testRun = series(testCopy, build_development, pate2e, pat);
 const prodCopy = series(parallel(copyprod_src, copyprod_images, copyprod_node_css, copyprod_css));
@@ -318,13 +341,15 @@ task(prodRun);
 exports.prd = series(clean, prodCopy, build);
 exports.test = series(testCopy, build_development, pate2e, pat);
 exports.testit = series(pate2e, pat);
-exports.acceptance = pate2e;
+exports.e2e = pate2e;
+exports.acceptance = series(lintRun, pate2e, pat);
 exports.ngtest = pat;
 exports.rebuild = series(testCopy, build_development);
 exports.tdd = tdd_rollup;
 exports.tddo = tddo;
 exports.watch = rollup_watch;
 exports.lint = lintRun;
+exports.nglint = ngLint;
 
 var tsProject = ts.createProject("../tsconfig.json", {
     typescript: require("typescript")
@@ -484,7 +509,7 @@ function karmaServer(done, singleRun = false, watch = true) {
     const Server = karma.Server;
 
     parseConfig(
-        path.resolve("./karma" + useNg + ".conf.js"),
+        path.resolve("./karma.conf.js"),
         { port: 9876, singleRun: singleRun, watch: watch },
         { promiseConfig: true, throwErrors: true },
     ).then(
