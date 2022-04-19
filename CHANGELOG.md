@@ -1,5 +1,21 @@
 # Changelog
 
+## [v2.3.1](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/tree/v2.3.0) (2022-04-08)
+
+[Full Changelog](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/compare/v2.2.1...v2.3.1)
+
+* Upgraded dependencies.
+* Made Dodex compatable with parcel 2.4.1.
+
+## [v2.3.0](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/tree/v2.3.0) (2022-04-08)
+
+[Full Changelog](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/compare/v2.2.1...v2.3.0)
+
+* Upgraded to angular13.
+* Changed ng tests to use 'angular.json'.
+* Added Angular linting with 'angular.json'.
+* Added Aungular build for webpack with 'angular.json'.
+
 ## [v2.2.1](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/tree/v2.2.1) (2022-02-25)
 
 [Full Changelog](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/compare/v2.2.0...v2.2.1)
