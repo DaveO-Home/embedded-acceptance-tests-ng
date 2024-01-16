@@ -1,5 +1,15 @@
 # Changelog
 
+## [v2.4.0](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/tree/v2.4.0) (2024-01-16)
+
+[Full Changelog](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/compare/v2.3.1...v2.4.0)
+
+* Upgraded dependencies.
+* Upgraded to Angular 17
+* Added Angular Build to esbuild `./bm esbuild ngprod`
+* Installed tool-kit/cli version 17.1.0-rc to support ".svg" files for esbuild, allows "loader" property under "application-builder". Not supported under "esbuild-builder".
+* Downgraded `fusebox` to Angular 14. Simply run `./bm fusebox prod` to build
+
 ## [v2.3.1](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/tree/v2.3.0) (2022-04-08)
 
 [Full Changelog](https://github.com/DaveO-Home/embedded-acceptance-tests-ng/compare/v2.2.1...v2.3.1)

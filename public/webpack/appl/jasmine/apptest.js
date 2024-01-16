@@ -35,7 +35,7 @@ export default function (App, AppModule, platformBrowserDynamic, destroyPlatform
 
         it("Is Default Page Loaded(Start)", (done) => {
             /*
-             * Start page loads by default. 
+             * Start page loads by default.
              */
             Helpers.getResource("ng-component span", 0, 3)
             .catch(rejected => {

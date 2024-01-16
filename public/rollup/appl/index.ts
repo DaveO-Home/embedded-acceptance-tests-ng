@@ -13,7 +13,7 @@ import Setup from "./js/utils/setup";
 import "tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js";
 
 /* develblock:start */
-import "zone.js/dist/zone-error";
+import "zone.js/testing";
 import apptest from "./jasmine/apptest";
 
 declare let testit: boolean;

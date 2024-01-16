@@ -10,7 +10,7 @@ import Setup from "./js/utils/setup";
 import "../../node_modules/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js";
 import App from "./js/app";
 /* develblock:start */
-import "zone.js/dist/zone-error";
+// import "zone.js/testing";
 import apptest from "./jasmine/apptest";
 /* develblock:end */
 // import { Elm } from "./elm/Main.elm";

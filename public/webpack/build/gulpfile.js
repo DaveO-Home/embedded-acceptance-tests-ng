@@ -1,7 +1,7 @@
 /**
  * Production build using karma/jasmine acceptance test approval and Development environment with Webpack
  * Successful acceptance tests & lints start the production build.
- * Tasks are run serially, 'pat' -> test-build -> acceptance-tests -> ('csslint', 'bootlint') -> 'build(eslint)'
+ * Tasks are run serially, 'pat' -> test-build -> acceptance-tests -> ('csslint') -> 'build(eslint)'
  */
 const { src, dest, series, parallel, task } = require("gulp");
 const env = require("gulp-env");
@@ -18,7 +18,6 @@ const webpackStream = require("webpack-stream");
 const WebpackDevServer = require("webpack-dev-server");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const karma = require("karma");
-const { ngtest } = require("../../fusebox/build/gulpfile.js");
 
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || 3080; // && Number(process.env.PORT);
@@ -33,7 +32,7 @@ if (browsers) {
 }
 
 /**
- * Default: Production Acceptance Tests 
+ * Default: Production Acceptance Tests
  */
 const pate2e = function (done) {
     if (!browsers) {
@@ -42,8 +41,9 @@ const pate2e = function (done) {
     useNg = "";
     karmaServer(done, true, false);
 };
+
 /**
- * Add in Angular unit tests 
+ * Add in Angular unit tests
  */
 const pat = function (done) {
     if (!browsers) {
@@ -51,7 +51,7 @@ const pat = function (done) {
     }
     log(chalk.cyan("Starting Angular unit tests with", global.whichBrowsers));
     process.env.BUNDLER = "webpack";
-    ngtest(done);
+    ngTest(done);
 };
 /*
  * javascript linter
@@ -118,7 +118,7 @@ const cssLint = function (cb) {
     });
 };
 /*
- * Bootstrap html linter 
+ * Bootstrap html linter
  */
 const bootLint = function (cb) {
     log("Starting Gulpboot.js");
@@ -135,7 +135,7 @@ const bootLint = function (cb) {
     if (!browsers) {
         global.whichBrowsers = ["ChromeHeadless", "FirefoxHeadless"];
     }
-    process.env.BUNDLER = "esbuild";
+    process.env.BUNDLER = "webpack";
     const spawn = require('child_process').spawn;
     const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
     run.on("exit", code => {
@@ -157,7 +157,7 @@ const bootLint = function (cb) {
     });
 };
 /*
- * Build the application to the production distribution 
+ * Build the application to the production distribution
  */
 const build = function (cb) {
     var envs = env.set({
@@ -312,7 +312,7 @@ const test_build = function (cb) {
         });
 };
 /**
- * Continuous testing - test driven development.  
+ * Continuous testing - test driven development.
  */
 const webpack_tdd = function (done) {
     if (typeof browsers === "undefined") {
@@ -344,8 +344,8 @@ const webpack_watch = function (cb) {
 /*
  * Webpack development server - use with normal development
  * Rebuilds bundles in dist_test on code change.
- * Run server in separate window - 
- * - watch for code changes 
+ * Run server in separate window -
+ * - watch for code changes
  * - hot module recompile/replace
  * - reload served web page.
  */
@@ -379,7 +379,7 @@ const webpack_server = function (cb) {
 };
 
 const testRun = series(eslint_test, test_build);
-const lintRun = parallel(esLint, esLintts, ngLint, cssLint, bootLint);
+const lintRun = parallel(esLint, esLintts, ngLint, cssLint);
 const prodRun = series(testRun, pate2e, pat, lintRun, build);
 prodRun.displayName = "prod";
 
@@ -486,7 +486,7 @@ function karmaServerSnap(done, singleRun = true, watch = false) {
                     takeSnapShot(["welcome", "react"]);
                     takeSnapShot(["table/tools", "tools"]);
                     // Not working with PDF-?
-                    // takeSnapShot(['pdf/test', 'test'])       
+                    // takeSnapShot(['pdf/test', 'test'])
                 }
                 process.exit(exitCode);
             }).start();

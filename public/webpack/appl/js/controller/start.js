@@ -136,7 +136,10 @@ export default App.controllers.Start ||
         finish (options) {
             me = this;
             const mdFunction = data => {
-                me.html = `${App.html} ${marked.parse(data)}`;
+                const markedOptions = {
+                    mangle: false, headerIds: false
+                };
+                me.html = `${App.html} ${marked.parse(data, markedOptions)}`;
             };
             $.get(options.urlMd, mdFunction, "text")
             .fail(err => {

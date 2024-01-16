@@ -5,13 +5,13 @@
     "outDir": "tsc/",
     "lib": [
       "dom",
-      "es6"
+      "es2018"
     ],
     "typeRoots": [
       "./types",
       "../node_modules/@types"
     ],
-    "module": "es2015",
+    "module": "es2020",
     "moduleResolution": "node",
     "noImplicitAny": false,
     "pretty": true,
@@ -20,8 +20,9 @@
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
     "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0",
     "allowJs": true,
-    "target": "es5",
+    "target": "es2020",
     "types": [
       "jqueryfn",
       "jquery",
@@ -32,4 +33,9 @@
   "files": [
     "appl/main.ts"
   ]
+  ,
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
 }

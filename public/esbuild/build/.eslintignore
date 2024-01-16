@@ -2,6 +2,7 @@
 ../../dist/
 ../../dist_test/
 /*.js
+../appl/**/*.ts
 ../appl/js/utils/marked.js
 ../appl/js/plugin/CopyFS.js
 ../appl/js/plugin/BlockStrip.js

@@ -11,7 +11,7 @@ import "tablepager";
 import { environment } from "./js/utils/environments/environment.prod";
 import { fail, testit, jasmine, __karma__, Promise } from "./global.variables";
 /* develblock:start */
-import "zone.js/dist/zone-error";
+import "zone.js/testing";
 import apptest from "./jasmine/apptest";
 environment.production = false;
 /* develblock:end */

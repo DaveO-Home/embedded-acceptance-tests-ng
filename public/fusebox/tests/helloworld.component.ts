@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
   template: '<h1 class="h1">{{title}}</h1>'
 })
 export class HelloWorldComponent {
-  title = 'Acceptance Testing with Angular13';
+  title = 'Acceptance Testing with Angular14';
   router: any
   
   constructor(router: Router) {

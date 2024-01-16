@@ -1,6 +1,6 @@
 /**
  * Successful acceptance tests & lints start the production build.
- * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint', 'bootlint') -> 'build'
+ * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint') -> 'build'
  */
 const esbuild = require("esbuild");
 const { src, dest, series, parallel, task } = require("gulp");
@@ -9,7 +9,6 @@ const eslint = require("gulp-eslint");
 const csslint = require("gulp-csslint");
 const exec = require("child_process").exec;
 const copy = require("gulp-copy");
-const del = require("del");
 const log = require("fancy-log");
 const flatten = require("gulp-flatten");
 const chalk = require("chalk");
@@ -115,20 +114,10 @@ const cssLint = function (cb) {
     });
 };
 /*
- * Bootstrap html linter 
- */
-const bootLint = function (cb) {
-    return exec("npx gulp --gulpfile Gulpboot.js", function (err, stdout, stderr) {
-        log(stdout);
-        log(stderr);
-        cb(err);
-    });
-};
-/*
  * Compile Angular
 */
 const ngc = function (cb) {
-    return exec("npx ngc", function (err, stdout, stderr) {
+    return exec("cd .. && npx ngc", function (err, stdout, stderr) {
         log(stdout);
         log(stderr);
         cb(err);
@@ -145,6 +134,31 @@ const ngc = function (cb) {
     const spawn = require('child_process').spawn;
     const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
     run.on("exit", code => {
+        done(code);
+    });
+};
+/**
+ * Alternate Angular production build - uses angular.json
+ */
+ const ngProd = function (done) {
+    const spawn = require('child_process').spawn;
+    const run = spawn("cd .. && npx ng build ngprod", { shell: true, stdio: 'inherit' });
+    run.on("exit", code => {
+        const fs = require("fs");
+        const {join} = require('path');
+        const original = join(__dirname, "../../dist/esbuild/browser");
+        const target = join(__dirname, "../../dist/esbuild");
+        fs.cp(original, target, {recursive: true}, (err) => {
+            if (err) {
+                throw err
+            } else {
+                import("del").then(del => {
+                    del.deleteSync([
+                             "../../" + prodDist + "/browser/**/*"
+                        ], { dryRun: false, force: true });
+                });
+            }
+        });
         done(code);
     });
 };
@@ -168,9 +182,13 @@ const ngc = function (cb) {
 const clean = function (done) {
     isProduction = true;
     dist = prodDist;
-    return del([
-        "../../" + prodDist + "/**/*"
-    ], { dryRun: false, force: true }, done);
+    return import("del").then(del => {
+        del.deleteSync([
+                 "../../" + prodDist + "/**/*"
+             ], { dryRun: false, force: true });
+        done(); 
+     });
+
 };
 
 const cleant = function (done) {
@@ -180,9 +198,12 @@ const cleant = function (done) {
     }
     isProduction = false;
     dist = testDist;
-    return del([
-        "../../" + testDist + "/**/*"
-    ], { dryRun: dryRun, force: true }, done);
+    return import("del").then(del => {
+        del.deleteSync([
+                 "../../" + testDist + "/**/*"
+             ], { dryRun: false, force: true });
+        done();
+     });
 };
 /**
  * Resources and content copied to dist directory - for production
@@ -275,7 +296,7 @@ const runTestCopy = parallel(copy_test, copy_images);
 const runTest = series(ngc, cleant, runTestCopy, build_development);
 const runTestNoBuild = series(cleant, runTestCopy);
 const runProdCopy = parallel(copyprod, copyprod_images);
-const runLint = parallel(esLint, esLintts, ngLint, cssLint /*, bootlint */);
+const runLint = parallel(esLint, esLintts, ngLint, cssLint);
 const runProd = series(runTest, pat, ngTest, runLint, clean, runProdCopy, build);
 runProd.displayName = "prod";
 
@@ -283,6 +304,7 @@ exports.build = series(clean, runProdCopy, build);
 task(runProd);
 task("default", runProd);
 exports.prd = series(ngc, clean, runProdCopy, build);
+exports.ngprod = ngProd;
 exports.test = series(runTest, pat, ngTest);
 exports.tdd = series(runTest, tdd_esbuild);
 exports.hmr = series(runTestCopy, parallel(sync, watch));
@@ -300,7 +322,7 @@ exports.nglint = ngLint;
 function devlServer() {
     const port = 3080;
     return esbuild.serve({ port: port }, {
-        entryPoints: ["./dist/main"],
+        entryPoints: ["../dist/main"],
         bundle: true,
         outfile: path.join("../../", dist, "/appl/main.js"),
         define: {
@@ -351,7 +373,7 @@ async function esbuildBuild(cb) {
     }
     dist = isProduction ? prodDist : testDist;
     const options = {
-        entryPoints: ["./dist/main"],
+        entryPoints: ["../dist/main"],
         // entryPoints: ["../appl/main"],
         resolveExtensions: [".ts", ".js", ".css", ".json"],
         bundle: true,

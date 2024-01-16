@@ -55,6 +55,9 @@ function socketServer(server) {
    *        server defaults to localhost - server:port can be changed in the dodex config. 
    */
   wss.on("connection", async (ws, request) => {
+    if(request.url.startsWith("/socket.io/")) {
+       return;
+    }
     const parameters = new Url(request.headers.origin + request.url).searchParams;
     const handle = parameters.get("handle");
     const id = parameters.get("id");

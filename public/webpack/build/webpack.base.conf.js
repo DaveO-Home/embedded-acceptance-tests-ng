@@ -2,10 +2,11 @@
 const AngularCompilerPlugin = require("@ngtools/webpack").AngularWebpackPlugin;
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 const path = require("path");
 const webpack = require("webpack");
 
-module.exports.baseWebpackConfig = (argv) => {    
+module.exports.baseWebpackConfig = (argv) => {
     return {
         context: path.resolve(__dirname, "../"),
         mode: argv.mode,
@@ -63,7 +64,7 @@ module.exports.baseWebpackConfig = (argv) => {
                 },
                 {
                     test: /\.less$/,
-                    use: [ 
+                    use: [
                         { loader: "raw-loader" },
                         { loader: "less-loader" }
                     ],
@@ -71,8 +72,8 @@ module.exports.baseWebpackConfig = (argv) => {
                 },
                 {
                     test: /\.m?js$/,
-                    exclude: [/node_modules/, resolve("dodex/data")], 
-                    resolve: {fullySpecified: false},      
+                    exclude: [/node_modules/, resolve("dodex/data")],
+                    resolve: {fullySpecified: false},
                     use: {
                         loader: "babel-loader",
                         options: {

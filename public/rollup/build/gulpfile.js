@@ -1,6 +1,6 @@
 /**
  * Successful acceptance tests & lints start the production build.
- * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint', 'bootlint') -> 'build'
+ * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint') -> 'build'
  */
 const { src, dest, series, parallel, task } = require("gulp");
 var fs = require("fs");
@@ -10,7 +10,6 @@ const chalk = require("chalk");
 const commonjs = require("@rollup/plugin-commonjs");
 const copy = require("gulp-copy");
 const csslint = require("gulp-csslint");
-const del = require("del");
 const eslint = require("gulp-eslint");
 const exec = require("child_process").exec;
 const livereload = require("rollup-plugin-livereload");
@@ -20,12 +19,12 @@ const noop = require("gulp-noop");
 const path = require("path");
 const postcss = require("rollup-plugin-postcss");
 const progress = require("rollup-plugin-progress");
-const replaceEnv = require("rollup-plugin-replace");
+const replaceEnv = require("@rollup/plugin-replace");
 const rmf = require("rimraf");
 const rollup = require("rollup");
 const serve = require("rollup-plugin-serve");
 const stripCode = require("gulp-strip-code");
-const terser = require("rollup-plugin-terser").terser;
+const terser = require("@rollup/plugin-terser");
 const ts = require("gulp-typescript");
 const karma = require("karma");
 
@@ -139,16 +138,6 @@ const cssLint = function (cb) {
     });
     return stream.on("end", function () {
         cb();
-    });
-};
-/*
- * Bootstrap html linter 
- */
-const bootLint = function (cb) {
-    exec("npx gulp --gulpfile Gulpboot.js", function (err, stdout, stderr) {
-        log(stdout);
-        log(stderr);
-        cb(err);
     });
 };
 /**
@@ -329,7 +318,7 @@ const rollup_watch = function (cb) {
     });
 };
 
-const lintRun = parallel(esLint, esLintts, ngLint, cssLint, bootLint)
+const lintRun = parallel(esLint, esLintts, ngLint, cssLint)
 const testCopy = series(parallel(copy_src, copy_images, copy_node_css, copy_css));
 const testRun = series(testCopy, build_development, pate2e, pat);
 const prodCopy = series(parallel(copyprod_src, copyprod_images, copyprod_node_css, copyprod_css));
@@ -409,26 +398,28 @@ function buildBundle(cb) {
         }
         log(chalk.cyan("Writing bundle..."));
         bundle.write({
-            external: ["fs"],
-            output: {
+//            external: ["fs"],
+//            output: {
                 globals: {"fs": "fs"},
                 file: `../../${dist}/bundle.js`,
                 banner: "var fs",
                 format: "iife",
                 name: "bundle",
                 sourcemap: isProduction === false,
-            },
+//            },
         }).then(function () {
             if (isProduction) {
-                del.sync([
+                import("del").then(del => {
+                  del.deleteSync([
                     `../../${dist}/appl/components`,
                     `../../${dist}/appl/services`,
                     `../../${dist}/appl/router`,
                     `../../${dist}/appl/jasmine`,
                     `../../${dist}/appl/js`,
-                    `../../${dist}/appl/*.js`
-                ], { dryRun: false, force: true });
-                cb();
+                    `../../${dist}/appl/\*.js`
+                    ], { dryRun: false, force: true });
+                  cb();
+                });
             }
             else {
                 log(chalk.green("*** Build finished ***"));

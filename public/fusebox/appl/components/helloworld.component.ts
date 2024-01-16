@@ -7,7 +7,7 @@ import Start from "js/start";
   styleUrls: ["css/hello.world.css"]
 })
 export class HelloWorldComponent implements OnInit  {
-  title = "Acceptance Testing with Angular13";
+  title = "Acceptance Testing with Angular14";
   ngOnInit() {
     Setup.init();
     Start.initMenu();

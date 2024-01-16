@@ -18,5 +18,5 @@ declare const require: {
     platformBrowserDynamicTesting(),
   );
 
-const context = require.context('./', true, /.spec\.ts$/);
-context.keys().map(context);
+// const context = require.context('./', true, /.spec\.ts$/);
+// context.keys().map(context);

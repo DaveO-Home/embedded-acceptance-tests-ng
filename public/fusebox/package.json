@@ -1,0 +1,34 @@
+{
+  "name": "fusebox",
+  "version": "1.0.0",
+  "description": "fusebox for angular 14",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fusebox",
+    "angular14"
+  ],
+  "author": "dave o",
+  "license": "ISC",
+  "devDependencies": {
+    "@angular-builders/custom-webpack": "^14.1.0",
+    "@angular-devkit/build-angular": "^14.2.13",
+    "@angular-eslint/builder": "^14.4.0",
+    "@angular-eslint/eslint-plugin": "^14.4.0",
+    "@angular-eslint/eslint-plugin-template": "^14.4.0",
+    "@angular-eslint/schematics": "^14.4.0",
+    "@angular-eslint/template-parser": "^14.4.0",
+    "@angular/animations": "^14.3.0",
+    "@angular/cli": "^14.2.13",
+    "@angular/common": "^14.3.0",
+    "@angular/compiler": "^14.3.0",
+    "@angular/compiler-cli": "^14.3.0",
+    "@angular/core": "^14.3.0",
+    "@angular/platform-browser": "^14.3.0",
+    "@angular/platform-browser-dynamic": "^14.3.0",
+    "@angular/router": "^14.3.0",
+    "fuse-box": "^4.0.1-next.8",
+    "typescript": "4.6.3"
+  }
+}

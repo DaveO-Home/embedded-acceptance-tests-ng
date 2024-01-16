@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": true,
+        "noImplicitAny": false,
+        "noImplicitUseStrict": false,
+        "removeComments": true,
+        "importHelpers": true,
+        "noLib": false,
+        "lib": ["dom", "es5"],
+        "outDir": "tsc/",
+        "noEmitHelpers": true,
+        "preserveConstEnums": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "baseUrl": "../appl",
+        "typeRoots": [
+            "../types",
+            "../../node_modules/@types"
+         ],
+        "types": [
+            "jquery",
+            "jasmine",
+            "node"
+        ],
+        "paths": {
+            "js/*": ["./js/controller/*", "./js/utils/*", "./js/*", "./jasmine/*"],
+            "ts/*": ["./components/*", "./services/*", "./*", "../tests/*"]
+          }
+    }
+}

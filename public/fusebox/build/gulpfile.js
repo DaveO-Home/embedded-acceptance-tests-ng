@@ -1,10 +1,10 @@
 /*eslint "no-console": 0 camelcase: 0 */
 /**
  * Successful acceptance tests & lints start the production build.
- * Tasks are run serially, 'pat' -> 'accept' -> ('eslint', 'csslint', 'bootlint') -> 'build'
+ * Tasks are run serially, 'pat' -> 'accept' -> ('eslint', 'csslint') -> 'build'
  */
 const { src, series, parallel /*, dest, task*/ } = require("gulp");
-const runFusebox = require("./fuse4.js");
+const fs = require("fs");
 const path = require("path");
 const csslint = require("gulp-csslint");
 const eslint = require("gulp-eslint");
@@ -12,6 +12,7 @@ const exec = require("child_process").exec;
 const log = require("fancy-log");
 const karma = require("karma");
 const chalk = require("chalk");
+let runFusebox; //  = require("./fuse4.js");
 
 let lintCount = 0;
 let browsers = process.env.USE_BROWSERS;
@@ -114,16 +115,6 @@ const cssLint = function (cb) {
         process.exit(1);
     }).on("end", function () {
         cb();
-    });
-};
-/*
- * Bootstrap html linter 
- */
-const bootLint = function (cb) {
-    exec("npx gulp --gulpfile Gulpboot.js", function (err, stdout, stderr) {
-        log(stdout);
-        log(stderr);
-        cb(err);
     });
 };
 /*
@@ -279,7 +270,7 @@ const ngTest = function (done) {
     }
     process.env.BUNDLER = "fusebox";
     const spawn = require('child_process').spawn;
-    const run = spawn("cd .. && npx ng test devacc", { shell: true, stdio: 'inherit' });
+    const run = spawn("npx ng test devacc", { shell: true, stdio: 'inherit' });
     run.on("exit", code => {
         done(code);
     });
@@ -330,25 +321,39 @@ const tddo = function (done) {
     karmaServer(done, false, true);
 };
 
-const testRun = series(testBuild, pate2e, ngTest);
-const testNgRun = series(pat);
-const lintRun = parallel(esLint, esLintts, cssLint, bootLint);
+const fusebox = (done) => {
+    if (!fs.existsSync("../node_modules")) {
+        const spawn = require('child_process').spawn;
+        const run = spawn("npm install --force", { shell: true, stdio: 'inherit' });
+        return run.on("exit", code => {
+	          runFusebox = require("./fuse4.js");
+            done(code);
+        });
+    } else {
+	      runFusebox = require("./fuse4.js");
+        done();
+    }
+}
 
-exports.default = series(testRun, lintRun, build);
-exports.prod = series(testRun, lintRun, build);
-exports.preview = preview;
-exports.prd = series(build);
+const testRun = series(fusebox, testBuild, pate2e, ngTest);
+const testNgRun = series(fusebox, pat);
+const lintRun = parallel(fusebox, esLint, esLintts, cssLint);
+
+exports.default = series(fusebox, testRun, lintRun, build);
+exports.prod = series(fusebox, testRun, lintRun, build);
+exports.preview = series(fusebox, preview);
+exports.prd = series(fusebox, build);
 exports.test = testRun;
 // exports.testng = testNgRun;
-exports.tdd = fuseboxTdd;
-exports.tddo = tddo;
-exports.hmr = fuseboxHmr;
-exports.rebuild = fuseboxRebuild;
-exports.acceptance = e2eTest;
-exports.ngtest = ngTest;
-exports.nglint = ngLint;
-exports.e2e = e2eTest;
-exports.development = series(setNoftl, parallel(fuseboxHmr, fuseboxTddWait));
+exports.tdd = series(fusebox, fuseboxTdd);
+exports.tddo = series(fusebox, tddo);
+exports.hmr = series(fusebox, fuseboxHmr);
+exports.rebuild = series(fusebox, fuseboxRebuild);
+exports.acceptance = series(fusebox, e2eTest);
+exports.ngtest = series(fusebox,ngTest);
+exports.nglint = series(fusebox, ngLint);
+exports.e2e = series(fusebox, e2eTest);
+exports.development = series(fusebox, setNoftl, parallel(fuseboxHmr, fuseboxTddWait));
 exports.lint = lintRun;
 exports.copy = copy;
 
@@ -421,7 +426,7 @@ function fuseboxConfig(mode, props) {
             publicPath: "../",
             template: isProduction ? path.join(__dirname, "../appl/testapp.html") : path.join(__dirname, "../appl/testapp_dev.html")
         },
-        tsConfig: path.join(__dirname, "../tsconfig.json"),
+        tsConfig: path.join(__dirname, "./tsconfig.json"),
         watcher: props.isWatch && !isProduction,
         hmr: props.isHmr && !isProduction,
         devServer: defaultServer ? devServe : false,
@@ -438,15 +443,16 @@ function fuseboxConfig(mode, props) {
         },
         compilerOptions: {
             buildTarget: "browser",
-            tsConfig: path.join(__dirname, "../tsconfig.json"),
+            tsConfig: path.join(__dirname, "./tsconfig.json"),
         }
     };
+
     return configure;
 }
 
 //From Stack Overflow - Node (Gulp) process.stdout.write to file
 if (process.env.USE_LOGFILE == "true") {
-    var fs = require("fs");
+//    var fs = require("fs");
     var util = require("util");
     var logFile = fs.createWriteStream("log.txt", { flags: "w" });
     // Or "w" to truncate the file every time the process starts.

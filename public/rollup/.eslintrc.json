@@ -5,13 +5,13 @@
       "files": ["*.js"],
       "parserOptions": {
          "ecmaVersion": 2018,
-	"sourceType": "module"
+	 "sourceType": "module"
       }
     },
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["tsconfig.eslint.json"],
+	"project": ["tsconfig.*?.json"],
         "createDefaultProgram": true
       },
       "extends": [

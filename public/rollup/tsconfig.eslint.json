@@ -12,9 +12,9 @@
         "appl/main.ts", "appl/polyfills.ts"
       ],
       "include": [
-        "appl/**/*.ts"
+        "./appl/**/*.ts"
       ],
-      "exclude": [ "./appl" ]
+      "exclude": [ "./appl/**/*.js" ]
 }
 
 

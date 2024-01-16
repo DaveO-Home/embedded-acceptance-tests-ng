@@ -10,7 +10,8 @@ import Setup from "js/setup";
 import "tablesorter/dist/js/extras/jquery.tablesorter.pager.min";
 
 /* develblock:start */
-import "zone.js/dist/zone-error";
+// import "zone.js/testing";
+// import "zone.js/bundles/zone-testing.umd";
 import apptest from "js/apptest";
 /* develblock:end */
 

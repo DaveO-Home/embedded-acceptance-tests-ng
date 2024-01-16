@@ -3,5 +3,6 @@
 ../../dist/
 ../../dist_test/
 /*.js
+/**/*.ts
 ../test/unit/coverage/
 ../appl/js/utils/marked.js

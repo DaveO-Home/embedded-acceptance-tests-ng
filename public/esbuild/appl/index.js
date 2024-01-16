@@ -6,21 +6,13 @@ import { AppModule } from "./entry";
 import "./js/config";
 import Default from "./js/utils/default";
 import Setup from "./js/utils/setup";
-import "../../../node_modules/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js";
+import "../../node_modules/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js";
 import App from "./js/app";
 /* develblock:start */
-import "zone.js/dist/zone-error";
+// import "zone.js/testing";
 import apptest from "./jasmine/apptest";
 /* develblock:end */
-// import { Elm } from "./elm/Main.elm";
-// import { register } from "./elm/elm-console-debug";
 
-// register({ simple_mode: true, debug: false, sizeLimit: 1000 });
-// setTimeout(() => {
-// Elm.Main.init({
-//     node: document.getElementById("root"),
-// });
-// }, 1500);
 let production = true;  // This will work if "parcel-plugin-strip" is linked in - see README
 /* develblock:start */
 production = false;

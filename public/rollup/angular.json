@@ -67,7 +67,6 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            // "configuration": {},
             "lintFilePatterns": [
               "./appl/**/*.ts",
               "./appl/**/*.js"
@@ -77,7 +76,6 @@
       }
     }
   },
-  "defaultProject": "devacc",
   "cli": {
     "defaultCollection": "@angular-eslint/schematics"
   }

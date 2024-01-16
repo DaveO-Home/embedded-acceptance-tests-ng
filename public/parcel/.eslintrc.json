@@ -11,6 +11,8 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
+	"tsconfigRootDir": "./",
+	"include": "appl/**/*.ts",
         "project": ["tsconfig.eslint.json"],
         "createDefaultProgram": true
       },

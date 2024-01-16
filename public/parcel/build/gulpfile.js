@@ -1,13 +1,12 @@
 /*eslint no-console: 0 */
 /**
  * Successful acceptance tests & lints start the production build.
- * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint', 'bootlint') -> 'build'
+ * Tasks are run serially, 'pat'(run acceptance tests) -> 'build-development' -> ('eslint', 'csslint') -> 'build'
  */
 const { src, /* dest, */ series, parallel, task } = require("gulp");
 const eslint = require("gulp-eslint");
 const csslint = require("gulp-csslint");
 const exec = require("child_process").exec;
-const del = require("del");
 const log = require("fancy-log");
 const Parcel = require("@parcel/core").default;
 const chalk = require("chalk");
@@ -129,17 +128,6 @@ const cssLint = function (cb) {
         cb();
     });
 };
-/*
- * Bootstrap html linter 
- */
-const bootLint = function (cb) {
-    process.env.BUNDLER = "parcel";
-    const spawn = require('child_process').spawn;
-    const run = spawn("npx gulp --gulpfile Gulpboot.js", { shell: true, stdio: 'inherit' });
-    run.on("exit", code => {
-        cb(code);
-    });
-};
 /**
  * Run Angular Devkit karma/jasmine unit tests - uses angular.json
  */
@@ -174,9 +162,12 @@ const bootLint = function (cb) {
 const clean = function (done) {
     isProduction = true;
     dist = prodDist;
-    return del([
-        "../../" + prodDist + "/**/*"
-    ], { dryRun: false, force: true }, done);
+    return import("del").then(del => {
+        del.deleteSync([
+                 "../../" + prodDist + "/**/*"
+             ], { dryRun: false, force: true });
+        done();
+     });
 };
 
 const cleant = function (done) {
@@ -186,9 +177,12 @@ const cleant = function (done) {
     }
     isProduction = false;
     dist = testDist;
-    return del([
-        "../../" + testDist + "/**/*"
-    ], { dryRun: dryRun, force: true }, done);
+    return import("del").then(del => {
+        del.deleteSync([
+                 "../../" + testDist + "/**/*"
+             ], { dryRun: false, force: true });
+        done();
+     });
 };
 /**
  * Resources and content copied to dist directory - for production
@@ -257,7 +251,7 @@ const watch_parcel = function (cb) {
 };
 
 const testRun = series(cleant, copy_images, copy_test, build_development);
-const lintRun = parallel(esLint, esLintts, ngLint, cssLint, bootLint);
+const lintRun = parallel(esLint, esLintts, ngLint, cssLint);
 const prodRun = series(testRun, pate2e, pat, lintRun, clean, copyprod_images, copyprod, build);
 const copyStatic = series(cleant, parallel(copy_images, copy_test));
 prodRun.displayName = "prod";

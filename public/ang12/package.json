@@ -37,7 +37,7 @@
     "handlebars": "^4.7.7",
     "jsoneditor": "^9.7.4",
     "marked": "^4.0.14",
-    "moment": "^2.29.4",
+    "moment": "^2.29.3",
     "redux": "^4.2.0",
     "tablesorter": "^2.31.3"
   },
